@@ -2,15 +2,15 @@
 # yarn lockfile v1
 
 
-"@alfalab/core-components-checkbox-group@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@alfalab/core-components-checkbox-group/-/core-components-checkbox-group-1.1.0.tgz#e6bc3ed0fb6407c47ee12d364f4eb3da0dd787a7"
-  integrity sha512-4hkuYKa4w6ctvn8Hbl1D4KXUJJac5drNgzoJ6Sq5NQDBRI072XIslhQHdBsGfA9hwSShkEX0w69vS4ZfXSn2vg==
+"@alfalab/core-components-checkbox-group@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@alfalab/core-components-checkbox-group/-/core-components-checkbox-group-1.1.1.tgz#28de456ad2e621a718812eacfa456e054ab3ab91"
+  integrity sha512-EdqzDH160g2C0yhN2ol7h8N5qoEcHsnx0qTyXLD4kgSyimQlh0n9uutOelWC+on47muxAnShX9EOdwgQfqJqAA==
 
-"@alfalab/core-components-checkbox@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@alfalab/core-components-checkbox/-/core-components-checkbox-1.1.0.tgz#db3484805db1e4caadf37bfd497789bf0c1aa6c1"
-  integrity sha512-d3g9/iwTxHn/8lP6SwyX+Yd9x+zbgKMlIoVGX+3nxZGS+rMEqWUpIm+rxTkUr2076ngE+ZZI4oExX2vroVcJxg==
+"@alfalab/core-components-checkbox@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@alfalab/core-components-checkbox/-/core-components-checkbox-1.1.1.tgz#80dd39444d48f09de67add9953268c79134091bf"
+  integrity sha512-sip5g1cvyOXrvkWpxJFzmZ3Sab+b3lFZhUdr60Wjnj39w/b/LxfnQ6C1cUBFpYER8C/oACddlDP2t8fWdiozCg==
   dependencies:
     "@alfalab/icons-classic" "^1.7.0"
 
