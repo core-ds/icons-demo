@@ -27,6 +27,6 @@ jobs:
         push-branch: 'master'
         commit-message: 'chore(*): update version'
         force-add: 'false'
-        files: package.json
+        files: .
         name: dmitrsavk
         email: dmitrsavk@yandex.ru
