@@ -10,7 +10,6 @@ node_modules/
 
 # production
 /build
-dist
 *.tsbuildinfo
 
 # misc
@@ -27,5 +26,3 @@ storybook-static
 
 # IDE
 .idea
-
-index.html
