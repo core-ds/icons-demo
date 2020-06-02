@@ -47,6 +47,7 @@
         "@alfalab/icons": "^1.14.0",
         "classnames": "^2.2.6",
         "react": "^16.13.1",
-        "react-dom": "^16.13.1"
+        "react-dom": "^16.13.1",
+        "react-virtual": "^2.2.0"
     }
 }

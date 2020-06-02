@@ -1,3 +1,7 @@
+body {
+    margin: 10px 0;
+}
+
 .root {
     font-family: var(--font-family-system);
 }
@@ -15,9 +19,11 @@
 }
 
 .icons-list {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
 }
 
 .icon-wrap {
@@ -27,12 +33,21 @@
     align-items: center;
     width: 180px;
     height: 150px;
-    margin: 15px;
     padding: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
     cursor: pointer;
     border-radius: 8px;
+    background-color: #fff;
+    margin: 0 20px;
+}
+
+.icon-wrap:last-child {
+    margin-right: 0;
+}
+
+.icon-wrap:first-child {
+    margin-left: 0;
 }
 
 .icon-wrap_dark {
@@ -61,6 +76,25 @@
 .title {
     font-size: 16px;
     font-weight: 500;
+}
+
+.list-scroller {
+    margin: 0;
+    padding: 15px;
+    width: 100%;
+    height: calc(100vh - 170px);
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.list-row {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 @keyframes vertical_6933 {
