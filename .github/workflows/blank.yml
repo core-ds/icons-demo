@@ -1,9 +1,6 @@
 name: BUILD
 
-on:
-  push:
-    branches:
-      - master
+on: repository_dispatch
 
 jobs:
   build:
