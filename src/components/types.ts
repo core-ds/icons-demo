@@ -7,6 +7,7 @@ export type Packages = {
 export enum IconPackageName {
     GLYPH = 'glyph',
     CLASSIC = 'classic',
+    FLAG = 'flag',
 }
 
 export type SearchResult = {

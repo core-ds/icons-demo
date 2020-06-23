@@ -4,6 +4,7 @@ import { Checkbox } from '@alfalab/core-components-checkbox';
 import { CheckboxGroup } from '@alfalab/core-components-checkbox-group';
 import * as IconsGlyph from '@alfalab/icons/glyph/dist';
 import * as IconsClassic from '@alfalab/icons/classic/dist';
+import * as IconsFlag from '@alfalab/icons/flag/dist';
 
 import { IconList } from './IconList';
 import { IconPackageName, Packages } from './types';
@@ -14,15 +15,17 @@ export const getModule = (packageName: IconPackageName) => {
             return IconsGlyph;
         case IconPackageName.CLASSIC:
             return IconsClassic;
+        case IconPackageName.FLAG:
+            return IconsFlag;
     }
 };
-
 
 export const Demo: FC = () => {
     const [value, setValue] = useState('');
     const [packages, setPackages] = useState<Packages>({
         [IconPackageName.CLASSIC]: false,
         [IconPackageName.GLYPH]: true,
+        [IconPackageName.FLAG]: false,
     });
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +62,11 @@ export const Demo: FC = () => {
                         name={IconPackageName.CLASSIC}
                         checked={packages.classic}
                     />
+                    <Checkbox
+                        label='icons-flag'
+                        name={IconPackageName.FLAG}
+                        checked={packages.flag}
+                    />
                 </CheckboxGroup>
 
                 <h1 className='title'>Кликните на иконку для копирования импорта</h1>
@@ -68,6 +76,7 @@ export const Demo: FC = () => {
                 icons={{
                     [IconPackageName.GLYPH]: IconsGlyph,
                     [IconPackageName.CLASSIC]: IconsClassic,
+                    [IconPackageName.FLAG]: IconsFlag,
                 }}
                 value={value}
                 packages={packages}

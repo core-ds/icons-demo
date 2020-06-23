@@ -60,7 +60,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                 const searchValue = value.toLowerCase();
                 const iconName = Icon.toLowerCase();
                 // @ts-ignore
-                const iconInfo = json[packageName][Icon];
+                const iconInfo = json[packageName] && json[packageName][Icon];
                 const iconDescription =
                     iconInfo && iconInfo.figmaDescription
                         ? iconInfo.figmaDescription.toLowerCase()
