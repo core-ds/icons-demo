@@ -2,9 +2,11 @@ import React, { FC, useState, ChangeEvent } from 'react';
 import { Input } from '@alfalab/core-components-input';
 import { Checkbox } from '@alfalab/core-components-checkbox';
 import { CheckboxGroup } from '@alfalab/core-components-checkbox-group';
+
 import * as IconsGlyph from '@alfalab/icons/glyph/dist';
 import * as IconsClassic from '@alfalab/icons/classic/dist';
 import * as IconsFlag from '@alfalab/icons/flag/dist';
+import * as IconsLogotype from '@alfalab/icons/logotype/dist';
 
 import { IconList } from './IconList';
 import { IconPackageName, Packages } from './types';
@@ -17,6 +19,8 @@ export const getModule = (packageName: IconPackageName) => {
             return IconsClassic;
         case IconPackageName.FLAG:
             return IconsFlag;
+        case IconPackageName.LOGOTYPE:
+            return IconsLogotype;
     }
 };
 
@@ -26,6 +30,7 @@ export const Demo: FC = () => {
         [IconPackageName.CLASSIC]: false,
         [IconPackageName.GLYPH]: true,
         [IconPackageName.FLAG]: false,
+        [IconPackageName.LOGOTYPE]: false,
     });
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +72,11 @@ export const Demo: FC = () => {
                         name={IconPackageName.FLAG}
                         checked={packages.flag}
                     />
+                    <Checkbox
+                        label='icons-logotype'
+                        name={IconPackageName.LOGOTYPE}
+                        checked={packages.logotype}
+                    />
                 </CheckboxGroup>
 
                 <h1 className='title'>Кликните на иконку для копирования импорта</h1>
@@ -77,6 +87,7 @@ export const Demo: FC = () => {
                     [IconPackageName.GLYPH]: IconsGlyph,
                     [IconPackageName.CLASSIC]: IconsClassic,
                     [IconPackageName.FLAG]: IconsFlag,
+                    [IconPackageName.LOGOTYPE]: IconsLogotype,
                 }}
                 value={value}
                 packages={packages}

@@ -8,6 +8,7 @@ export enum IconPackageName {
     GLYPH = 'glyph',
     CLASSIC = 'classic',
     FLAG = 'flag',
+    LOGOTYPE = 'logotype'
 }
 
 export type SearchResult = {
