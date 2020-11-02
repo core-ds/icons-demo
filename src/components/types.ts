@@ -21,6 +21,7 @@ export type SearchResult = {
 export type ClickedElement = {
     iconName?: string;
     packageName?: string;
+    cdnLink?: string;
 };
 
 export type IconPackage = {

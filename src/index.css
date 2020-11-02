@@ -31,15 +31,16 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 180px;
-    height: 150px;
+    width: 220px;
+    height: 200px;
     padding: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
     border-radius: 8px;
     background-color: #fff;
     margin: 0 20px;
+    text-align: center;
 }
 
 .icon-wrap:last-child {
@@ -55,13 +56,9 @@ body {
     color: #fff;
 }
 
-.icon-wrap_clicked {
-    animation: vertical_6933 2.44s ease infinite;
-    transform-origin: 50% 50%;
-}
-
 .icon-wrap:hover {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
 }
 
 .icon {
@@ -71,6 +68,7 @@ body {
 .icon-name {
     font-size: 14px;
     opacity: 0.7;
+    margin-bottom: 10px;
 }
 
 .title {
@@ -95,6 +93,80 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+}
+
+.modal-close-icon {
+    width: 20px;
+    height: 20px;
+    padding: 10px;
+    background-image: url('https://alfabank.st/icons/glyph_sf-cross_m.svg');
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.highlight {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.highlight:last-child {
+    margin-bottom: 0;
+}
+
+.highlight pre {
+    margin: 0;
+}
+
+.modal-copy-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.modal-copy-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.hljs {
+    padding: 15px;
+    padding-right: 40px;
+    border-radius: 10px;
+}
+
+.highlight-link {
+    padding: 15px;
+    padding-right: 40px;
+    border-radius: 10px;
+    display: block;
+    overflow-x: auto;
+    background: #2b2b2b;
+    color: #f8f8f2;
+}
+
+.ok-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s ease;
 }
 
 @keyframes vertical_6933 {
