@@ -3,6 +3,7 @@ import { useVirtual } from 'react-virtual';
 import json from '@alfalab/icons/search.json';
 import Modal, { Styles } from 'react-modal';
 import Highlight from 'react-highlight';
+import decamelize from 'decamelize';
 import { CopyLineMIcon, CheckmarkHeavyMIcon } from '@alfalab/icons/glyph/dist';
 
 import 'highlight.js/styles/tomorrow-night.css';
@@ -44,6 +45,14 @@ const modalStyles: Styles = {
     },
 };
 
+const PACKAGE_ALIAS: { [key: string]: string } = {
+    classic: 'icon',
+};
+
+export const getPackageName = (iconPrefix: string) => PACKAGE_ALIAS[iconPrefix] || iconPrefix;
+
+const sizes = ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl'];
+
 export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
     // @ts-ignore
     const result: SearchResult = {};
@@ -83,7 +92,36 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                 const searchValue = value.toLowerCase();
                 const iconName = Icon.toLowerCase();
                 // @ts-ignore
-                const iconInfo = json[packageName] && json[packageName][Icon];
+                let iconInfo = json[packageName] && json[packageName][Icon];
+
+                if (!iconInfo) {
+                    console.log('no icon info')
+                    const arr = decamelize(Icon.replace(/Icon$/, '')).split('_');
+
+                    let lastElem = arr[arr.length - 1];
+
+                    let color = '';
+                    let name = '';
+                    let size = '';
+
+                    if (sizes.includes(lastElem)) {
+                        size = lastElem;
+                        name = arr.slice(0, arr.length - 1).join('-');
+                    } else {
+                        color = lastElem;
+                        size = arr[arr.length - 2];
+                        name = arr.slice(0, arr.length - 2).join('-');
+                    }
+
+                    const svgIconName = `${getPackageName(packageName)}_${name}_${size}${
+                        color ? `_${color}` : ''
+                    }`;
+
+                    iconInfo = { svgIconName };
+
+                    // @ts-ignore
+                    json[packageName][Icon] = iconInfo;
+                }
 
                 const iconDescription =
                     iconInfo && iconInfo.figmaDescription
