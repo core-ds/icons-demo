@@ -95,7 +95,6 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                 let iconInfo = json[packageName] && json[packageName][Icon];
 
                 if (!iconInfo) {
-                    console.log('no icon info')
                     const arr = decamelize(Icon.replace(/Icon$/, '')).split('_');
 
                     let lastElem = arr[arr.length - 1];
