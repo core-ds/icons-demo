@@ -10,11 +10,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin: 20px 15px;
 }
 
 .search-input {
-    width: 260px;
+    max-width: 500px;
     margin-bottom: 20px;
 }
 
@@ -31,7 +31,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 220px;
+    width: 100%;
+    min-width: 220px;
     height: 200px;
     padding: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -116,6 +117,20 @@ body {
     padding: 15px;
 }
 
+.copy-button-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    background-color: #1d1f21;
+    border-radius: 10px;
+}
+
 .highlight {
     position: relative;
     margin-bottom: 40px;
@@ -130,10 +145,6 @@ body {
 }
 
 .modal-copy-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
     color: #fff;
     opacity: 0.8;
     transition: all 0.3s ease;
@@ -146,17 +157,17 @@ body {
 
 .hljs {
     padding: 15px;
-    padding-right: 40px;
+    padding-right: 50px;
     border-radius: 10px;
 }
 
 .highlight-link {
     padding: 15px;
-    padding-right: 40px;
+    padding-right: 50px;
     border-radius: 10px;
     display: block;
     overflow-x: auto;
-    background: #2b2b2b;
+    background-color: #1d1f21;
     color: #f8f8f2;
 }
 
@@ -193,5 +204,12 @@ body {
     }
     100% {
         transform: translate(0, 0);
+    }
+}
+
+@media (min-width: 1024px) {
+    .icon-wrap {
+        min-width: initial;
+        width: 220px;
     }
 }

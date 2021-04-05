@@ -28,6 +28,11 @@
   dependencies:
     "@alfalab/core-components-form-control" "^1.0.0"
 
+"@alfalab/core-components-mq@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@alfalab/core-components-mq/-/core-components-mq-2.0.0.tgz#a328dd5310c03306d83d9e63b53de67a822e225d"
+  integrity sha512-18+Dm0w/Fwv2b4nAgk/gFW48tHXtxh72EEYq71ZkZ+I/23DHfJXs/LBJt+hothCptg2yqmTp18Rg0Z9QkNYHLA==
+
 "@alfalab/icons-classic@^1.7.0":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/@alfalab/icons-classic/-/icons-classic-1.10.0.tgz#26c65e295945d8490088938913db27f3a2f711f1"

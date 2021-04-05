@@ -5,6 +5,7 @@ import Modal, { Styles } from 'react-modal';
 import Highlight from 'react-highlight';
 import decamelize from 'decamelize';
 import { CopyLineMIcon, CheckmarkHeavyMIcon } from '@alfalab/icons/glyph/dist';
+import { useMatchMedia } from '@alfalab/core-components-mq';
 
 import 'highlight.js/styles/tomorrow-night.css';
 
@@ -24,26 +25,7 @@ type IconListProps = {
     packages: Packages;
 };
 
-const COLUMNS_COUNT = 4;
-
 Modal.setAppElement('#root');
-
-const modalStyles: Styles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        minWidth: '500px',
-        padding: '0',
-        borderRadius: '10px',
-    },
-    overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    },
-};
 
 const PACKAGE_ALIAS: { [key: string]: string } = {
     classic: 'icon',
@@ -195,8 +177,13 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
 
     const parentRef = React.useRef<HTMLDivElement>(null);
 
+    const [mobile] = useMatchMedia('--mobile');
+    const [tablet] = useMatchMedia('--tablet');
+
+    const columnsAmount = mobile ? 1 : tablet ? 2 : 4;
+
     let resultGrid = resultArray.reduce((acc, curr, index) => {
-        const columnIndex = Math.floor(index / COLUMNS_COUNT);
+        const columnIndex = Math.floor(index / columnsAmount);
 
         if (!acc[columnIndex]) {
             acc[columnIndex] = [];
@@ -213,6 +200,23 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
         overscan: 5,
         estimateSize: React.useCallback(() => 260, []),
     });
+
+    const modalStyles: Styles = {
+        content: {
+            width: mobile || tablet ? '100%' : 'auto',
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            padding: '0',
+            borderRadius: '10px',
+        },
+        overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        },
+    };
 
     return (
         <>
@@ -258,35 +262,39 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                                 {`import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}';`}
                             </Highlight>
 
-                            {copyed === 'react' ? (
-                                <CheckmarkHeavyMIcon className='ok-icon' />
-                            ) : (
-                                <CopyLineMIcon
-                                    className='modal-copy-icon'
-                                    onClick={() => {
-                                        copyStr(
-                                            `import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}';`,
-                                            'react',
-                                        );
-                                    }}
-                                />
-                            )}
+                            <div
+                                className='copy-button-wrapper'
+                                onClick={() => {
+                                    copyStr(
+                                        `import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}';`,
+                                        'react',
+                                    );
+                                }}
+                            >
+                                {copyed === 'react' ? (
+                                    <CheckmarkHeavyMIcon className='ok-icon' />
+                                ) : (
+                                    <CopyLineMIcon className='modal-copy-icon' />
+                                )}
+                            </div>
                         </div>
 
                         {clickedElem.cdnLink && (
                             <div className='highlight'>
                                 <pre className='highlight-link'>{clickedElem.cdnLink}</pre>
 
-                                {copyed === 'link' ? (
-                                    <CheckmarkHeavyMIcon className='ok-icon' />
-                                ) : (
-                                    <CopyLineMIcon
-                                        className='modal-copy-icon'
-                                        onClick={() => {
-                                            copyStr(clickedElem.cdnLink || '', 'link');
-                                        }}
-                                    />
-                                )}
+                                <div
+                                    className='copy-button-wrapper'
+                                    onClick={() => {
+                                        copyStr(clickedElem.cdnLink || '', 'link');
+                                    }}
+                                >
+                                    {copyed === 'link' ? (
+                                        <CheckmarkHeavyMIcon className='ok-icon' />
+                                    ) : (
+                                        <CopyLineMIcon className='modal-copy-icon' />
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>

@@ -54,9 +54,14 @@ export const Demo: FC = () => {
                     onChange={onChange}
                     className='search-input'
                     placeholder='Название иконки'
+                    block={true}
                 />
 
-                <CheckboxGroup direction='horizontal' onChange={onCheckboxGroupChange}>
+                <CheckboxGroup
+                    direction='horizontal'
+                    onChange={onCheckboxGroupChange}
+                    className='checkbox-group'
+                >
                     <Checkbox
                         label='icons-glyph'
                         name={IconPackageName.GLYPH}
