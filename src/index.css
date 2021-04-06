@@ -57,7 +57,7 @@ body {
     color: #fff;
 }
 
-.icon-wrap:hover {
+.icon-wrap_interactive:hover {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
     transform: scale(1.01);
 }

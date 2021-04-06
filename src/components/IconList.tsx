@@ -6,6 +6,8 @@ import Highlight from 'react-highlight';
 import decamelize from 'decamelize';
 import { CopyLineMIcon, CheckmarkHeavyMIcon } from '@alfalab/icons/glyph/dist';
 import { useMatchMedia } from '@alfalab/core-components-mq';
+import qs from 'querystring';
+import cn from 'classnames';
 
 import 'highlight.js/styles/tomorrow-night.css';
 
@@ -42,8 +44,12 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
     const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [copyed, setCopyed] = useState('');
 
+    const { platform = 'web' } = qs.parse(document.location.search.replace(/^\?/, ''));
+
     const onIconClick = (elem: ClickedElement) => {
-        setClickedElem(elem);
+        if (platform === 'web') {
+            setClickedElem(elem);
+        }
     };
 
     const copyStr = (str: string, name: string) => {
@@ -54,16 +60,6 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                 setCopyed('');
             }, 2000);
         });
-    };
-
-    const getItemClassName = (iconName: string) => {
-        let className = 'icon-wrap';
-
-        if (iconName.includes('white')) {
-            className += ' icon-wrap_dark';
-        }
-
-        return className;
     };
 
     Object.keys(icons).forEach((str) => {
@@ -120,8 +116,6 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                     // @ts-ignore
                     const IconComponent = module[Icon];
 
-                    const className = getItemClassName(iconName);
-
                     const onClick = () => {
                         onIconClick({
                             iconName: Icon,
@@ -134,12 +128,15 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
 
                     const IconWrap = (
                         <div
-                            className={className}
+                            className={cn('icon-wrap', {
+                                'icon-wrap_dark': iconName.includes('white'),
+                                'icon-wrap_interactive': platform === 'web',
+                            })}
                             onClick={onClick}
                             key={`${packageName}-${iconName}`}
                         >
                             <IconComponent className='icon' />
-                            <span className='icon-name'>{Icon}</span>
+                            {platform === 'web' && <span className='icon-name'>{Icon}</span>}
                             <span className='icon-name'>{iconPrimitiveName}</span>
                         </div>
                     );
