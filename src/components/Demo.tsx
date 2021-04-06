@@ -2,6 +2,7 @@ import React, { FC, useState, ChangeEvent } from 'react';
 import { Input } from '@alfalab/core-components-input';
 import { Checkbox } from '@alfalab/core-components-checkbox';
 import { CheckboxGroup } from '@alfalab/core-components-checkbox-group';
+import qs from 'querystring';
 
 import * as IconsGlyph from '@alfalab/icons/glyph/dist';
 import * as IconsClassic from '@alfalab/icons/classic/dist';
@@ -46,6 +47,8 @@ export const Demo: FC = () => {
         });
     };
 
+    const { platform = 'web' } = qs.parse(document.location.search.replace(/^\?/, ''));
+
     return (
         <div className='root'>
             <div className='search-wrap'>
@@ -84,7 +87,9 @@ export const Demo: FC = () => {
                     />
                 </CheckboxGroup>
 
-                <h1 className='title'>Кликните на иконку для копирования импорта</h1>
+                {platform === 'web' && (
+                    <h1 className='title'>Кликните на иконку для копирования импорта</h1>
+                )}
             </div>
 
             <IconList
