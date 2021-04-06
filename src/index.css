@@ -37,7 +37,6 @@ body {
     padding: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    cursor: pointer;
     border-radius: 8px;
     background-color: #fff;
     margin: 0 20px;
@@ -60,6 +59,7 @@ body {
 .icon-wrap_interactive:hover {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
     transform: scale(1.01);
+    cursor: pointer;
 }
 
 .icon {
