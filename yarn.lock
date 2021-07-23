@@ -38,10 +38,10 @@
   resolved "https://registry.yarnpkg.com/@alfalab/icons-classic/-/icons-classic-1.10.0.tgz#26c65e295945d8490088938913db27f3a2f711f1"
   integrity sha512-xI0cpkw9CXqKFce/hEV729tKW30ge7m8nCsYXZDoOGdqf+rzeX7lQIw5TfLOyAEH9bLnCsI1qkw26/b24K4WNg==
 
-"@alfalab/icons@^2.17.0":
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/@alfalab/icons/-/icons-2.17.0.tgz#1c872acd02577dba0322ef20bfc1659a29453435"
-  integrity sha512-7TwivDCA+waMk7P16XJidOlwvcas3pvo2iwU7L9Pck5iSw3gwAayZ8KXzy/UJVeikZoURqlQJEMo5E2MuINCJQ==
+"@alfalab/icons@^2.18.0":
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/@alfalab/icons/-/icons-2.18.0.tgz#e9cd98901d54fb979846f45b56eabba52a5699c8"
+  integrity sha512-w/xTRdtYG66WlmQgFlxALArOFj6Z2VxfhIqGHm5j4NkNDxnU72VLekuZYJi5CR0ZbymBhSxqYHAVyBpU4w2teg==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.1":
   version "7.10.1"
