@@ -4,10 +4,22 @@ import { Checkbox } from '@alfalab/core-components-checkbox';
 import { CheckboxGroup } from '@alfalab/core-components-checkbox-group';
 import qs from 'querystring';
 
-import * as IconsGlyph from '@alfalab/icons/glyph/dist';
-import * as IconsClassic from '@alfalab/icons/classic/dist';
-import * as IconsFlag from '@alfalab/icons/flag/dist';
-import * as IconsLogotype from '@alfalab/icons/logotype/dist';
+const IconsGlyph = {};
+const IconsClassic = {};
+const IconsFlag = {};
+const IconsLogotype = {};
+
+const importAllIcons = (requireContext: any, Module: any) =>
+    requireContext.keys().forEach((key: string) => {
+        const moduleName = key.replace(/\.js$/, '').replace(/^\.\//, '');
+
+        Module[moduleName] = requireContext(key)[moduleName];
+    });
+
+importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
+importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
+importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
+importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$/), IconsLogotype);
 
 import { IconList } from './IconList';
 import { IconPackageName, Packages } from './types';

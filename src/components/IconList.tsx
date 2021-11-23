@@ -4,7 +4,8 @@ import json from '@alfalab/icons/search.json';
 import Modal, { Styles } from 'react-modal';
 import Highlight from 'react-highlight';
 import decamelize from 'decamelize';
-import { CopyLineMIcon, CheckmarkHeavyMIcon } from '@alfalab/icons/glyph/dist';
+import { CopyLineMIcon } from '@alfalab/icons/glyph/dist/CopyLineMIcon';
+import { CheckmarkHeavyMIcon } from '@alfalab/icons/glyph/dist/CheckmarkHeavyMIcon';
 import { useMatchMedia } from '@alfalab/core-components-mq';
 import qs from 'querystring';
 import cn from 'classnames';
@@ -135,7 +136,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                             onClick={onClick}
                             key={`${packageName}-${iconName}`}
                         >
-                            <IconComponent className='icon' />
+                            {IconComponent ? <IconComponent className='icon' /> : null}
                             {platform === 'web' && <span className='icon-name'>{Icon}</span>}
                             <span className='icon-name'>{iconPrimitiveName}</span>
                         </div>
