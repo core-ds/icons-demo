@@ -257,7 +257,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                     <div className='modal-body'>
                         <div className='highlight'>
                             <Highlight className='typescript'>
-                                {`import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}';`}
+                                {`import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.iconName}';`}
                             </Highlight>
 
                             <div
