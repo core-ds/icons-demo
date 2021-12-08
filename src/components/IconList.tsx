@@ -277,7 +277,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                             </div>
                         </div>
 
-                        {clickedElem.cdnLink && (
+                        {/* {clickedElem.cdnLink && (
                             <div className='highlight'>
                                 <pre className='highlight-link'>{clickedElem.cdnLink}</pre>
 
@@ -294,7 +294,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                                     )}
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 )}
             </Modal>
