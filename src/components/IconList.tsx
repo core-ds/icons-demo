@@ -264,7 +264,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                                 className='copy-button-wrapper'
                                 onClick={() => {
                                     copyStr(
-                                        `import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}';`,
+                                        `import { ${clickedElem.iconName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.iconName}';`,
                                         'react',
                                     );
                                 }}
