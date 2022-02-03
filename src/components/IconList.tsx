@@ -98,7 +98,10 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                     iconInfo = { svgIconName };
 
                     // @ts-ignore
-                    json[packageName][Icon] = iconInfo;
+                    if (json[packageName] && json[packageName][Icon]) {
+                        // @ts-ignore
+                        json[packageName][Icon] = iconInfo;
+                    }
                 }
 
                 const iconDescription =

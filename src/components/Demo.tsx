@@ -8,6 +8,7 @@ const IconsGlyph = {};
 const IconsClassic = {};
 const IconsFlag = {};
 const IconsLogotype = {};
+const IconsCorp = {};
 
 const importAllIcons = (requireContext: any, Module: any) =>
     requireContext.keys().forEach((key: string) => {
@@ -20,6 +21,7 @@ importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/),
 importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
 importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
 importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$/), IconsLogotype);
+importAllIcons(require.context('@alfalab/icons/corp/dist', false, /Icon\.js$/), IconsCorp);
 
 import { IconList } from './IconList';
 import { IconPackageName, Packages } from './types';
@@ -34,16 +36,20 @@ export const getModule = (packageName: IconPackageName) => {
             return IconsFlag;
         case IconPackageName.LOGOTYPE:
             return IconsLogotype;
+        case IconPackageName.CORP:
+            return IconsCorp;
     }
 };
 
 export const Demo: FC = () => {
     const [value, setValue] = useState('');
+
     const [packages, setPackages] = useState<Packages>({
         [IconPackageName.CLASSIC]: false,
         [IconPackageName.GLYPH]: true,
         [IconPackageName.FLAG]: false,
         [IconPackageName.LOGOTYPE]: false,
+        [IconPackageName.CORP]: false,
     });
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +103,11 @@ export const Demo: FC = () => {
                         name={IconPackageName.LOGOTYPE}
                         checked={packages.logotype}
                     />
+                    <Checkbox
+                        label='icons-corp'
+                        name={IconPackageName.CORP}
+                        checked={packages.corp}
+                    />
                 </CheckboxGroup>
 
                 {platform === 'web' && (
@@ -110,6 +121,7 @@ export const Demo: FC = () => {
                     [IconPackageName.CLASSIC]: IconsClassic,
                     [IconPackageName.FLAG]: IconsFlag,
                     [IconPackageName.LOGOTYPE]: IconsLogotype,
+                    [IconPackageName.CORP]: IconsCorp,
                 }}
                 value={value}
                 packages={packages}
