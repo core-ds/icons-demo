@@ -1,0 +1,215 @@
+body {
+    margin: 10px 0;
+}
+
+.root {
+    font-family: var(--font-family-system);
+}
+
+.search-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 15px;
+}
+
+.search-input {
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+.icons-list {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.icon-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-width: 220px;
+    height: 200px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background-color: #fff;
+    margin: 0 20px;
+    text-align: center;
+}
+
+.icon-wrap:last-child {
+    margin-right: 0;
+}
+
+.icon-wrap:first-child {
+    margin-left: 0;
+}
+
+.icon-wrap_dark {
+    background-color: rgba(11, 31, 53, 0.9);
+    color: #fff;
+}
+
+.icon-wrap_interactive:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.icon {
+    flex-grow: 1;
+}
+
+.icon-name {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.list-scroller {
+    margin: 0;
+    padding: 15px;
+    width: 100%;
+    height: calc(100vh - 170px);
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.list-row {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+}
+
+.modal-close-icon {
+    width: 20px;
+    height: 20px;
+    padding: 10px;
+    background-image: url('https://alfabank.st/icons/glyph_sf-cross_m.svg');
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.copy-button-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    background-color: #1d1f21;
+    border-radius: 10px;
+}
+
+.highlight {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.highlight:last-child {
+    margin-bottom: 0;
+}
+
+.highlight pre {
+    margin: 0;
+}
+
+.modal-copy-icon {
+    color: #fff;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.modal-copy-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.hljs {
+    padding: 15px;
+    padding-right: 50px;
+    border-radius: 10px;
+}
+
+.highlight-link {
+    padding: 15px;
+    padding-right: 50px;
+    border-radius: 10px;
+    display: block;
+    overflow-x: auto;
+    background-color: #1d1f21;
+    color: #f8f8f2;
+}
+
+.ok-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+@keyframes vertical_6933 {
+    0% {
+        transform: translate(0, -3px);
+    }
+    3.27869% {
+        transform: translate(0, 3px);
+    }
+    6.55738% {
+        transform: translate(0, -3px);
+    }
+    9.83606% {
+        transform: translate(0, 3px);
+    }
+    13.11475% {
+        transform: translate(0, -3px);
+    }
+    16.39344% {
+        transform: translate(0, 3px);
+    }
+    18.03279% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@media (min-width: 1024px) {
+    .icon-wrap {
+        min-width: initial;
+        width: 220px;
+    }
+}
