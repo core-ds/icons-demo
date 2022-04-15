@@ -1,5 +1,5 @@
 {
-    "name": "icons-demo",
+    "name": "@alfalab/icons-demo",
     "version": "1.290.0",
     "main": "index.js",
     "license": "MIT",
