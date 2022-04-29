@@ -125,7 +125,7 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                             iconName: Icon,
                             packageName,
                             cdnLink: iconPrimitiveName
-                                ? `https://alfabank.st/icons/${iconPrimitiveName}.svg`
+                                ? `https://alfabank.gcdn.co/icons/${iconPrimitiveName}.svg`
                                 : '',
                         });
                     };
