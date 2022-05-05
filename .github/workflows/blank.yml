@@ -25,5 +25,5 @@ jobs:
         commit-message: 'chore(*): update version'
         force-add: 'false'
         files: .
-        name: dmitrsavk
-        email: dmitrsavk@yandex.ru
+        name: core-ds-bot
+        email: ds@gitmax.tech
