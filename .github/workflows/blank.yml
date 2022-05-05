@@ -18,7 +18,7 @@ jobs:
     - run: npm version minor --git-tag-version false
 
     - name: commit changes
-      uses: github-actions-x/commit@v2.5
+      uses: github-actions-x/commit@v6
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'master'
