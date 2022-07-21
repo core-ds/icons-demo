@@ -10,6 +10,9 @@ export enum IconPackageName {
     FLAG = 'flag',
     LOGOTYPE = 'logotype',
     CORP = 'corp',
+    ROCKY = 'rocky',
+    IOS = 'ios',
+    ANDROID = 'android',
 }
 
 export type SearchResult = {
