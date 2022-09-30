@@ -99,42 +99,42 @@ export const Demo: FC = () => {
                     className='checkbox-group'
                 >
                     <Checkbox
-                        label='icons-glyph'
+                        label='glyph'
                         name={IconPackageName.GLYPH}
                         checked={packages.glyph}
                     />
                     <Checkbox
-                        label='icons-rocky'
+                        label='rocky'
                         name={IconPackageName.ROCKY}
                         checked={packages.rocky}
                     />
                     <Checkbox
-                        label='icons-ios'
+                        label='ios'
                         name={IconPackageName.IOS}
                         checked={packages.ios}
                     />
                     <Checkbox
-                        label='icons-android'
+                        label='android'
                         name={IconPackageName.ANDROID}
                         checked={packages.android}
                     />
                     <Checkbox
-                        label='icons-corp'
+                        label='corp'
                         name={IconPackageName.CORP}
                         checked={packages.corp}
                     />
                     <Checkbox
-                        label='icons-old'
+                        label='classic (old)'
                         name={IconPackageName.CLASSIC}
                         checked={packages.classic}
                     />
                     <Checkbox
-                        label='logotypes'
+                        label='logotype'
                         name={IconPackageName.LOGOTYPE}
                         checked={packages.logotype}
                     />
                     <Checkbox
-                        label='flags'
+                        label='flag'
                         name={IconPackageName.FLAG}
                         checked={packages.flag}
                     />
