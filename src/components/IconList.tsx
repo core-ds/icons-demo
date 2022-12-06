@@ -91,15 +91,12 @@ export const IconList: FC<IconListProps> = ({ icons, value, packages }) => {
                         name = arr.slice(0, arr.length - 2).join('-');
                     }
 
-                    let svgIconName=''
+                    let svgIconName = `${name}_${size}${color ? `_${color}` : ''}`
 
                     if (packageName !== 'ios' && packageName !== 'android') {
-                        svgIconName = `${getPackageName(packageName)}_${name}_${size}${color ? `_${color}` : ''}`;
-                    } else {
-                        svgIconName = `${name}_${size}${color ? `_${color}` : ''}`;
+                        svgIconName = `${getPackageName(packageName)}_${svgIconName}`;
                     }
                     
-
                     iconInfo = { svgIconName };
 
                     // @ts-ignore
