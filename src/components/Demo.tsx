@@ -1,164 +1,88 @@
-import React, { FC, useState, ChangeEvent } from 'react';
-import { Input } from '@alfalab/core-components-input';
-import { Checkbox } from '@alfalab/core-components-checkbox';
-import { CheckboxGroup } from '@alfalab/core-components-checkbox-group';
-import qs from 'querystring';
+import React, { FC, useState } from 'react';
+import { Input } from '@alfalab/core-components/input/modern';
+import { Typography } from '@alfalab/core-components/typography/modern';
+import {
+    Select,
+    BaseOption,
+    SelectMobile,
+    SelectProps,
+} from '@alfalab/core-components/select/modern';
+import { Spinner } from '@alfalab/core-components/spinner/modern';
+import { useMatchMedia } from '@alfalab/core-components/mq/modern';
+import MagnifierMIcon from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 
-const IconsGlyph = {};
-const IconsClassic = {};
-const IconsFlag = {};
-const IconsLogotype = {};
-const IconsCorp = {};
-const IconsRocky = {};
-const IconsIos = {};
-const IconsAndroid= {}
+import { IconPackageName, IconPackageNameKeys } from './types';
 
-const importAllIcons = (requireContext: any, Module: any) =>
-    requireContext.keys().forEach((key: string) => {
-        const moduleName = key.replace(/\.js$/, '').replace(/^\.\//, '');
+const IconList = React.lazy(() => import('./IconList'));
 
-        Module[moduleName] = requireContext(key)[moduleName];
-    });
+const ICON_OPTIONS = Object.keys(IconPackageName).map((key) => {
+    const typedKey = key as IconPackageNameKeys;
+    const lcName = typedKey.toLowerCase();
 
-importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
-importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
-importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
-importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$/), IconsLogotype);
-importAllIcons(require.context('@alfalab/icons/corp/dist', false, /Icon\.js$/), IconsCorp);
-importAllIcons(require.context('@alfalab/icons/rocky/dist', false, /Icon\.js$/), IconsRocky);
-importAllIcons(require.context('@alfalab/icons/ios/dist', false, /Icon\.js$/), IconsIos);
-importAllIcons(require.context('@alfalab/icons/android/dist', false, /Icon\.js$/), IconsAndroid);
-
-import { IconList } from './IconList';
-import { IconPackageName, Packages } from './types';
-
-export const getModule = (packageName: IconPackageName) => {
-    switch (packageName) {
-        case IconPackageName.GLYPH:
-            return IconsGlyph;
-        case IconPackageName.CLASSIC:
-            return IconsClassic;
-        case IconPackageName.FLAG:
-            return IconsFlag;
-        case IconPackageName.LOGOTYPE:
-            return IconsLogotype;
-        case IconPackageName.CORP:
-            return IconsCorp;
-        case IconPackageName.ROCKY:
-            return IconsRocky;
-        case IconPackageName.IOS:
-            return IconsIos
-        case IconPackageName.ANDROID:
-            return IconsAndroid;
-    }
-};
+    return {
+        key: IconPackageName[typedKey],
+        content: lcName.charAt(0).toUpperCase() + lcName.slice(1),
+    };
+});
 
 export const Demo: FC = () => {
     const [value, setValue] = useState('');
 
-    const [packages, setPackages] = useState<Packages>({
-        [IconPackageName.CLASSIC]: false,
-        [IconPackageName.GLYPH]: true,
-        [IconPackageName.FLAG]: false,
-        [IconPackageName.LOGOTYPE]: false,
-        [IconPackageName.CORP]: false,
-        [IconPackageName.ROCKY]: false,
-        [IconPackageName.IOS]: false,
-        [IconPackageName.ANDROID]: false,
-    });
+    const [packages, setPackages] = useState<IconPackageName[]>([IconPackageName.GLYPH]);
 
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
+    const [isMobile] = useMatchMedia('--mobile');
+
+    const handlePackageChange: SelectProps['onChange'] = ({ selectedMultiple }) => {
+        setPackages(selectedMultiple.map((option) => option.key as IconPackageName));
     };
 
-    const onCheckboxGroupChange = (_: any, payload?: { checked: boolean; name?: string }) => {
-        const { checked, name = '' } = payload || {};
-
-        setPackages({
-            ...packages,
-            [name]: checked,
-        });
-    };
-
-    const { platform = 'web' } = qs.parse(document.location.search.replace(/^\?/, ''));
+    const Title = isMobile ? Typography.TitleMobile : Typography.Title;
+    const SelectComponent = isMobile ? SelectMobile : Select;
 
     return (
         <div className='root'>
-            <div className='search-wrap'>
-                <Input
-                    value={value}
-                    onChange={onChange}
-                    className='search-input'
-                    placeholder='Название иконки'
-                    block={true}
-                />
+            <div className='header-wrapper'>
+                <Title tag='h1' view='xlarge' font='styrene' className='header-title'>
+                    Витрина иконок
+                </Title>
 
-                <CheckboxGroup
-                    direction='horizontal'
-                    onChange={onCheckboxGroupChange}
-                    className='checkbox-group'
-                >
-                    <Checkbox
-                        label='glyph'
-                        name={IconPackageName.GLYPH}
-                        checked={packages.glyph}
-                    />
-                    <Checkbox
-                        label='rocky'
-                        name={IconPackageName.ROCKY}
-                        checked={packages.rocky}
-                    />
-                    <Checkbox
-                        label='ios'
-                        name={IconPackageName.IOS}
-                        checked={packages.ios}
-                    />
-                    <Checkbox
-                        label='android'
-                        name={IconPackageName.ANDROID}
-                        checked={packages.android}
-                    />
-                    <Checkbox
-                        label='corp'
-                        name={IconPackageName.CORP}
-                        checked={packages.corp}
-                    />
-                    <Checkbox
-                        label='classic (old)'
-                        name={IconPackageName.CLASSIC}
-                        checked={packages.classic}
-                    />
-                    <Checkbox
-                        label='logotype'
-                        name={IconPackageName.LOGOTYPE}
-                        checked={packages.logotype}
-                    />
-                    <Checkbox
-                        label='flag'
-                        name={IconPackageName.FLAG}
-                        checked={packages.flag}
-                    />
-                </CheckboxGroup>
+                <div className='search-wrapper'>
+                    <div className='bundle-select-wrapper'>
+                        <SelectComponent
+                            options={ICON_OPTIONS}
+                            selected={packages}
+                            Option={BaseOption}
+                            multiple={true}
+                            block={true}
+                            placeholder='Bundle'
+                            allowUnselect={true}
+                            size='s'
+                            onChange={handlePackageChange}
+                        />
+                    </div>
 
-                {platform === 'web' && (
-                    <h1 className='title'>Кликните на иконку для копирования импорта</h1>
-                )}
+                    <Input
+                        value={value}
+                        className='search-input'
+                        placeholder='Поиск по названию'
+                        block={true}
+                        leftAddons={<MagnifierMIcon />}
+                        clear={true}
+                        onChange={(e) => setValue(e.target.value)}
+                        onClear={() => setValue('')}
+                    />
+                </div>
             </div>
 
-            <IconList
-                icons={{
-                    [IconPackageName.GLYPH]: IconsGlyph,
-                    [IconPackageName.CLASSIC]: IconsClassic,
-                    [IconPackageName.FLAG]: IconsFlag,
-                    [IconPackageName.LOGOTYPE]: IconsLogotype,
-                    [IconPackageName.CORP]: IconsCorp,
-                    [IconPackageName.ROCKY]: IconsRocky,
-                    [IconPackageName.IOS]: IconsIos,
-                    [IconPackageName.ANDROID]: IconsAndroid,
-                }}
-                value={value}
-                packages={packages}
-            />
+            <React.Suspense
+                fallback={
+                    <div className='fallback-spinner'>
+                        <Spinner visible={true} size='m' />
+                    </div>
+                }
+            >
+                <IconList value={value} packages={packages} />
+            </React.Suspense>
         </div>
     );
 };

@@ -1,9 +1,5 @@
 import { ComponentType } from 'react';
 
-export type Packages = {
-    [key in IconPackageName]: boolean;
-};
-
 export enum IconPackageName {
     GLYPH = 'glyph',
     CLASSIC = 'classic',
@@ -15,6 +11,8 @@ export enum IconPackageName {
     ANDROID = 'android',
 }
 
+export type IconPackageNameKeys = keyof typeof IconPackageName;
+
 export type SearchResult = {
     [key in IconPackageName]: {
         matchByNameArr: JSX.Element[];
@@ -23,6 +21,7 @@ export type SearchResult = {
 };
 
 export type ClickedElement = {
+    reactIconName?: string;
     iconName?: string;
     packageName?: string;
     cdnLink?: string;
@@ -33,9 +32,12 @@ export type IconPackage = {
 };
 
 export type IconListProps = {
-    icons: {
-        [key in IconPackageName]: IconPackage;
-    };
     value: string;
-    packages: Packages;
+    packages: IconPackageName[];
 };
+
+export enum CopyType {
+    NAME = 'name',
+    REACT_NAME = 'react_name',
+    IMPORT_CODE = 'import_code',
+}
