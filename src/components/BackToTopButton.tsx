@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { IconButton } from '@alfalab/core-components/icon-button/modern';
-import { ArrowUpMIcon } from '@alfalab/icons-glyph/ArrowUpMIcon';
+import { ArrowUpMIcon } from '@alfalab/icons/glyph/dist/ArrowUpMIcon';
 
 type BackToTopProps = {
     onClick: () => void;

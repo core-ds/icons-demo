@@ -48,7 +48,18 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-            chunks: 'all',
+            cacheGroups: {
+                icons: {
+                    test: /[\\/]node_modules[\\/](@alfalab\/icons)[\\/]/,
+                    name: 'icons',
+                    chunks: 'all',
+                },
+                core_components: {
+                    test: /[\\/]node_modules[\\/](@alfalab\/core-components)[\\/]/,
+                    name: 'core-components',
+                    chunks: 'all',
+                },
+            },
         },
     },
     devServer: {
