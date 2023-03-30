@@ -1,8 +1,14 @@
 import React from 'react';
-import reactDom from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 
 import { Demo } from './components/Demo';
 
 import './index.css';
 
-reactDom.render(<Demo />, document.getElementById('root'));
+const rootEl = document.getElementById('root');
+
+if (rootEl) {
+    const root = ReactDOM.createRoot(rootEl);
+
+    root.render(<Demo />);
+}

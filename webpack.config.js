@@ -29,15 +29,21 @@ module.exports = {
                             sourceMap: true,
                         },
                     },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                        },
+                    },
                 ],
             },
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.jsx']
+        extensions: ['.tsx', '.ts', '.js', '.jsx'],
     },
     output: {
-        filename: 'dist/index.[hash].js',
+        filename: 'dist/[name].[fullhash].js',
         path: path.resolve(__dirname),
     },
     optimization: {
@@ -46,7 +52,7 @@ module.exports = {
         },
     },
     devServer: {
-        contentBase: path.join(__dirname),
+        static: path.join(__dirname),
         compress: true,
         port: 3000,
     },
