@@ -108,6 +108,10 @@ const IconList: FC<IconListProps> = ({ value, packages }) => {
 
     const popoverRef = useRef<HTMLDivElement>(null);
     const popoverAnchorRef = useRef<HTMLDivElement>();
+    const parentRef = useRef<HTMLDivElement>(null);
+
+    const [mobile] = useMatchMedia('--mobile');
+    const [tablet] = useMatchMedia('--tablet');
 
     const handleCopyDropdownClose = () => setClickedElem(null);
 
@@ -171,6 +175,8 @@ const IconList: FC<IconListProps> = ({ value, packages }) => {
             />
         );
     };
+
+    const columnsAmount = mobile ? 1 : tablet ? 3 : 4;
 
     Object.keys(ICONS).forEach((str) => {
         let packageName = str as IconPackageName;
@@ -245,7 +251,7 @@ const IconList: FC<IconListProps> = ({ value, packages }) => {
 
                     const IconWrap = (
                         <div
-                            className={cn('icon-wrap', {
+                            className={cn('icon-wrap', `icon-wrap-column-${columnsAmount}`, {
                                 'icon-wrap_dark': iconName.includes('white'),
                             })}
                             onClick={onClick}
@@ -292,13 +298,6 @@ const IconList: FC<IconListProps> = ({ value, packages }) => {
             ...result[packageName].matchByDescriptionArr,
         ];
     });
-
-    const parentRef = React.useRef<HTMLDivElement>(null);
-
-    const [mobile] = useMatchMedia('--mobile');
-    const [tablet] = useMatchMedia('--tablet');
-
-    const columnsAmount = mobile ? 1 : tablet ? 3 : 4;
 
     let resultGrid = resultArray.reduce((acc, curr, index) => {
         const columnIndex = Math.floor(index / columnsAmount);

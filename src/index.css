@@ -81,9 +81,22 @@ body {
     border-radius: 12px;
     background-color: var(--color-light-bg-secondary);
     text-align: center;
-    flex: 1 1 0;
+    flex-grow: 0;
+    flex-shrink: 1;
     width: 0;
     color: var(--color-light-graphic-primary);
+}
+
+.icon-wrap-column-1 {
+    flex-basis: 100%;
+}
+
+.icon-wrap-column-3 {
+    flex-basis: 33%;
+}
+
+.icon-wrap-column-4 {
+    flex-basis: 25%;
 }
 
 .icon-wrap:hover {
