@@ -23,7 +23,6 @@
         "postcss-import": "^15.1.0",
         "postcss-loader": "^7.1.0",
         "postcss-mixins": "^9.0.4",
-        "postcss-nested": "^6.0.1",
         "postcss-preset-env": "^8.2.0",
         "prettier": "^2.0.5",
         "rimraf": "^3.0.2",
@@ -52,12 +51,12 @@
         "@alfalab/core-components": "^40.1.0",
         "@alfalab/hooks": "^1.13.0",
         "@alfalab/icons": "^3.145.0",
+        "@tanstack/react-virtual": "^3.0.0-beta.54",
         "camelcase": "^6.2.0",
         "classnames": "^2.3.1",
         "decamelize": "^4.0.0",
         "querystring": "^0.2.1",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-virtual": "^2.10.4"
+        "react-dom": "^18.2.0"
     }
 }

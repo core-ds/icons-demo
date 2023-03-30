@@ -1,0 +1,195 @@
+@import '@alfalab/core-components/vars/index.css';
+@import '@alfalab/core-components/vars/mixins.css';
+
+:root {
+    --content-width: 1000px;
+    --side-gap: 20px;
+    --search-wrapper-padding: var(--gap-m) 0 var(--gap-2xs);
+    --bundle-select-width: '100%';
+    --bundle-select-margin: 0 0 var(--gap-m) 0;
+    --icons-list-padding: var(--gap-3xl) 0 var(--gap-7xl);
+    --row-padding: 0 0 var(--gap-m);
+    --icon-wrapper-padding: var(--gap-s);
+    --option-content-padding: var(--gap-m) 0 var(--gap-m) var(--gap-m);
+}
+
+.root {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+}
+
+.search-wrapper {
+    padding: var(--search-wrapper-padding);
+}
+
+.bundle-select-wrapper {
+    width: var(--bundle-select-width);
+    margin: var(--bundle-select-margin);
+}
+
+.search-input {
+    flex: 1;
+    color: var(--color-light-graphic-secondary);
+}
+
+.icons-list {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--icons-list-padding);
+}
+
+.list-header {
+    margin-bottom: var(--gap-m);
+}
+
+.list-row {
+    display: grid;
+    width: 100%;
+    column-gap: var(--gap-s);
+    padding: var(--row-padding);
+}
+
+.list-row-1 {
+    grid-template-columns: 1fr;
+}
+
+.list-row-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.list-row-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.icon-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 180px;
+    padding: var(--icon-wrapper-padding);
+    border-radius: 12px;
+    background-color: var(--color-light-bg-secondary);
+    text-align: center;
+    width: 100%;
+    color: var(--color-light-graphic-primary);
+}
+
+.icon-wrap:hover {
+    cursor: pointer;
+}
+
+.icon-wrap:last-child {
+    margin-right: 0;
+}
+
+.icon-wrap:first-child {
+    margin-left: 0;
+}
+
+.icon-wrap_dark {
+    background-color: var(--color-light-bg-secondary-inverted);
+    color: #fff;
+}
+
+.icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-grow: 1;
+    max-width: calc(100% - var(--icon-wrapper-padding) * 2);
+}
+
+.icon-primitive-name {
+    margin-top: auto;
+}
+
+.list-scroller {
+    margin: 0;
+    width: 100%;
+    padding: 0 var(--side-gap);
+
+    @mixin custom-scrollbar;
+}
+
+.list-scroller-inner {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.desktop-copy-dropdown-inner {
+    padding-top: var(--select-options-list-offset);
+    padding-bottom: var(--select-options-list-offset);
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    position: relative;
+}
+
+.popover-options-list {
+    position: relative;
+    padding-top: var(--select-options-list-top-padding);
+    padding-bottom: var(--select-options-list-bottom-padding);
+    box-shadow: var(--select-options-list-box-shadow);
+    border-radius: var(--select-options-list-border-radius);
+    background: var(--select-option-background);
+    overflow: hidden;
+}
+
+.mobile-copy-dropdown {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.copy-option:hover {
+    background-color: var(--select-option-hover-background);
+}
+
+.copy-option-content {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--gap-s);
+    padding: var(--option-content-padding);
+    color: var(--color-light-graphic-tertiary);
+}
+
+.back-to-top {
+    position: fixed;
+    right: var(--side-gap);
+    bottom: var(--gap-3xl);
+    background-color: var(--color-light-bg-primary-inverted);
+    border-radius: var(--border-radius-circle);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.back-to-top-appear {
+    opacity: 1;
+}
+
+@media (min-width: 600px) {
+    :root {
+        --search-wrapper-padding: var(--gap-m) 0 var(--gap-xs);
+        --bundle-select-width: 200px;
+        --icons-list-padding: var(--gap-5xl) 0 var(--gap-8xl);
+        --bundle-select-margin: 0;
+        --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
+        --row-padding: 0 0 var(--gap-s);
+    }
+
+    .search-wrapper {
+        display: flex;
+        flex-flow: row nowrap;
+        gap: var(--gap-xs);
+    }
+}
