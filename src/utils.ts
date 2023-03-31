@@ -67,3 +67,14 @@ export const fillIconInfo = (packages: Record<IconPackageName, AnyIcon>, iconsIn
         return result;
     }, {} as IconsInfo);
 };
+
+export const formatPackageName = (packageName: IconPackageName) => {
+    const name = packageName.toLowerCase();
+    let suffix = '';
+
+    if (name === IconPackageName.CLASSIC) {
+        suffix = ' (deprecated)';
+    }
+
+    return name.charAt(0).toUpperCase() + name.slice(1) + suffix;
+};

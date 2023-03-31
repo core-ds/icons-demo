@@ -2,16 +2,14 @@ import React, { ComponentType } from 'react';
 
 export enum IconPackageName {
     GLYPH = 'glyph',
-    CLASSIC = 'classic',
-    FLAG = 'flag',
-    LOGOTYPE = 'logotype',
-    CORP = 'corp',
     ROCKY = 'rocky',
     IOS = 'ios',
     ANDROID = 'android',
+    CORP = 'corp',
+    LOGOTYPE = 'logotype',
+    FLAG = 'flag',
+    CLASSIC = 'classic',
 }
-
-export type IconPackageNameKeys = keyof typeof IconPackageName;
 
 export type ClickedElement = {
     reactIconName: string;

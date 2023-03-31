@@ -25,26 +25,20 @@ import {
     ClickedElement,
     CopyType,
     IconPackageName,
-    IconPackageNameKeys,
     IconsInfo,
     RenderIconParams,
 } from '../types';
 import { BackToTopButton } from './BackToTopButton';
-import { fillIconInfo, getKeys, noop, importAllIcons } from '../utils';
+import { fillIconInfo, getKeys, noop, importAllIcons, formatPackageName } from '../utils';
 
 import iconsInfo from '@alfalab/icons/search.json';
 
 import './Demo.css';
 
-const ICON_OPTIONS = Object.keys(IconPackageName).map((key) => {
-    const typedKey = key as IconPackageNameKeys;
-    const lcName = typedKey.toLowerCase();
-
-    return {
-        key: IconPackageName[typedKey],
-        content: lcName.charAt(0).toUpperCase() + lcName.slice(1),
-    };
-});
+const ICON_OPTIONS = getKeys(IconPackageName).map((key) => ({
+    key: IconPackageName[key],
+    content: formatPackageName(IconPackageName[key]),
+}));
 
 const getOptionContent = (text: string) => (
     <div className='copy-option-content'>
@@ -63,32 +57,32 @@ const COPY_OPTIONS = [
 ];
 
 const IconsGlyph: AnyIcon = {};
-const IconsClassic: AnyIcon = {};
-const IconsFlag: AnyIcon = {};
-const IconsLogotype: AnyIcon = {};
-const IconsCorp: AnyIcon = {};
 const IconsRocky: AnyIcon = {};
 const IconsIos: AnyIcon = {};
 const IconsAndroid: AnyIcon = {};
+const IconsCorp: AnyIcon = {};
+const IconsLogotype: AnyIcon = {};
+const IconsFlag: AnyIcon = {};
+const IconsClassic: AnyIcon = {};
 
 importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
-importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
-importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
-importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$/), IconsLogotype);
-importAllIcons(require.context('@alfalab/icons/corp/dist', false, /Icon\.js$/), IconsCorp);
 importAllIcons(require.context('@alfalab/icons/rocky/dist', false, /Icon\.js$/), IconsRocky);
 importAllIcons(require.context('@alfalab/icons/ios/dist', false, /Icon\.js$/), IconsIos);
 importAllIcons(require.context('@alfalab/icons/android/dist', false, /Icon\.js$/), IconsAndroid);
+importAllIcons(require.context('@alfalab/icons/corp/dist', false, /Icon\.js$/), IconsCorp);
+importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$/), IconsLogotype);
+importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
+importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
 
 const ICONS = {
     [IconPackageName.GLYPH]: IconsGlyph,
-    [IconPackageName.CLASSIC]: IconsClassic,
-    [IconPackageName.FLAG]: IconsFlag,
-    [IconPackageName.LOGOTYPE]: IconsLogotype,
-    [IconPackageName.CORP]: IconsCorp,
     [IconPackageName.ROCKY]: IconsRocky,
     [IconPackageName.IOS]: IconsIos,
     [IconPackageName.ANDROID]: IconsAndroid,
+    [IconPackageName.CORP]: IconsCorp,
+    [IconPackageName.LOGOTYPE]: IconsLogotype,
+    [IconPackageName.FLAG]: IconsFlag,
+    [IconPackageName.CLASSIC]: IconsClassic,
 };
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
@@ -251,7 +245,7 @@ const Demo: FC = () => {
         );
     };
 
-    const renderPackageTitle = (packageName: string) => {
+    const renderPackageTitle = (packageName: IconPackageName) => {
         return (
             <Title
                 tag='h3'
@@ -260,7 +254,7 @@ const Demo: FC = () => {
                 data-package-title
                 key={packageName}
             >
-                {packageName.charAt(0).toUpperCase() + packageName.slice(1)}
+                {formatPackageName(packageName)}
             </Title>
         );
     };
