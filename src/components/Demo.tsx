@@ -1,7 +1,7 @@
 import React, { FC, useRef, useState } from 'react';
 import cn from 'classnames';
-import decamelize from 'decamelize';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import copy from 'copy-to-clipboard';
 
 import { Input } from '@alfalab/core-components/input/modern';
 import { Typography } from '@alfalab/core-components/typography/modern';
@@ -21,15 +21,18 @@ import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 import { CopyLineMIcon } from '@alfalab/icons/glyph/dist/CopyLineMIcon';
 
 import {
+    AnyIcon,
     ClickedElement,
     CopyType,
     IconPackageName,
     IconPackageNameKeys,
-    SearchResult,
-} from './types';
+    IconsInfo,
+    RenderIconParams,
+} from '../types';
 import { BackToTopButton } from './BackToTopButton';
+import { fillIconInfo, getKeys, noop, importAllIcons } from '../utils';
 
-import json from '@alfalab/icons/search.json';
+import iconsInfo from '@alfalab/icons/search.json';
 
 import './Demo.css';
 
@@ -42,12 +45,6 @@ const ICON_OPTIONS = Object.keys(IconPackageName).map((key) => {
         content: lcName.charAt(0).toUpperCase() + lcName.slice(1),
     };
 });
-
-const PACKAGE_ALIAS: { [key: string]: string } = {
-    classic: 'icon',
-};
-
-const noop = () => {};
 
 const getOptionContent = (text: string) => (
     <div className='copy-option-content'>
@@ -65,44 +62,14 @@ const COPY_OPTIONS = [
     { key: CopyType.IMPORT_CODE, content: getOptionContent('Код для импорта') },
 ];
 
-const getPackageName = (iconPrefix: string) => PACKAGE_ALIAS[iconPrefix] || iconPrefix;
-
-const getModule = (packageName: IconPackageName) => {
-    switch (packageName) {
-        case IconPackageName.GLYPH:
-            return IconsGlyph;
-        case IconPackageName.CLASSIC:
-            return IconsClassic;
-        case IconPackageName.FLAG:
-            return IconsFlag;
-        case IconPackageName.LOGOTYPE:
-            return IconsLogotype;
-        case IconPackageName.CORP:
-            return IconsCorp;
-        case IconPackageName.ROCKY:
-            return IconsRocky;
-        case IconPackageName.IOS:
-            return IconsIos;
-        case IconPackageName.ANDROID:
-            return IconsAndroid;
-    }
-};
-
-const IconsGlyph = {};
-const IconsClassic = {};
-const IconsFlag = {};
-const IconsLogotype = {};
-const IconsCorp = {};
-const IconsRocky = {};
-const IconsIos = {};
-const IconsAndroid = {};
-
-const importAllIcons = (requireContext: any, Module: any) =>
-    requireContext.keys().forEach((key: string) => {
-        const moduleName = key.replace(/\.js$/, '').replace(/^\.\//, '');
-
-        Module[moduleName] = requireContext(key)[moduleName];
-    });
+const IconsGlyph: AnyIcon = {};
+const IconsClassic: AnyIcon = {};
+const IconsFlag: AnyIcon = {};
+const IconsLogotype: AnyIcon = {};
+const IconsCorp: AnyIcon = {};
+const IconsRocky: AnyIcon = {};
+const IconsIos: AnyIcon = {};
+const IconsAndroid: AnyIcon = {};
 
 importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
 importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
@@ -124,16 +91,14 @@ const ICONS = {
     [IconPackageName.ANDROID]: IconsAndroid,
 };
 
+const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
+
 const isHeader = (idx: number) => idx === 0;
+const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
+const isEmptySearchResult = (element: JSX.Element) => Boolean(element.props['data-empty-search']);
 
 const estimateDesktopSize = () => 192;
 const estimateMobileSize = () => 196;
-
-function easeInOutQuint(t: number) {
-    return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
-}
-
-const sizes = ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl'];
 
 const Demo: FC = () => {
     const [value, setValue] = useState('');
@@ -145,39 +110,29 @@ const Demo: FC = () => {
     const popoverAnchorRef = useRef<HTMLDivElement>();
     const scrollerRef = useRef<HTMLDivElement>(null);
 
-    const [isMobile] = useMatchMedia('--mobile');
-
     const [mobile] = useMatchMedia('--mobile');
     const [tablet] = useMatchMedia('--tablet');
+
+    const query = value.toLowerCase();
+    const Title = mobile ? Typography.TitleMobile : Typography.Title;
+    const SelectComponent = mobile ? SelectMobile : Select;
 
     const handleCopyDropdownClose = () => setClickedElem(null);
 
     useClickOutside(popoverRef, handleCopyDropdownClose);
 
-    const copyStr = (str = '') => {
-        void navigator.clipboard.writeText(str);
-    };
-
-    const onIconClick = (elem: ClickedElement) => {
-        setClickedElem(elem);
-    };
-
     const handleCopy = (type: CopyType) => {
         if (clickedElem) {
-            switch (type) {
-                case CopyType.NAME:
-                    copyStr(clickedElem.iconName);
-                    break;
-
-                case CopyType.REACT_NAME:
-                    copyStr(clickedElem.reactIconName);
-                    break;
-
-                case CopyType.IMPORT_CODE:
-                    copyStr(
-                        `import { ${clickedElem.reactIconName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.reactIconName}';`,
-                    );
-                    break;
+            if (type === CopyType.NAME) {
+                copy(clickedElem.iconName);
+            }
+            if (type === CopyType.REACT_NAME) {
+                copy(clickedElem.reactIconName);
+            }
+            if (type === CopyType.IMPORT_CODE) {
+                copy(
+                    `import { ${clickedElem.reactIconName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.reactIconName}';`,
+                );
             }
 
             setToastParams({
@@ -193,9 +148,6 @@ const Demo: FC = () => {
     };
 
     const renderHeader = () => {
-        const Title = isMobile ? Typography.TitleMobile : Typography.Title;
-        const SelectComponent = isMobile ? SelectMobile : Select;
-
         return (
             <div key='header'>
                 <Title tag='h1' view='xlarge' font='styrene' className='header-title'>
@@ -258,187 +210,194 @@ const Demo: FC = () => {
         );
     };
 
+    const renderIcon = ({
+        reactIconName,
+        iconPrimitiveName,
+        packageName,
+        Icon,
+    }: RenderIconParams) => {
+        const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+            popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
+            setClickedElem({
+                reactIconName,
+                iconName: iconPrimitiveName,
+                packageName,
+                cdnLink: iconPrimitiveName
+                    ? `https://alfabank.gcdn.co/icons/${iconPrimitiveName}.svg`
+                    : '',
+            });
+        };
+
+        const isWhite = iconPrimitiveName.includes('white');
+
+        return (
+            <div
+                className={cn('icon-wrap', `icon-wrap-column-${columnsAmount}`, {
+                    'icon-wrap_dark': isWhite,
+                })}
+                onClick={handleClick}
+                key={`${packageName}-${iconPrimitiveName}`}
+            >
+                {Icon ? <Icon className='icon' /> : null}
+
+                <Typography.Text
+                    view='primary-small'
+                    color={isWhite ? 'secondary-inverted' : 'secondary'}
+                    className='icon-primitive-name'
+                >
+                    {iconPrimitiveName}
+                </Typography.Text>
+            </div>
+        );
+    };
+
+    const renderPackageTitle = (packageName: string) => {
+        return (
+            <Title
+                tag='h3'
+                view='small'
+                className='package-title'
+                data-package-title
+                key={packageName}
+            >
+                {packageName.charAt(0).toUpperCase() + packageName.slice(1)}
+            </Title>
+        );
+    };
+
+    const renderEmptySearchResult = () => (
+        <Typography.Text
+            key='emtpty-result'
+            view='primary-small'
+            color='secondary'
+            className='empty-search-result'
+            data-empty-search
+        >
+            Ничего не нашлось, попробуйте изменить запрос
+        </Typography.Text>
+    );
+
     const columnsAmount = mobile ? 1 : tablet ? 3 : 4;
 
-    const result = {} as SearchResult;
+    const result: JSX.Element[] = [renderHeader()];
 
-    Object.keys(ICONS).forEach((str) => {
-        let packageName = str as IconPackageName;
-
+    getKeys(ICONS).forEach((packageName) => {
         if (packages.includes(packageName)) {
-            Object.keys(ICONS[packageName]).forEach((Icon) => {
-                const searchValue = value.toLowerCase();
-                const iconName = Icon.toLowerCase();
-                // @ts-ignore
-                let iconInfo = json[packageName] && json[packageName][Icon];
+            const module = ICONS[packageName];
 
-                if (!iconInfo) {
-                    const arr = decamelize(Icon.replace(/Icon$/, '')).split('_');
+            if (!query) {
+                result.push(renderPackageTitle(packageName));
+            }
 
-                    let lastElem = arr[arr.length - 1];
+            getKeys(module).forEach((reactIconName) => {
+                const iconName = reactIconName.toLowerCase();
+                const iconInfo = ICONS_INFO[packageName][reactIconName];
+                const iconDescription = iconInfo.figmaDescription.toLowerCase();
+                const iconPrimitiveName = iconInfo.svgIconName;
 
-                    let color = '';
-                    let name;
-                    let size;
+                const isMatch =
+                    !query ||
+                    iconName.includes(query) ||
+                    iconPrimitiveName.includes(query) ||
+                    iconDescription.includes(query);
 
-                    if (sizes.includes(lastElem)) {
-                        size = lastElem;
-                        name = arr.slice(0, arr.length - 1).join('-');
-                    } else {
-                        color = lastElem;
-                        size = arr[arr.length - 2];
-                        name = arr.slice(0, arr.length - 2).join('-');
-                    }
+                if (isMatch) {
+                    const IconComponent = module[reactIconName];
 
-                    let svgIconName = `${name}_${size}${color ? `_${color}` : ''}`;
-
-                    if (packageName !== 'ios' && packageName !== 'android') {
-                        svgIconName = `${getPackageName(packageName)}_${svgIconName}`;
-                    }
-
-                    iconInfo = { svgIconName };
-
-                    // @ts-ignore
-                    if (json[packageName] && json[packageName][Icon]) {
-                        // @ts-ignore
-                        json[packageName][Icon] = iconInfo;
-                    }
-                }
-
-                const iconDescription =
-                    iconInfo && iconInfo.figmaDescription
-                        ? iconInfo.figmaDescription.toLowerCase()
-                        : '';
-
-                const iconPrimitiveName = (iconInfo && iconInfo.svgIconName) ?? '';
-
-                const matchByName =
-                    iconName.includes(searchValue) || iconPrimitiveName.includes(searchValue);
-                const matchByDescription = iconDescription && iconDescription.includes(searchValue);
-
-                if (matchByName || matchByDescription) {
-                    const module = getModule(packageName);
-                    // @ts-ignore
-                    const IconComponent = module[Icon];
-
-                    const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-                        popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
-                        onIconClick({
-                            reactIconName: Icon,
-                            iconName: iconPrimitiveName,
+                    result.push(
+                        renderIcon({
+                            reactIconName,
+                            iconPrimitiveName,
                             packageName,
-                            cdnLink: iconPrimitiveName
-                                ? `https://alfabank.gcdn.co/icons/${iconPrimitiveName}.svg`
-                                : '',
-                        });
-                    };
-
-                    const IconWrap = (
-                        <div
-                            className={cn('icon-wrap', `icon-wrap-column-${columnsAmount}`, {
-                                'icon-wrap_dark': iconName.includes('white'),
-                            })}
-                            onClick={onClick}
-                            key={`${packageName}-${iconName}`}
-                        >
-                            {IconComponent ? <IconComponent className='icon' /> : null}
-                            <Typography.Text
-                                view='primary-small'
-                                color={
-                                    iconName.includes('white') ? 'secondary-inverted' : 'secondary'
-                                }
-                                className='icon-primitive-name'
-                            >
-                                {iconPrimitiveName}
-                            </Typography.Text>
-                        </div>
+                            Icon: IconComponent,
+                        }),
                     );
-
-                    if (!result[packageName]) {
-                        result[packageName] = {
-                            matchByDescriptionArr: [],
-                            matchByNameArr: [],
-                        };
-                    }
-
-                    if (matchByName) {
-                        result[packageName].matchByNameArr.push(IconWrap);
-                    } else {
-                        result[packageName].matchByDescriptionArr.push(IconWrap);
-                    }
                 }
             });
         }
     });
 
-    let resultArray: JSX.Element[] = [renderHeader()];
+    const { grid } = result.reduce(
+        (acc, curr, index) => {
+            if (!acc.grid[acc.rowIndex]) {
+                acc.grid[acc.rowIndex] = [];
+            }
 
-    Object.keys(result).forEach((str) => {
-        let packageName = str as IconPackageName;
+            if (isHeader(index) || isPackageName(curr)) {
+                if (acc.grid[acc.rowIndex].length) {
+                    acc.rowIndex += 1;
 
-        resultArray = [
-            ...resultArray,
-            ...result[packageName].matchByNameArr,
-            ...result[packageName].matchByDescriptionArr,
-        ];
-    });
+                    if (!acc.grid[acc.rowIndex]) {
+                        acc.grid[acc.rowIndex] = [];
+                    }
+                }
 
-    let resultGrid = resultArray.reduce((acc, curr, index) => {
-        const columnIndex = isHeader(index) ? index : Math.ceil(index / columnsAmount);
+                acc.grid[acc.rowIndex].push(curr);
+                acc.rowIndex += 1;
+            } else {
+                acc.grid[acc.rowIndex].push(curr);
+            }
 
-        if (!acc[columnIndex]) {
-            acc[columnIndex] = [];
-        }
+            if (acc.grid[acc.rowIndex]?.length === columnsAmount) {
+                acc.rowIndex += 1;
+            }
 
-        acc[columnIndex].push(curr);
+            return acc;
+        },
+        { grid: [] as JSX.Element[][], rowIndex: 0 },
+    );
 
-        return acc;
-    }, [] as JSX.Element[][]);
+    //Только заголовок, т.е ничего не найдено
+    if (query && grid.length === 1) {
+        grid.push([renderEmptySearchResult()]);
+    }
 
-    const rowVirtualizer = useVirtualizer({
-        count: resultGrid.length,
+    const virtualizer = useVirtualizer({
+        count: grid.length,
         getScrollElement: () => scrollerRef.current,
         overscan: 5,
-        estimateSize: isMobile ? estimateMobileSize : estimateDesktopSize,
+        estimateSize: mobile ? estimateMobileSize : estimateDesktopSize,
     });
 
-    const items = rowVirtualizer.getVirtualItems();
+    const items = virtualizer.getVirtualItems();
 
     return (
         <div className='root'>
             <div ref={scrollerRef} className='list-scroller'>
-                <div
-                    className='list-scroller-inner'
-                    style={{ height: rowVirtualizer.getTotalSize() }}
-                >
+                <div className='list-scroller-inner' style={{ height: virtualizer.getTotalSize() }}>
                     <div
                         className='icons-list'
                         style={{ transform: `translateY(${items[0].start}px)` }}
                     >
                         {items.map((virtualRow) => {
+                            const rowItems = grid[virtualRow.index];
                             const header = isHeader(virtualRow.index);
-                            const rowItems = resultGrid[virtualRow.index];
+                            const packageName = isPackageName(rowItems[0]);
+                            const emptySearchResult =
+                                virtualRow.index === 1 && isEmptySearchResult(rowItems[0]);
+                            const listRow = !emptySearchResult && !header && !packageName;
 
                             return (
-                                rowItems && (
-                                    <div
-                                        key={virtualRow.index}
-                                        className={cn({
-                                            ['list-header']: header,
-                                            ['list-row']: !header,
-                                            [`list-row-${columnsAmount}`]: !header,
-                                        })}
-                                        data-index={virtualRow.index}
-                                        ref={rowVirtualizer.measureElement}
-                                    >
-                                        {rowItems.map((item) => item)}
-                                    </div>
-                                )
+                                <div
+                                    key={virtualRow.index}
+                                    className={cn({
+                                        ['list-package-name']: packageName,
+                                        ['list-header-gap']: query && header,
+                                        ['list-row']: listRow,
+                                        [`list-row-${columnsAmount}`]: listRow,
+                                        ['empty-search-result']: emptySearchResult,
+                                    })}
+                                    data-index={virtualRow.index}
+                                    ref={virtualizer.measureElement}
+                                >
+                                    {rowItems.map((item) => item)}
+                                </div>
                             );
                         })}
                     </div>
                 </div>
             </div>
+
             <Toast
                 open={toastParams.open}
                 onClose={() => setToastParams((prev) => ({ ...prev, open: false }))}
