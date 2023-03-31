@@ -76,5 +76,9 @@ export const formatPackageName = (packageName: IconPackageName) => {
         suffix = ' (deprecated)';
     }
 
+    if (packageName === IconPackageName.IOS) {
+        return 'iOS';
+    }
+
     return name.charAt(0).toUpperCase() + name.slice(1) + suffix;
 };
