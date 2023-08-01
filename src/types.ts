@@ -6,6 +6,7 @@ export enum IconPackageName {
     IOS = 'ios',
     ANDROID = 'android',
     CORP = 'corp',
+    INVEST = 'invest',
     LOGOTYPE = 'logotype',
     FLAG = 'flag',
     CLASSIC = 'classic',
