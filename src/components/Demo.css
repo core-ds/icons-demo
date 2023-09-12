@@ -30,7 +30,7 @@
 }
 
 :root {
-    --content-width: 1000px;
+    --content-width: 768px;
     --side-gap: 20px;
     --search-wrapper-padding: var(--gap-m) 0 var(--gap-2xs);
     --bundle-select-width: '100%';
@@ -90,10 +90,6 @@
 
 .list-row-3 {
     grid-template-columns: repeat(3, 1fr);
-}
-
-.list-row-4 {
-    grid-template-columns: repeat(4, 1fr);
 }
 
 .icon-wrap {
