@@ -108,6 +108,7 @@ const Demo: FC = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
 
     const [mobile] = useMatchMedia('--mobile');
+    const [tablet] = useMatchMedia('--tablet');
 
     const query = value.toLowerCase();
     const Title = mobile ? Typography.TitleMobile : Typography.Title;
@@ -273,7 +274,7 @@ const Demo: FC = () => {
         </Typography.Text>
     );
 
-    const columnsAmount = mobile ? 1 : 3;
+    const columnsAmount = mobile ? 1 : tablet ? 3 : 4;
 
     const result: JSX.Element[] = [renderHeader()];
 
