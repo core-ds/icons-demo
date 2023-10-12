@@ -52,7 +52,7 @@ const getOptionContent = (text: string) => (
 
 const COPY_OPTIONS = [
     { key: CopyType.NAME, content: getOptionContent('Имя иконки') },
-    { key: CopyType.REACT_NAME, content: getOptionContent('Имя реакт компонента') },
+    { key: CopyType.REACT_NAME, content: getOptionContent('Реакт компонент') },
     { key: CopyType.IMPORT_CODE, content: getOptionContent('Код для импорта') },
 ];
 
