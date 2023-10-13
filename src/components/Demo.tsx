@@ -52,7 +52,7 @@ const getOptionContent = (text: string) => (
 
 const COPY_OPTIONS = [
     { key: CopyType.NAME, content: getOptionContent('Имя иконки') },
-    { key: CopyType.REACT_NAME, content: getOptionContent('Реакт компонент') },
+    { key: CopyType.REACT_NAME, content: getOptionContent('Имя компонента') },
     { key: CopyType.IMPORT_CODE, content: getOptionContent('Код для импорта') },
 ];
 
@@ -396,12 +396,11 @@ const Demo: FC = () => {
             </div>
 
             <Toast
+                title={toastParams.text}
                 open={toastParams.open}
                 onClose={() => setToastParams((prev) => ({ ...prev, open: false }))}
-                style={{ left: '50%', transform: 'translateX(-50%)' }}
-            >
-                <Typography.Text view='component'>{toastParams.text}</Typography.Text>
-            </Toast>
+                style={{ left: '50%', transform: 'translateX(-53%)' }}                
+            />
             {mobile ? (
                 <BottomSheet
                     open={Boolean(clickedElem)}
