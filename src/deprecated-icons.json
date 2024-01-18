@@ -1,0 +1,11 @@
+{
+    "glyph_book-check_m": {
+        "replacement" : "glyph_book-open-checkmark_m"
+    },
+    "glyph_book-open-check_m": {
+        "replacement" : "glyph_book-open-checkmark_m"
+    },
+    "glyph_call_m": {
+        "replacement" : ""
+    }
+}
