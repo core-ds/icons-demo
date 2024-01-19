@@ -51,3 +51,12 @@ export type RenderIconParams = {
     packageName: string;
     Icon: AnyIcon[keyof AnyIcon];
 };
+
+export type DeprecatedIcons = {
+    [key: string]: { replacement: string };
+  }
+
+export enum DeprecatedType {
+    DEPRECATED = 'deprecated',
+    NO_REPLACE = 'no_replace',
+}

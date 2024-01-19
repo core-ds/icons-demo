@@ -5,13 +5,9 @@ import copy from 'copy-to-clipboard';
 
 import { Input } from '@alfalab/core-components/input/modern';
 import { Typography } from '@alfalab/core-components/typography/modern';
-import {
-    Select,
-    BaseOption,
-    SelectMobile,
-    SelectProps,
-    OptionsList,
-} from '@alfalab/core-components/select/modern';
+import { Select, SelectProps } from '@alfalab/core-components/select/modern';
+import { SelectMobile } from '@alfalab/core-components/select/modern/mobile';
+import { BaseOption, OptionsList } from '@alfalab/core-components/select/modern/shared';
 import { useMatchMedia } from '@alfalab/core-components/mq/modern';
 import { Toast } from '@alfalab/core-components/toast/modern';
 import { BottomSheet } from '@alfalab/core-components/bottom-sheet/modern';
@@ -19,11 +15,14 @@ import { Popover } from '@alfalab/core-components/popover/modern';
 import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 import { CopyLineMIcon } from '@alfalab/icons/glyph/dist/CopyLineMIcon';
+import { ArrowRightCurvedMIcon } from '@alfalab/icons-glyph/ArrowRightCurvedMIcon';
 
 import {
     AnyIcon,
     ClickedElement,
     CopyType,
+    DeprecatedIcons,
+    DeprecatedType,
     IconPackageName,
     IconsInfo,
     RenderIconParams,
@@ -31,6 +30,7 @@ import {
 import { BackToTopButton } from './BackToTopButton';
 import { fillIconInfo, getKeys, noop, importAllIcons, formatPackageName } from '../utils';
 
+import deprecatedIcons from '../deprecated-icons.json';
 import iconsInfo from '@alfalab/icons/search.json';
 
 import './Demo.css';
@@ -40,8 +40,8 @@ const ICON_OPTIONS = getKeys(IconPackageName).map((key) => ({
     content: formatPackageName(IconPackageName[key]),
 }));
 
-const getOptionContent = (text: string) => (
-    <div className='copy-option-content'>
+const getOptionContentCopy = (text: string) => (
+    <div className='option-content'>
         <Typography.Text view='component' color='primary'>
             {text}
         </Typography.Text>
@@ -50,11 +50,55 @@ const getOptionContent = (text: string) => (
     </div>
 );
 
+const getOptionContentDeprecated = (text: string, replace: boolean) => (
+    <div
+        className={cn('option-content', {
+            'option-no-replace': !replace,
+        })}
+    >
+        <Typography.Text
+            view={replace ? 'component' : 'primary-small'}
+            color={replace ? 'primary' : 'tertiary'}
+        >
+            {text}
+        </Typography.Text>
+
+        {replace && <ArrowRightCurvedMIcon color='var(--color-light-graphic-tertiary)' />}
+    </div>
+);
+
 const COPY_OPTIONS = [
-    { key: CopyType.NAME, content: getOptionContent('Имя иконки') },
-    { key: CopyType.REACT_NAME, content: getOptionContent('Имя компонента') },
-    { key: CopyType.IMPORT_CODE, content: getOptionContent('Код для импорта') },
+    { key: CopyType.NAME, content: getOptionContentCopy('Имя иконки') },
+    { key: CopyType.REACT_NAME, content: getOptionContentCopy('Имя компонента') },
+    { key: CopyType.IMPORT_CODE, content: getOptionContentCopy('Код для импорта') },
 ];
+
+const DEPRECATED_OPTION_WITH_REPLACE = [
+    {
+        key: DeprecatedType.DEPRECATED,
+        content: getOptionContentDeprecated('Перейти к замене', true),
+    },
+];
+
+const DEPRECATED_OPTION_WITHOUT_REPLACE = [
+    {
+        key: DeprecatedType.NO_REPLACE,
+        content: getOptionContentDeprecated(
+            'Замены нет. Попробуйте найти другую иконку, подходящую под вашу задачу.',
+            false,
+        ),
+    },
+];
+
+function getOptionsList(iconName: string, deprecatedIcons: DeprecatedIcons) {
+    if (!deprecatedIcons.hasOwnProperty(iconName)) {
+        return COPY_OPTIONS;
+    } else if (deprecatedIcons[iconName].replacement) {
+        return DEPRECATED_OPTION_WITH_REPLACE;
+    } else {
+        return DEPRECATED_OPTION_WITHOUT_REPLACE;
+    }
+}
 
 const IconsGlyph: AnyIcon = {};
 const IconsRocky: AnyIcon = {};
@@ -90,6 +134,8 @@ const ICONS = {
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
 
+const allDeprecatedIcons: DeprecatedIcons = deprecatedIcons;
+
 const isHeader = (idx: number) => idx === 0;
 const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
 const isEmptySearchResult = (element: JSX.Element) => Boolean(element.props['data-empty-search']);
@@ -114,29 +160,36 @@ const Demo: FC = () => {
     const Title = mobile ? Typography.TitleMobile : Typography.Title;
     const SelectComponent = mobile ? SelectMobile : Select;
 
-    const handleCopyDropdownClose = () => setClickedElem(null);
+    const handleDropdownClose = () => setClickedElem(null);
 
-    useClickOutside(popoverRef, handleCopyDropdownClose);
+    useClickOutside(popoverRef, handleDropdownClose);
 
-    const handleCopy = (type: CopyType) => {
+    const handleOptionAction = (type: DeprecatedType | CopyType, newName?: string) => {
         if (clickedElem) {
-            if (type === CopyType.NAME) {
-                copy(clickedElem.iconName);
-            }
-            if (type === CopyType.REACT_NAME) {
-                copy(clickedElem.reactIconName);
-            }
-            if (type === CopyType.IMPORT_CODE) {
-                copy(
-                    `import { ${clickedElem.reactIconName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.reactIconName}';`,
-                );
+            if (Object.values(CopyType).includes(type as CopyType)) {
+                if (type === CopyType.NAME) {
+                    copy(clickedElem.iconName);
+                }
+                if (type === CopyType.REACT_NAME) {
+                    copy(clickedElem.reactIconName);
+                }
+                if (type === CopyType.IMPORT_CODE) {
+                    copy(
+                        `import { ${clickedElem.reactIconName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.reactIconName}';`,
+                    );
+                }
+
+                setToastParams({
+                    open: true,
+                    text: type === CopyType.IMPORT_CODE ? 'Код скопирован' : 'Имя скопировано',
+                });
             }
 
-            setToastParams({
-                open: true,
-                text: type === CopyType.IMPORT_CODE ? 'Код скопирован' : 'Имя скопировано',
-            });
-            handleCopyDropdownClose();
+            if (type === DeprecatedType.DEPRECATED && newName) {
+                setValue(newName);
+            }
+
+            handleDropdownClose();
         }
     };
 
@@ -181,11 +234,14 @@ const Demo: FC = () => {
         );
     };
 
-    const renderCopyDropdown = () => {
+    const renderDropdown = (iconName?: string) => {
+        const newName = iconName && allDeprecatedIcons[iconName]?.replacement;
+        const options = (iconName && getOptionsList(iconName, allDeprecatedIcons)) || [];
+
         return (
             <OptionsList
                 nativeScrollbar={true}
-                options={COPY_OPTIONS}
+                options={options}
                 Option={BaseOption}
                 setSelectedItems={noop}
                 toggleMenu={noop}
@@ -194,10 +250,11 @@ const Demo: FC = () => {
                     index,
                     option,
                     mobile,
-                    className: 'copy-option',
+                    className: 'option',
                     innerProps: {
                         id: option.key,
-                        onClick: () => handleCopy(option.key as CopyType),
+                        onClick: () =>
+                            handleOptionAction(option.key as CopyType | DeprecatedType, newName),
                         onMouseDown: noop,
                         onMouseMove: noop,
                         role: 'option',
@@ -226,6 +283,7 @@ const Demo: FC = () => {
         };
 
         const isWhite = iconPrimitiveName.includes('white');
+        const isDeprecatedIcon = allDeprecatedIcons.hasOwnProperty(iconPrimitiveName);
 
         return (
             <div
@@ -235,7 +293,25 @@ const Demo: FC = () => {
                 onClick={handleClick}
                 key={`${packageName}-${iconPrimitiveName}`}
             >
-                {Icon ? <Icon className='icon' /> : null}
+                {isDeprecatedIcon ? (
+                    <Typography.Text
+                        tag='div'
+                        view='primary-small'
+                        color={isWhite ? 'tertiary-inverted' : 'tertiary'}
+                        className={cn('deprecated', {
+                            deprecated_dark: isWhite,
+                        })}
+                    >
+                        deprecated
+                    </Typography.Text>
+                ) : null}
+
+                {Icon ? (
+                    <Icon
+                        className='icon'
+                        color={isDeprecatedIcon && 'var(--color-light-graphic-tertiary)'}
+                    />
+                ) : null}
 
                 <Typography.Text
                     view='primary-small'
@@ -399,15 +475,15 @@ const Demo: FC = () => {
                 title={toastParams.text}
                 open={toastParams.open}
                 onClose={() => setToastParams((prev) => ({ ...prev, open: false }))}
-                style={{ left: '50%', transform: 'translateX(-53%)' }}                
+                style={{ left: '50%', transform: 'translateX(-53%)' }}
             />
             {mobile ? (
                 <BottomSheet
                     open={Boolean(clickedElem)}
-                    onClose={handleCopyDropdownClose}
+                    onClose={handleDropdownClose}
                     contentClassName='mobile-copy-dropdown'
                 >
-                    {renderCopyDropdown()}
+                    {renderDropdown(clickedElem?.iconName)}
                 </BottomSheet>
             ) : (
                 <Popover
@@ -420,7 +496,9 @@ const Demo: FC = () => {
                     preventFlip={false}
                     ref={popoverRef}
                 >
-                    <div className='popover-options-list'>{renderCopyDropdown()}</div>
+                    <div className='popover-options-list'>
+                        {renderDropdown(clickedElem?.iconName)}
+                    </div>
                 </Popover>
             )}
 
