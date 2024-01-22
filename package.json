@@ -1,6 +1,6 @@
 {
     "name": "@alfalab/icons-demo",
-    "version": "1.496.0",
+    "version": "1.497.0",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
@@ -50,7 +50,7 @@
     "dependencies": {
         "@alfalab/core-components": "^44.5.1",
         "@alfalab/hooks": "^1.13.0",
-        "@alfalab/icons": "^3.202.0",
+        "@alfalab/icons": "^3.203.0",
         "@tanstack/react-virtual": "^3.0.0-beta.54",
         "camelcase": "^6.2.0",
         "classnames": "^2.3.1",
