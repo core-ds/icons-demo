@@ -42,7 +42,7 @@ const ICON_OPTIONS = getKeys(IconPackageName).map((key) => ({
 
 const getOptionContentCopy = (text: string) => (
     <div className='option-content'>
-        <Typography.Text view='component' color='primary'>
+        <Typography.Text view='component-primary' color='primary'>
             {text}
         </Typography.Text>
 
@@ -57,7 +57,7 @@ const getOptionContentDeprecated = (text: string, replace: boolean) => (
         })}
     >
         <Typography.Text
-            view={replace ? 'component' : 'primary-small'}
+            view={replace ? 'component-primary' : 'primary-small'}
             color={replace ? 'primary' : 'tertiary'}
         >
             {text}
@@ -90,7 +90,11 @@ const DEPRECATED_OPTION_WITHOUT_REPLACE = [
     },
 ];
 
-function getOptionsList(iconName: string, deprecatedIcons: DeprecatedIcons) {
+function getOptionsList(iconName: string, packageName: string, deprecatedIcons: DeprecatedIcons) {
+    if (packageName === IconPackageName.CLASSIC) {
+        return DEPRECATED_OPTION_WITHOUT_REPLACE;
+    }
+
     if (!deprecatedIcons.hasOwnProperty(iconName)) {
         return COPY_OPTIONS;
     } else if (deprecatedIcons[iconName].replacement) {
@@ -109,6 +113,7 @@ const IconsLogotype: AnyIcon = {};
 const IconsFlag: AnyIcon = {};
 const IconsClassic: AnyIcon = {};
 const IconsInvest: AnyIcon = {};
+const IconsSite: AnyIcon = {};
 
 importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
 importAllIcons(require.context('@alfalab/icons/rocky/dist', false, /Icon\.js$/), IconsRocky);
@@ -119,6 +124,7 @@ importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$
 importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
 importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
 importAllIcons(require.context('@alfalab/icons/invest/dist', false, /Icon\.js$/), IconsInvest);
+importAllIcons(require.context('@alfalab/icons/site/dist', false, /Icon\.js$/), IconsSite);
 
 const ICONS = {
     [IconPackageName.GLYPH]: IconsGlyph,
@@ -130,6 +136,7 @@ const ICONS = {
     [IconPackageName.FLAG]: IconsFlag,
     [IconPackageName.CLASSIC]: IconsClassic,
     [IconPackageName.INVEST]: IconsInvest,
+    [IconPackageName.SITE]: IconsSite,
 };
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
@@ -187,6 +194,10 @@ const Demo: FC = () => {
 
             if (type === DeprecatedType.DEPRECATED && newName) {
                 setValue(newName);
+                const replacePackage = newName.split('_')[0] as IconPackageName;
+                if (!packages.includes(replacePackage)) {
+                    setPackages((prevPackages) => [...prevPackages, replacePackage]);
+                }
             }
 
             handleDropdownClose();
@@ -234,9 +245,11 @@ const Demo: FC = () => {
         );
     };
 
-    const renderDropdown = (iconName?: string) => {
-        const newName = iconName && allDeprecatedIcons[iconName]?.replacement;
-        const options = (iconName && getOptionsList(iconName, allDeprecatedIcons)) || [];
+    const renderDropdown = (clickedElem: ClickedElement | null) => {
+        const { iconName, packageName } = clickedElem || ({} as ClickedElement);
+        const newName = allDeprecatedIcons[iconName]?.replacement || '';
+        const options =
+            (iconName && getOptionsList(iconName, packageName, allDeprecatedIcons)) || [];
 
         return (
             <OptionsList
@@ -283,7 +296,9 @@ const Demo: FC = () => {
         };
 
         const isWhite = iconPrimitiveName.includes('white');
-        const isDeprecatedIcon = allDeprecatedIcons.hasOwnProperty(iconPrimitiveName);
+        const isDeprecatedIcon =
+            allDeprecatedIcons.hasOwnProperty(iconPrimitiveName) ||
+            packageName === IconPackageName.CLASSIC;
 
         return (
             <div
@@ -309,7 +324,11 @@ const Demo: FC = () => {
                 {Icon ? (
                     <Icon
                         className='icon'
-                        color={isDeprecatedIcon && 'var(--color-light-graphic-tertiary)'}
+                        color={
+                            isDeprecatedIcon
+                                ? 'var(--color-light-graphic-tertiary)'
+                                : 'var(--color-light-graphic-primary)'
+                        }
                     />
                 ) : null}
 
@@ -483,7 +502,7 @@ const Demo: FC = () => {
                     onClose={handleDropdownClose}
                     contentClassName='mobile-copy-dropdown'
                 >
-                    {renderDropdown(clickedElem?.iconName)}
+                    {renderDropdown(clickedElem)}
                 </BottomSheet>
             ) : (
                 <Popover
@@ -496,9 +515,7 @@ const Demo: FC = () => {
                     preventFlip={false}
                     ref={popoverRef}
                 >
-                    <div className='popover-options-list'>
-                        {renderDropdown(clickedElem?.iconName)}
-                    </div>
+                    <div className='popover-options-list'>{renderDropdown(clickedElem)}</div>
                 </Popover>
             )}
 

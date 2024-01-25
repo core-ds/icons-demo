@@ -10,6 +10,7 @@ export enum IconPackageName {
     LOGOTYPE = 'logotype',
     FLAG = 'flag',
     CLASSIC = 'classic',
+    SITE = 'site',
 }
 
 export type ClickedElement = {
@@ -53,8 +54,8 @@ export type RenderIconParams = {
 };
 
 export type DeprecatedIcons = {
-    [key: string]: { replacement: string };
-  }
+    [key: string]: { replacement: string; date: string };
+};
 
 export enum DeprecatedType {
     DEPRECATED = 'deprecated',
