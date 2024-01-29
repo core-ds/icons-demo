@@ -28,7 +28,14 @@ import {
     RenderIconParams,
 } from '../types';
 import { BackToTopButton } from './BackToTopButton';
-import { fillIconInfo, getKeys, noop, importAllIcons, formatPackageName } from '../utils';
+import {
+    fillIconInfo,
+    getKeys,
+    noop,
+    importAllIcons,
+    formatPackageName,
+    getKeyParts,
+} from '../utils';
 
 import deprecatedIcons from '../deprecated-icons.json';
 import iconsInfo from '@alfalab/icons/search.json';
@@ -373,12 +380,25 @@ const Demo: FC = () => {
 
     const result: JSX.Element[] = [renderHeader()];
 
+    const iconsByPackage: Record<IconPackageName, JSX.Element[]> = {
+        glyph: [],
+        rocky: [],
+        ios: [],
+        android: [],
+        corp: [],
+        invest: [],
+        logotype: [],
+        flag: [],
+        classic: [],
+        site: [],
+    };
+
     getKeys(ICONS).forEach((packageName) => {
         if (packages.includes(packageName)) {
             const module = ICONS[packageName];
 
             if (!query) {
-                result.push(renderPackageTitle(packageName));
+                iconsByPackage[packageName].push(renderPackageTitle(packageName));
             }
 
             getKeys(module).forEach((reactIconName) => {
@@ -396,7 +416,7 @@ const Demo: FC = () => {
                 if (isMatch) {
                     const IconComponent = module[reactIconName];
 
-                    result.push(
+                    iconsByPackage[packageName].push(
                         renderIcon({
                             reactIconName,
                             iconPrimitiveName,
@@ -406,6 +426,23 @@ const Demo: FC = () => {
                     );
                 }
             });
+
+            iconsByPackage[packageName].sort((a, b) => {
+                const keyA = a.key as string;
+                const keyB = b.key as string;
+                const keyPartsA = getKeyParts(keyA);
+                const keyPartsB = getKeyParts(keyB);
+
+                if (allDeprecatedIcons[keyPartsA]) {
+                    return 1;
+                } else if (allDeprecatedIcons[keyPartsB]) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+
+            result.push(...iconsByPackage[packageName]);
         }
     });
 

@@ -82,3 +82,5 @@ export const formatPackageName = (packageName: IconPackageName) => {
 
     return name.charAt(0).toUpperCase() + name.slice(1) + suffix;
 };
+
+export const getKeyParts = (key: string) => key.split('-').slice(1).join('-');
