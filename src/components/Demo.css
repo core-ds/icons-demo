@@ -131,6 +131,7 @@
 
 .icon-primitive-name {
     margin-top: auto;
+    word-break: break-word;
 }
 
 .list-scroller {
