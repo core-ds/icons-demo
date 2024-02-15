@@ -11,6 +11,7 @@ export enum IconPackageName {
     FLAG = 'flag',
     CLASSIC = 'classic',
     SITE = 'site',
+    LOGO = 'logo',
 }
 
 export type ClickedElement = {
