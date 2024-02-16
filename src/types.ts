@@ -7,11 +7,11 @@ export enum IconPackageName {
     ANDROID = 'android',
     CORP = 'corp',
     INVEST = 'invest',
-    LOGOTYPE = 'logotype',
-    FLAG = 'flag',
-    CLASSIC = 'classic',
     SITE = 'site',
+    FLAG = 'flag',
     LOGO = 'logo',
+    LOGOTYPE = 'logotype',
+    CLASSIC = 'classic',
 }
 
 export type ClickedElement = {
