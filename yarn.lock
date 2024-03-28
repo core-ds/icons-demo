@@ -80,10 +80,10 @@
   resolved "https://registry.yarnpkg.com/@alfalab/icons-logotype/-/icons-logotype-2.29.0.tgz#6d212528b6a3d060dfeeea7a11425c7b19a14fc9"
   integrity sha512-XTzXfHsIeLcb4RjSRIPfA6m7COlgxGaTIN8p5LUjDMs7WWuAmzEnZlbIeD7DvqOszGH8b2uImJWYwts7AXrKKg==
 
-"@alfalab/icons@^3.228.0":
-  version "3.228.0"
-  resolved "https://registry.yarnpkg.com/@alfalab/icons/-/icons-3.228.0.tgz#9e652c44e968a3463cccec7abe405e08c7c18eab"
-  integrity sha512-4myJv/Vn76OHtOuZhGoJeQtQgkv0JwMQ3Brz1wmDH0xeiwKfKpCI+/U4UO6VTvcVNG+ZAzlcm3gGaJbt0JhkOg==
+"@alfalab/icons@^3.229.0":
+  version "3.229.0"
+  resolved "https://registry.yarnpkg.com/@alfalab/icons/-/icons-3.229.0.tgz#3113b62d083fcbf9e37822df156462e03ba499b2"
+  integrity sha512-O3WzpBpDmMCilZeBRr8w2pSG5Rx3xrU5nD6fx3lir/wAQa291T55NbUZGWoR/RySBfsFMULgLW+0t7c+AsqTOw==
 
 "@alfalab/utils@^1.13.2":
   version "1.14.2"
