@@ -122,6 +122,7 @@ const IconsClassic: AnyIcon = {};
 const IconsInvest: AnyIcon = {};
 const IconsSite: AnyIcon = {};
 const IconsLogo: AnyIcon = {};
+const IconsLogoAm: AnyIcon = {};
 
 importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
 importAllIcons(require.context('@alfalab/icons/rocky/dist', false, /Icon\.js$/), IconsRocky);
@@ -134,6 +135,7 @@ importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/
 importAllIcons(require.context('@alfalab/icons/invest/dist', false, /Icon\.js$/), IconsInvest);
 importAllIcons(require.context('@alfalab/icons/site/dist', false, /Icon\.js$/), IconsSite);
 importAllIcons(require.context('@alfalab/icons/logo/dist', false, /Icon\.js$/), IconsLogo);
+importAllIcons(require.context('@alfalab/icons/logo-am/dist', false, /Icon\.js$/), IconsLogoAm);
 
 const ICONS = {
     [IconPackageName.GLYPH]: IconsGlyph,
@@ -147,6 +149,7 @@ const ICONS = {
     [IconPackageName.INVEST]: IconsInvest,
     [IconPackageName.SITE]: IconsSite,
     [IconPackageName.LOGO]: IconsLogo,
+    [IconPackageName.LOGO_AM]: IconsLogoAm,
 };
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
@@ -395,6 +398,7 @@ const Demo: FC = () => {
         classic: [],
         site: [],
         logo: [],
+        'logo-am': [],
     };
 
     getKeys(ICONS).forEach((packageName) => {
