@@ -3962,6 +3962,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-web@^5.12.2:
+  version "5.12.2"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.12.2.tgz#579ca9fe6d3fd9e352571edd3c0be162492f68e5"
+  integrity sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==
+
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/loud-rejection/-/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
@@ -6509,6 +6514,11 @@ ui-primitives@^13.19.0:
   version "13.28.0"
   resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-13.28.0.tgz#1fa71d5888e491dbeb633accc4e03b59bebe2edf"
   integrity sha512-OCsu8yrubZJJ0MAd8+5qewcvjvIjiG8kam/bW07HN5QNvkQ/4TQOWOxY8V8nRXDOYlBkTxj+wjiVxA36V5U3+w==
+
+ui-primitives@^20.8.0:
+  version "20.8.0"
+  resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-20.8.0.tgz#30d73527924a213c92ede8d6990a21b1ca4f8f20"
+  integrity sha512-1yHxst0bWDErpjWZB5FNqv8eqg7hh523yIP8WtDdzc7TIaQhgL4YAwCwcHyWgClqs7djVudPnUUE5YGJwSrIkw==
 
 unified@^9.0.0:
   version "9.2.2"

@@ -14,6 +14,7 @@ jobs:
         node-version: 16
 
     - run: yarn install
+    - run: yarn add ui-primitives@latest
     - run: yarn add @alfalab/icons@latest
     - run: yarn build
     - run: npm version minor --git-tag-version false
