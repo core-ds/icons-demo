@@ -1,5 +1,12 @@
 import React, { ComponentType } from 'react';
 
+export enum Asset {
+    ICONS = 'icons',
+    LOGOTYPE = 'logotype',
+    FLAG = 'flag',
+    ANIMATION = 'animation',
+}
+
 export enum IconPackageName {
     GLYPH = 'glyph',
     ROCKY = 'rocky',
@@ -53,6 +60,12 @@ export type RenderIconParams = {
     iconPrimitiveName: string;
     packageName: string;
     Icon: AnyIcon[keyof AnyIcon];
+};
+
+export type RenderAnimationParams = {
+    animationName: string;
+    packageName: string;
+    animationData: any;
 };
 
 export type DeprecatedIcons = {
