@@ -28,7 +28,8 @@ export const fillIconInfo = (packages: Record<IconPackageName, AnyIcon>, iconsIn
             let info = iconsInfo[packageName] && iconsInfo[packageName][iconName];
 
             if (!info) {
-                const arr = decamelize(iconName.replace(/Icon$/, '')).split('_');
+                const primitiveName = iconName.replace(/Icon$/, '').replace(/\d+/g, (match) => `-${match}`)
+                const arr = decamelize(primitiveName).split('_');
 
                 let lastElem = arr[arr.length - 1];
 
