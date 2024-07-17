@@ -117,6 +117,12 @@
     color: var(--color-light-graphic-primary);
 }
 
+.animation-icon {
+    align-self: end;
+    margin-top: -12px;
+    margin-right: -12px;
+}
+
 .icon-wrap:hover,
 .animation-wrap:hover {
     cursor: pointer;
