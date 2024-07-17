@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef, useState, MouseEvent } from 'react';
 import cn from 'classnames';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import copy from 'copy-to-clipboard';
@@ -14,12 +14,14 @@ import { BottomSheet } from '@alfalab/core-components/bottom-sheet/modern';
 import { Popover } from '@alfalab/core-components/popover/modern';
 import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
 import { Tag } from '@alfalab/core-components/tag/modern';
-import { Plate } from '@alfalab/core-components/plate';
+import { Plate } from '@alfalab/core-components/plate/modern';
+import { IconButton } from '@alfalab/core-components/icon-button/modern';
 
 import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 import { CopyLineMIcon } from '@alfalab/icons/glyph/dist/CopyLineMIcon';
 import { ArrowRightCurvedMIcon } from '@alfalab/icons-glyph/ArrowRightCurvedMIcon';
+import { PlayCircleMIcon } from '@alfalab/icons-glyph/PlayCircleMIcon';
 
 import {
     AnyIcon,
@@ -215,6 +217,8 @@ const Demo: FC = () => {
         [IconPackageName.GLYPH]: true,
     });
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
+    const [playAnimation , setPlayAnimation] = useState<string | null>(null);
+
 
     const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
@@ -446,6 +450,13 @@ const Demo: FC = () => {
             });
         };
 
+        const changeAnimationName = (name: string | null) => setPlayAnimation(name);
+
+        const handleClickAnimation = (event: MouseEvent<HTMLButtonElement>) => {
+            event.stopPropagation();
+            changeAnimationName(animationName);
+        };
+
         const isWhite = animationName.includes('white');
 
         return (
@@ -456,11 +467,21 @@ const Demo: FC = () => {
                 onClick={handleClick}
                 key={`${packageName}-${animationName}`}
             >
+                <IconButton
+                    onClick={handleClickAnimation}
+                    className='animation-icon'
+                    view='tertiary'
+                    size={48}
+                    icon={PlayCircleMIcon}
+                />
                 {animationData ? (
                     <LottieIcon
                         name={animationName}
                         className='animation'
                         animationData={animationData}
+                        play={playAnimation === animationName}
+                        changeAnimationName={changeAnimationName}
+
                     />
                 ) : null}
 
@@ -497,6 +518,7 @@ const Demo: FC = () => {
                 view='attention'
                 title='Не для прода'
                 limitContentWidth={false}
+                border={false}
             >
                 Примеры анимаций подготовлены для тестирования витрины ассетов, пожалуйста, не
                 тяните их на прод

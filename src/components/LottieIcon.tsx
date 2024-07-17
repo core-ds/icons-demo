@@ -6,29 +6,17 @@ export function LottieIcon({
     animationData,
     className,
     name,
+    play,
+    changeAnimationName,
 }: {
     animationData: any;
     className?: string;
     name?: string;
+    play?: boolean;
+    changeAnimationName: (name: string | null) => void;
 }) {
     const ref = useRef(null);
     const animationItem = useRef<AnimationItem>();
-
-    const handleAnimationPlay = () => {
-        if (!animationItem.current) {
-            return;
-        }
-        
-        animationItem.current.play();
-    };
-
-    const handleAnimationPause = () => {
-        if (!animationItem.current) {
-            return;
-        }
-
-        animationItem.current.pause();
-    };
 
     useEffect(() => {
         if (!ref.current) {
@@ -41,13 +29,23 @@ export function LottieIcon({
         const animation = Lottie.loadAnimation({
             container: ref.current,
             renderer: 'svg',
-            loop: true,
+            loop: false,
             autoplay: false,
             animationData,
             name,
         });
 
         animationItem.current = animation;
+
+        if (play && animationItem.current) {
+            animationItem.current.play();
+        }
+
+        animationItem.current.addEventListener('complete', () => {
+            if (play) {
+                changeAnimationName(null);
+            }
+        });
 
         return () => {
             if (!animationItem.current) {
@@ -56,18 +54,9 @@ export function LottieIcon({
 
             animationItem.current.destroy();
         };
-    }, [animationData]);
+    }, [animationData, play]);
 
-    return (
-        <div
-            onMouseOver={handleAnimationPlay}
-            onMouseOut={handleAnimationPause}
-            className={cn('lottie-animation', className)}
-            ref={ref}
-            onTouchStart={handleAnimationPlay}
-            onTouchEnd={handleAnimationPause}
-        />
-    );
+    return <div className={cn('lottie-animation', className)} ref={ref} />;
 }
 
 export default LottieIcon;
