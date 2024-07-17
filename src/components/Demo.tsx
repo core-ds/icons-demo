@@ -119,8 +119,8 @@ const ASSET_TO_PACKAGE_NAME = {
     ],
     logotype: [
         { value: 'logo', label: 'Logo' },
-        { value: 'logotype', label: 'Logotype' },
         { value: 'logo-am', label: 'Logo-am' },
+        { value: 'logotype', label: 'Logotype' },
     ],
     flag: [],
     animation: [],
@@ -323,6 +323,8 @@ const Demo: FC = () => {
                                 shape='rectangular'
                                 value={assetItem.value}
                                 key={assetItem.value}
+                                view='filled'
+                                size='xxs'
                             >
                                 {assetItem.label}
                             </Tag>
