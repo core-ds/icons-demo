@@ -14,14 +14,15 @@ export function LottieIcon({
     const ref = useRef(null);
     const animationItem = useRef<AnimationItem>();
 
-    const handleMouseOver = () => {
+    const handleAnimationPlay = () => {
         if (!animationItem.current) {
             return;
         }
+        
         animationItem.current.play();
     };
 
-    const handleMouseOut = () => {
+    const handleAnimationPause = () => {
         if (!animationItem.current) {
             return;
         }
@@ -59,10 +60,12 @@ export function LottieIcon({
 
     return (
         <div
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
+            onMouseOver={handleAnimationPlay}
+            onMouseOut={handleAnimationPause}
             className={cn('lottie-animation', className)}
             ref={ref}
+            onTouchStart={handleAnimationPlay}
+            onTouchEnd={handleAnimationPause}
         />
     );
 }
