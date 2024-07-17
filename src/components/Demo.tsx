@@ -12,6 +12,10 @@ import { useMatchMedia } from '@alfalab/core-components/mq/modern';
 import { Toast } from '@alfalab/core-components/toast/modern';
 import { BottomSheet } from '@alfalab/core-components/bottom-sheet/modern';
 import { Popover } from '@alfalab/core-components/popover/modern';
+import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
+import { Tag } from '@alfalab/core-components/tag/modern';
+import { Plate } from '@alfalab/core-components/plate';
+
 import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 import { CopyLineMIcon } from '@alfalab/icons/glyph/dist/CopyLineMIcon';
@@ -19,12 +23,14 @@ import { ArrowRightCurvedMIcon } from '@alfalab/icons-glyph/ArrowRightCurvedMIco
 
 import {
     AnyIcon,
+    Asset,
     ClickedElement,
     CopyType,
     DeprecatedIcons,
     DeprecatedType,
     IconPackageName,
     IconsInfo,
+    RenderAnimationParams,
     RenderIconParams,
 } from '../types';
 import { BackToTopButton } from './BackToTopButton';
@@ -35,16 +41,19 @@ import {
     importAllIcons,
     formatPackageName,
     getKeyParts,
+    getPackageNameAsset,
 } from '../utils';
 
 import deprecatedIcons from '../deprecated-icons.json';
 import iconsInfo from '@alfalab/icons/search.json';
+import animationJson from 'ui-primitives/animations/test.json';
 
 import './Demo.css';
+import LottieIcon from './LottieIcon';
 
-const ICON_OPTIONS = getKeys(IconPackageName).map((key) => ({
-    key: IconPackageName[key],
-    content: formatPackageName(IconPackageName[key]),
+const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
+    key: Asset[key],
+    content: getPackageNameAsset(Asset[key], true),
 }));
 
 const getOptionContentCopy = (text: string) => (
@@ -96,6 +105,26 @@ const DEPRECATED_OPTION_WITHOUT_REPLACE = [
         ),
     },
 ];
+
+const ASSET_TO_PACKAGE_NAME = {
+    icons: [
+        { value: 'glyph', label: 'Glyph' },
+        { value: 'rocky', label: 'Rocky' },
+        { value: 'ios', label: 'iOS' },
+        { value: 'android', label: 'Android' },
+        { value: 'corp', label: 'Corp' },
+        { value: 'invest', label: 'Invest' },
+        { value: 'site', label: 'Site' },
+        { value: 'classic', label: 'Classic (deprecated)' },
+    ],
+    logotype: [
+        { value: 'logo', label: 'Logo' },
+        { value: 'logotype', label: 'Logotype' },
+        { value: 'logo-am', label: 'Logo-am' },
+    ],
+    flag: [],
+    animation: [],
+};
 
 function getOptionsList(iconName: string, packageName: string, deprecatedIcons: DeprecatedIcons) {
     if (packageName === IconPackageName.CLASSIC) {
@@ -152,12 +181,28 @@ const ICONS = {
     [IconPackageName.LOGO_AM]: IconsLogoAm,
 };
 
+const initialState = {
+    [IconPackageName.GLYPH]: false,
+    [IconPackageName.ROCKY]: false,
+    [IconPackageName.IOS]: false,
+    [IconPackageName.ANDROID]: false,
+    [IconPackageName.CORP]: false,
+    [IconPackageName.FLAG]: false,
+    [IconPackageName.SITE]: false,
+    [IconPackageName.INVEST]: false,
+    [IconPackageName.CLASSIC]: false,
+    [IconPackageName.LOGOTYPE]: false,
+    [IconPackageName.LOGO]: false,
+    [IconPackageName.LOGO_AM]: false,
+};
+
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
 
 const allDeprecatedIcons: DeprecatedIcons = deprecatedIcons;
 
 const isHeader = (idx: number) => idx === 0;
 const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
+const isWarning = (element: JSX.Element) => Boolean(element.props['data-package-warning']);
 const isEmptySearchResult = (element: JSX.Element) => Boolean(element.props['data-empty-search']);
 
 const estimateDesktopSize = () => 192;
@@ -165,7 +210,12 @@ const estimateMobileSize = () => 196;
 
 const Demo: FC = () => {
     const [value, setValue] = useState('');
-    const [packages, setPackages] = useState<IconPackageName[]>([IconPackageName.GLYPH]);
+    const [packages, setPackages] = useState<Record<string, boolean>>({
+        ...initialState,
+        [IconPackageName.GLYPH]: true,
+    });
+    const [asset, setAsset] = useState<Asset>(Asset.ICONS);
+
     const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
 
@@ -208,8 +258,8 @@ const Demo: FC = () => {
             if (type === DeprecatedType.DEPRECATED && newName) {
                 setValue(newName);
                 const replacePackage = newName.split('_')[0] as IconPackageName;
-                if (!packages.includes(replacePackage)) {
-                    setPackages((prevPackages) => [...prevPackages, replacePackage]);
+                if (!packages[replacePackage]) {
+                    setPackages({ ...packages, [replacePackage]: true });
                 }
             }
 
@@ -217,32 +267,25 @@ const Demo: FC = () => {
         }
     };
 
-    const handlePackageChange: SelectProps['onChange'] = ({ selectedMultiple }) => {
-        setPackages(selectedMultiple.map((option) => option.key as IconPackageName));
+    const handlePackageChange = (payload: { checked: boolean; name?: string }) => {
+        if (!payload.name) return;
+        setPackages({ ...packages, [payload.name]: payload.checked });
+    };
+
+    const handleAssetChange: SelectProps['onChange'] = ({ selected }) => {
+        const packageName = getPackageNameAsset(selected?.key as Asset);
+        setPackages({ ...initialState, [packageName]: true });
+        setAsset(selected?.key as Asset);
     };
 
     const renderHeader = () => {
         return (
             <div key='header'>
                 <Title tag='h1' view='xlarge' font='styrene' className='header-title'>
-                    Витрина иконок
+                    Витрина ассетов
                 </Title>
 
                 <div className='search-wrapper'>
-                    <div className='bundle-select-wrapper'>
-                        <SelectComponent
-                            options={ICON_OPTIONS}
-                            selected={packages}
-                            Option={BaseOption}
-                            multiple={true}
-                            block={true}
-                            placeholder='Bundle'
-                            allowUnselect={true}
-                            size='s'
-                            onChange={handlePackageChange}
-                        />
-                    </div>
-
                     <Input
                         value={value}
                         className='search-input'
@@ -253,7 +296,39 @@ const Demo: FC = () => {
                         onChange={(e) => setValue(e.target.value)}
                         onClear={() => setValue('')}
                     />
+                    <div className='asset-select-wrapper'>
+                        <SelectComponent
+                            options={ASSET_OPTIONS}
+                            selected={asset}
+                            Option={BaseOption}
+                            block={true}
+                            placeholder='Bundle'
+                            size='s'
+                            onChange={handleAssetChange}
+                        />
+                    </div>
                 </div>
+
+                {['icons', 'logotype'].includes(asset) ? (
+                    <CheckboxGroup
+                        onChange={(_, payload) => handlePackageChange(payload)}
+                        direction='horizontal'
+                        type='tag'
+                        className='bundle-group-wrapper'
+                    >
+                        {ASSET_TO_PACKAGE_NAME[asset].map((assetItem) => (
+                            <Tag
+                                name={assetItem.value}
+                                checked={packages[assetItem.value]}
+                                shape='rectangular'
+                                value={assetItem.value}
+                                key={assetItem.value}
+                            >
+                                {assetItem.label}
+                            </Tag>
+                        ))}
+                    </CheckboxGroup>
+                ) : null}
             </div>
         );
     };
@@ -356,7 +431,49 @@ const Demo: FC = () => {
         );
     };
 
-    const renderPackageTitle = (packageName: IconPackageName) => {
+    const renderAnimation = ({
+        animationName,
+        packageName,
+        animationData,
+    }: RenderAnimationParams) => {
+        const handleClick = () => {
+            copy(JSON.stringify(animationData));
+            setToastParams({
+                open: true,
+                text: 'JSON скопирован',
+            });
+        };
+
+        const isWhite = animationName.includes('white');
+
+        return (
+            <div
+                className={cn('animation-wrap', {
+                    'animation-wrap_dark': isWhite,
+                })}
+                onClick={handleClick}
+                key={`${packageName}-${animationName}`}
+            >
+                {animationData ? (
+                    <LottieIcon
+                        name={animationName}
+                        className='animation'
+                        animationData={animationData}
+                    />
+                ) : null}
+
+                <Typography.Text
+                    view='primary-small'
+                    color={isWhite ? 'secondary-inverted' : 'secondary'}
+                    className='animation-primitive-name'
+                >
+                    {animationName}
+                </Typography.Text>
+            </div>
+        );
+    };
+
+    const renderPackageTitle = (packageName: IconPackageName | Asset) => {
         return (
             <Title
                 tag='h3'
@@ -367,6 +484,21 @@ const Demo: FC = () => {
             >
                 {formatPackageName(packageName)}
             </Title>
+        );
+    };
+
+    const renderWarning = () => {
+        return (
+            <Plate
+                data-package-warning
+                key='animation'
+                view='attention'
+                title='Не для прода'
+                limitContentWidth={false}
+            >
+                Примеры анимаций подготовлены для тестирования витрины ассетов, пожалуйста, не
+                тяните их на прод
+            </Plate>
         );
     };
 
@@ -386,7 +518,7 @@ const Demo: FC = () => {
 
     const result: JSX.Element[] = [renderHeader()];
 
-    const iconsByPackage: Record<IconPackageName, JSX.Element[]> = {
+    const iconsByPackage: Record<IconPackageName | Asset.ANIMATION, JSX.Element[]> = {
         glyph: [],
         rocky: [],
         ios: [],
@@ -399,10 +531,11 @@ const Demo: FC = () => {
         site: [],
         logo: [],
         'logo-am': [],
+        animation: [],
     };
 
     getKeys(ICONS).forEach((packageName) => {
-        if (packages.includes(packageName)) {
+        if (packages[packageName]) {
             const module = ICONS[packageName];
 
             if (!query) {
@@ -454,13 +587,53 @@ const Demo: FC = () => {
         }
     });
 
+    if (asset === 'animation') {
+        if (!query) {
+            iconsByPackage[asset].push(renderPackageTitle(asset));
+            iconsByPackage[asset].push(renderWarning());
+        }
+
+        getKeys(animationJson).forEach((animationName) => {
+            const animationData = animationJson[animationName].animationData;
+
+            const isMatch = !query || animationName.includes(query);
+
+            if (isMatch) {
+                iconsByPackage[asset].push(
+                    renderAnimation({
+                        animationName,
+                        packageName: asset,
+                        animationData,
+                    }),
+                );
+            }
+        });
+
+        iconsByPackage[asset].sort((a, b) => {
+            const keyA = a.key as string;
+            const keyB = b.key as string;
+            const keyPartsA = getKeyParts(keyA);
+            const keyPartsB = getKeyParts(keyB);
+
+            if (keyPartsA.toLowerCase() < keyPartsB.toLowerCase()) {
+                return -1;
+            }
+            if (keyPartsA.toLowerCase() > keyPartsB.toLowerCase()) {
+                return 1;
+            }
+            return 0;
+        });
+
+        result.push(...iconsByPackage[asset]);
+    }
+
     const { grid } = result.reduce(
         (acc, curr, index) => {
             if (!acc.grid[acc.rowIndex]) {
                 acc.grid[acc.rowIndex] = [];
             }
 
-            if (isHeader(index) || isPackageName(curr)) {
+            if (isHeader(index) || isPackageName(curr) || isWarning(curr)) {
                 if (acc.grid[acc.rowIndex].length) {
                     acc.rowIndex += 1;
 
@@ -510,15 +683,18 @@ const Demo: FC = () => {
                             const rowItems = grid[virtualRow.index];
                             const header = isHeader(virtualRow.index);
                             const packageName = isPackageName(rowItems[0]);
+                            const warning = isWarning(rowItems[0]);
                             const emptySearchResult =
                                 virtualRow.index === 1 && isEmptySearchResult(rowItems[0]);
-                            const listRow = !emptySearchResult && !header && !packageName;
+                            const listRow =
+                                !emptySearchResult && !header && !packageName && !warning;
 
                             return (
                                 <div
                                     key={virtualRow.index}
                                     className={cn({
                                         ['list-package-name']: packageName,
+                                        ['list-warning']: warning,
                                         ['list-header-gap']: query && header,
                                         ['list-row']: listRow,
                                         [`list-row-${columnsAmount}`]: listRow,

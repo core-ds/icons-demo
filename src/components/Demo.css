@@ -32,9 +32,10 @@
 :root {
     --content-width: 880px;
     --side-gap: 20px;
-    --search-wrapper-padding: var(--gap-m) 0 var(--gap-2xs);
-    --bundle-select-width: '100%';
-    --bundle-select-margin: 0 0 var(--gap-m) 0;
+    --search-wrapper-padding: var(--gap-l) 0 var(--gap-2xs);
+    --bundle-padding-bottom: var(--gap-2xs);
+    --asset-select-width: '100%';
+    --asset-select-margin: var(--gap-m) 0;
     --icons-list-padding: var(--gap-3xl) 0 var(--gap-7xl);
     --row-padding-bottom: var(--gap-m);
     --icon-wrapper-padding: var(--gap-s);
@@ -54,9 +55,13 @@
     padding: var(--search-wrapper-padding);
 }
 
-.bundle-select-wrapper {
-    width: var(--bundle-select-width);
-    margin: var(--bundle-select-margin);
+.asset-select-wrapper {
+    width: var(--asset-select-width);
+    margin: var(--asset-select-margin);
+}
+
+.bundle-group-wrapper {
+    padding-bottom: var(--bundle-padding-bottom)
 }
 
 .search-input {
@@ -96,7 +101,8 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
-.icon-wrap {
+.icon-wrap,
+.animation-wrap {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -111,25 +117,36 @@
     color: var(--color-light-graphic-primary);
 }
 
-.icon-wrap:hover {
+.icon-wrap:hover,
+.animation-wrap:hover {
     cursor: pointer;
 }
 
-.icon-wrap_dark {
+.icon-wrap_dark,
+.animation-wrap_dark {
     background-color: var(--color-light-bg-secondary-inverted);
     color: #fff;
 }
 
-.icon {
+.icon,
+.animation {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     flex-grow: 1;
+}
+
+.icon {
     max-width: calc(100% - var(--icon-wrapper-padding) * 2);
 }
 
-.icon-primitive-name {
+.animation {
+    width: 100px;
+}
+
+.icon-primitive-name,
+.animation-primitive-name {
     margin-top: auto;
     word-break: break-word;
 }
@@ -153,6 +170,10 @@
 .list-package-name {
     padding-top: var(--package-name-padding-top);
     padding-bottom: var(--package-name-padding-bottom);
+}
+
+.list-warning {
+    padding-bottom: var(--gap-m);
 }
 
 .list-row + .list-package-name {
@@ -241,10 +262,11 @@
 
 @media (min-width: 600px) {
     :root {
-        --search-wrapper-padding: var(--gap-m) 0 var(--gap-xs);
-        --bundle-select-width: 200px;
+        --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
+        --bundle-padding-bottom: var(--gap-xs);
+        --asset-select-width: 200px;
         --icons-list-padding: var(--gap-5xl) 0 var(--gap-8xl);
-        --bundle-select-margin: 0;
+        --asset-select-margin: 0;
         --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
         --row-padding-bottom: var(--gap-s);
         --package-name-padding-top: var(--gap-2xl);

@@ -1,4 +1,4 @@
-import { AnyIcon, IconInfo, IconPackageName, IconsInfo } from './types';
+import { AnyIcon, Asset, IconInfo, IconPackageName, IconsInfo } from './types';
 import decamelize from 'decamelize';
 
 export const noop = () => {};
@@ -69,12 +69,16 @@ export const fillIconInfo = (packages: Record<IconPackageName, AnyIcon>, iconsIn
     }, {} as IconsInfo);
 };
 
-export const formatPackageName = (packageName: IconPackageName) => {
+export const formatPackageName = (packageName: IconPackageName | Asset) => {
     const name = packageName.toLowerCase();
     let suffix = '';
 
     if (name === IconPackageName.CLASSIC) {
         suffix = ' (deprecated)';
+    }
+
+    if (name === Asset.ANIMATION) {
+        suffix = ' (test)';
     }
 
     if (packageName === IconPackageName.IOS) {
@@ -85,3 +89,16 @@ export const formatPackageName = (packageName: IconPackageName) => {
 };
 
 export const getKeyParts = (key: string) => key.split('-').slice(1).join('-');
+
+export const getPackageNameAsset = (asset: Asset, ru?: boolean): string => {
+    switch (asset) {
+        case Asset.LOGOTYPE:
+            return ru ? 'Логотипы' : 'logo';
+        case Asset.FLAG:
+            return ru ? 'Флажки' : 'flag';
+        case Asset.ANIMATION:
+            return ru ? 'Анимация' : 'animation';
+        default:
+            return ru ? 'Иконки' : 'glyph';
+    }
+};
