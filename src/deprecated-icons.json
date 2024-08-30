@@ -176,10 +176,6 @@
         "replacement": "glyph_bowling_m",
         "date": "01.24"
     },
-    "glyph_box_m": {
-        "replacement": "glyph_paper-box_m",
-        "date": "01.24"
-    },
     "glyph_bubble-remark_m": {
         "replacement": "glyph_bubble-asterisk_m",
         "date": "01.24"
@@ -588,10 +584,6 @@
     },
     "glyph_other_m": {
         "replacement": "glyph_box_m",
-        "date": "01.24"
-    },
-    "glyph_paper-box_m": {
-        "replacement": "glyph_paper-box_m",
         "date": "01.24"
     },
     "glyph_parking-rounded_m": {
