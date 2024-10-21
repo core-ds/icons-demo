@@ -1217,5 +1217,9 @@
     "glyph__card_im" : {
         "replacement": "glyph_card-info_m",
         "date": "05.24"
+    },
+    "glyph_tram_m" : {
+        "replacement": "glyph_trolleybus_m",
+        "date": "10.24"
     }
 }
