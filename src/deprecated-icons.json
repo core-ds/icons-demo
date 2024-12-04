@@ -152,10 +152,6 @@
         "replacement": "glyph_document-lines-line_m",
         "date": "01.24"
     },
-    "glyph_book_m": {
-        "replacement": "glyph_book_m",
-        "date": "01.24"
-    },
     "glyph_book-check_m": {
         "replacement": "glyph_book-open-checkmark_m",
         "date": "01.24"
