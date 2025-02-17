@@ -1218,4 +1218,8 @@
         "replacement": "glyph_trolleybus_m",
         "date": "10.24"
     }
+        "glyph_category-feedback_m" : {
+        "replacement": "glyph_star-pointer_m",
+        "date": "02.25"
+    }
 }
