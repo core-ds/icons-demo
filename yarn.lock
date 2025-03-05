@@ -6515,10 +6515,10 @@ ui-primitives@^13.19.0:
   resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-13.28.0.tgz#1fa71d5888e491dbeb633accc4e03b59bebe2edf"
   integrity sha512-OCsu8yrubZJJ0MAd8+5qewcvjvIjiG8kam/bW07HN5QNvkQ/4TQOWOxY8V8nRXDOYlBkTxj+wjiVxA36V5U3+w==
 
-ui-primitives@^25.10.0:
-  version "25.10.0"
-  resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-25.10.0.tgz#cb6c442eb21d9bd74b99b72e3a427d23398fe26a"
-  integrity sha512-VbJyrQduey8DHc+EyKkcOoxQfSKuC3aHNuvxunH42uiQC7eF5yDngH+Jj5nq+OW9/ov4THeQ0fcvy/6+WmsinA==
+ui-primitives@^25.11.0:
+  version "25.11.0"
+  resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-25.11.0.tgz#2f8c8756251124ec8ef2f8dba27ed337d158d1c3"
+  integrity sha512-K6ao+GCCft/aO9+NvgPg5fV/Uc+/fZL6c3fWEkIMuhqjuCSJtK/pxPM8fhDN7zFE8hr29q85JCfsQqiHaDOS2Q==
 
 unified@^9.0.0:
   version "9.2.2"
