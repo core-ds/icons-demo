@@ -1213,13 +1213,5 @@
     "glyph_category-feedback_m" : {
         "replacement": "glyph_star-pointer_m",
         "date": "02.25"
-    },
-    "logo_alfa-bank-sing-square_m_color" : {
-        "replacement": "logo_alfa-bank-sign-square_m_color",
-        "date": "03.25"
-    },
-     "logo_alfa-bank-sing-square_m_white" : {
-        "replacement": "logo_alfa-bank-sign-square_m_white",
-        "date": "03.25"
     }
 }
