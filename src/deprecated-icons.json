@@ -1,4 +1,8 @@
 {
+    "glyph_add_m": {
+        "replacement": "glyph_plus_m",
+        "date": "01.24"
+    },
     "glyph_add-circle_m": {
         "replacement": "glyph_plus-circle_m",
         "date": "01.24"
