@@ -1,3 +1,8 @@
+# Позволяет в ручную пересобрать icons-demo
+# Примеры:
+# 1. Необходимо в случае обновления списка deprecated иконок;
+# 2. Нужно когда по какой-то причине сломалась цепочка поставки ui-primitives [✓] => icons [✓] => icons-demo [x]
+
 name: MANUAL_BUILD
 
 on: workflow_dispatch
