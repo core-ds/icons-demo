@@ -1,0 +1,37 @@
+name: MANUAL_BUILD
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check permissions
+      if: ${{ contains(fromJSON('["fulcanellee","Oladii"]'), github.actor) == false }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.setFailed("You don't have permission to run this workflow!");
+
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - run: yarn install
+    - run: yarn add ui-primitives@latest
+    - run: yarn add @alfalab/icons@latest
+    - run: yarn build
+    - run: npm version minor --git-tag-version false
+
+    - name: commit changes
+      uses: github-actions-x/commit@v2.9
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        push-branch: 'master'
+        commit-message: 'chore(*): update version'
+        force-add: 'false'
+        files: .
+        name: core-ds-bot
+        email: ds@gitmax.tech
