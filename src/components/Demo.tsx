@@ -28,7 +28,7 @@ import {
     Asset,
     ClickedElement,
     CopyType,
-    DeprecatedIcons,
+    DeprecatedAssets,
     DeprecatedType,
     IconPackageName,
     IconsInfo,
@@ -46,12 +46,12 @@ import {
     getPackageNameAsset,
 } from '../utils';
 
-import deprecatedIcons from '../deprecated-icons.json';
 import iconsInfo from '@alfalab/icons/search.json';
 import animationJson from 'ui-primitives/animations/test.json';
 
 import './Demo.css';
 import LottieIcon from './LottieIcon';
+import { getDeprecatedAssets } from '../helpers/get-deprecated-assets';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -128,7 +128,7 @@ const ASSET_TO_PACKAGE_NAME = {
     animation: [],
 };
 
-function getOptionsList(iconName: string, packageName: string, deprecatedIcons: DeprecatedIcons) {
+function getOptionsList(iconName: string, packageName: string, deprecatedIcons: DeprecatedAssets) {
     if (packageName === IconPackageName.CLASSIC) {
         return DEPRECATED_OPTION_WITHOUT_REPLACE;
     }
@@ -200,8 +200,6 @@ const initialState = {
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
 
-const allDeprecatedIcons: DeprecatedIcons = deprecatedIcons;
-
 const isHeader = (idx: number) => idx === 0;
 const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
 const isWarning = (element: JSX.Element) => Boolean(element.props['data-package-warning']);
@@ -217,8 +215,7 @@ const Demo: FC = () => {
         [IconPackageName.GLYPH]: true,
     });
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
-    const [playAnimation , setPlayAnimation] = useState<string | null>(null);
-
+    const [playAnimation, setPlayAnimation] = useState<string | null>(null);
 
     const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
@@ -340,6 +337,7 @@ const Demo: FC = () => {
     };
 
     const renderDropdown = (clickedElem: ClickedElement | null) => {
+        const allDeprecatedIcons = getDeprecatedAssets();
         const { iconName, packageName } = clickedElem || ({} as ClickedElement);
         const newName = allDeprecatedIcons[iconName]?.replacement || '';
         const options =
@@ -391,7 +389,7 @@ const Demo: FC = () => {
 
         const isWhite = iconPrimitiveName.includes('white');
         const isDeprecatedIcon =
-            allDeprecatedIcons.hasOwnProperty(iconPrimitiveName) ||
+            getDeprecatedAssets().hasOwnProperty(iconPrimitiveName) ||
             packageName === IconPackageName.CLASSIC;
 
         return (
@@ -414,7 +412,6 @@ const Demo: FC = () => {
                         deprecated
                     </Typography.Text>
                 ) : null}
-
                 {Icon ? (
                     <Icon
                         className='icon'
@@ -425,7 +422,6 @@ const Demo: FC = () => {
                         }
                     />
                 ) : null}
-
                 <Typography.Text
                     view='primary-small'
                     color={isWhite ? 'secondary-inverted' : 'secondary'}
@@ -481,7 +477,6 @@ const Demo: FC = () => {
                         animationData={animationData}
                         play={playAnimation === animationName}
                         changeAnimationName={changeAnimationName}
-
                     />
                 ) : null}
 
@@ -597,6 +592,7 @@ const Demo: FC = () => {
                 const keyB = b.key as string;
                 const keyPartsA = getKeyParts(keyA);
                 const keyPartsB = getKeyParts(keyB);
+                const allDeprecatedIcons = getDeprecatedAssets();
 
                 if (allDeprecatedIcons[keyPartsA]) {
                     return 1;
