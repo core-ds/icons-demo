@@ -68,9 +68,7 @@ export type RenderAnimationParams = {
     animationData: any;
 };
 
-export type DeprecatedIcons = {
-    [key: string]: { replacement: string; date: string };
-};
+export type DeprecatedAssets = Record<string, { replacement: string; date: string }>;
 
 export enum DeprecatedType {
     DEPRECATED = 'deprecated',

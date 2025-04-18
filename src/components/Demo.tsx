@@ -19,8 +19,6 @@ import { IconButton } from '@alfalab/core-components/icon-button/modern';
 
 import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
-import { CopyLineMIcon } from '@alfalab/icons/glyph/dist/CopyLineMIcon';
-import { ArrowRightCurvedMIcon } from '@alfalab/icons-glyph/ArrowRightCurvedMIcon';
 import { PlayCircleMIcon } from '@alfalab/icons-glyph/PlayCircleMIcon';
 
 import {
@@ -28,7 +26,6 @@ import {
     Asset,
     ClickedElement,
     CopyType,
-    DeprecatedIcons,
     DeprecatedType,
     IconPackageName,
     IconsInfo,
@@ -46,101 +43,19 @@ import {
     getPackageNameAsset,
 } from '../utils';
 
-import deprecatedIcons from '../deprecated-icons.json';
 import iconsInfo from '@alfalab/icons/search.json';
 import animationJson from 'ui-primitives/animations/test.json';
 
 import './Demo.css';
 import LottieIcon from './LottieIcon';
+import { getDeprecatedAssets } from '../helpers/get-deprecated-assets';
+import { ASSET_TO_PACKAGE_NAME } from '../constants/asset-to-package-name';
+import { getOptionsList } from './OptionList';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
     content: getPackageNameAsset(Asset[key], true),
 }));
-
-const getOptionContentCopy = (text: string) => (
-    <div className='option-content'>
-        <Typography.Text view='component-primary' color='primary'>
-            {text}
-        </Typography.Text>
-
-        <CopyLineMIcon />
-    </div>
-);
-
-const getOptionContentDeprecated = (text: string, replace: boolean) => (
-    <div
-        className={cn('option-content', {
-            'option-no-replace': !replace,
-        })}
-    >
-        <Typography.Text
-            view={replace ? 'component-primary' : 'primary-small'}
-            color={replace ? 'primary' : 'tertiary'}
-        >
-            {text}
-        </Typography.Text>
-
-        {replace && <ArrowRightCurvedMIcon color='var(--color-light-graphic-tertiary)' />}
-    </div>
-);
-
-const COPY_OPTIONS = [
-    { key: CopyType.NAME, content: getOptionContentCopy('Имя иконки') },
-    { key: CopyType.REACT_NAME, content: getOptionContentCopy('Имя компонента') },
-    { key: CopyType.IMPORT_CODE, content: getOptionContentCopy('Код для импорта') },
-];
-
-const DEPRECATED_OPTION_WITH_REPLACE = [
-    {
-        key: DeprecatedType.DEPRECATED,
-        content: getOptionContentDeprecated('Перейти к замене', true),
-    },
-];
-
-const DEPRECATED_OPTION_WITHOUT_REPLACE = [
-    {
-        key: DeprecatedType.NO_REPLACE,
-        content: getOptionContentDeprecated(
-            'Замены нет. Попробуйте найти другую иконку, подходящую под вашу задачу.',
-            false,
-        ),
-    },
-];
-
-const ASSET_TO_PACKAGE_NAME = {
-    icons: [
-        { value: 'glyph', label: 'Glyph' },
-        { value: 'rocky', label: 'Rocky' },
-        { value: 'ios', label: 'iOS' },
-        { value: 'android', label: 'Android' },
-        { value: 'corp', label: 'Corp' },
-        { value: 'invest', label: 'Invest' },
-        { value: 'site', label: 'Site' },
-        { value: 'classic', label: 'Classic (deprecated)' },
-    ],
-    logotype: [
-        { value: 'logo', label: 'Logo' },
-        { value: 'logo-am', label: 'Logo-am' },
-        { value: 'logotype', label: 'Logotype' },
-    ],
-    flag: [],
-    animation: [],
-};
-
-function getOptionsList(iconName: string, packageName: string, deprecatedIcons: DeprecatedIcons) {
-    if (packageName === IconPackageName.CLASSIC) {
-        return DEPRECATED_OPTION_WITHOUT_REPLACE;
-    }
-
-    if (!deprecatedIcons.hasOwnProperty(iconName)) {
-        return COPY_OPTIONS;
-    } else if (deprecatedIcons[iconName].replacement) {
-        return DEPRECATED_OPTION_WITH_REPLACE;
-    } else {
-        return DEPRECATED_OPTION_WITHOUT_REPLACE;
-    }
-}
 
 const IconsGlyph: AnyIcon = {};
 const IconsRocky: AnyIcon = {};
@@ -200,8 +115,6 @@ const initialState = {
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
 
-const allDeprecatedIcons: DeprecatedIcons = deprecatedIcons;
-
 const isHeader = (idx: number) => idx === 0;
 const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
 const isWarning = (element: JSX.Element) => Boolean(element.props['data-package-warning']);
@@ -217,8 +130,7 @@ const Demo: FC = () => {
         [IconPackageName.GLYPH]: true,
     });
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
-    const [playAnimation , setPlayAnimation] = useState<string | null>(null);
-
+    const [playAnimation, setPlayAnimation] = useState<string | null>(null);
 
     const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
@@ -340,6 +252,7 @@ const Demo: FC = () => {
     };
 
     const renderDropdown = (clickedElem: ClickedElement | null) => {
+        const allDeprecatedIcons = getDeprecatedAssets();
         const { iconName, packageName } = clickedElem || ({} as ClickedElement);
         const newName = allDeprecatedIcons[iconName]?.replacement || '';
         const options =
@@ -391,7 +304,7 @@ const Demo: FC = () => {
 
         const isWhite = iconPrimitiveName.includes('white');
         const isDeprecatedIcon =
-            allDeprecatedIcons.hasOwnProperty(iconPrimitiveName) ||
+            getDeprecatedAssets().hasOwnProperty(iconPrimitiveName) ||
             packageName === IconPackageName.CLASSIC;
 
         return (
@@ -414,7 +327,6 @@ const Demo: FC = () => {
                         deprecated
                     </Typography.Text>
                 ) : null}
-
                 {Icon ? (
                     <Icon
                         className='icon'
@@ -425,7 +337,6 @@ const Demo: FC = () => {
                         }
                     />
                 ) : null}
-
                 <Typography.Text
                     view='primary-small'
                     color={isWhite ? 'secondary-inverted' : 'secondary'}
@@ -481,7 +392,6 @@ const Demo: FC = () => {
                         animationData={animationData}
                         play={playAnimation === animationName}
                         changeAnimationName={changeAnimationName}
-
                     />
                 ) : null}
 
@@ -597,6 +507,7 @@ const Demo: FC = () => {
                 const keyB = b.key as string;
                 const keyPartsA = getKeyParts(keyA);
                 const keyPartsB = getKeyParts(keyB);
+                const allDeprecatedIcons = getDeprecatedAssets();
 
                 if (allDeprecatedIcons[keyPartsA]) {
                     return 1;
