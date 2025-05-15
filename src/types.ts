@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react';
+import React from 'react';
 
 export enum Asset {
     ICONS = 'icons',
@@ -23,25 +23,26 @@ export enum IconPackageName {
 }
 
 export type ClickedElement = {
-    reactIconName: string;
-    iconName: string;
+    webName: string;
+    svgIconName: string;
+    androidName: string;
+    iosName: string;
     packageName: string;
-    cdnLink?: string;
-};
-
-export type IconPackage = {
-    [key: string]: ComponentType;
-};
-
-export type IconListProps = {
-    value: string;
-    packages: IconPackageName[];
+    middleName: string;
+    cdnName: string;
+    cdnUrl: string;
+    base64Icon: string;
 };
 
 export enum CopyType {
-    NAME = 'name',
-    REACT_NAME = 'react_name',
-    IMPORT_CODE = 'import_code',
+    WEB_NAME = 'web_name',
+    WEB_COMPONENT = 'web_component',
+    ANDROID_NAME = 'android_name',
+    IOS_NAME = 'ios_name',
+    MIDDLE_NAME = 'middle_name',
+    CDN_NAME = 'cdn_name',
+    CDN_URL = 'cdn_url',
+    BASE_64_ICON = 'base_64_icon',
 }
 
 export type IconsInfo = Record<IconPackageName, Record<string, IconInfo>>;
@@ -51,16 +52,17 @@ export type IconInfo = {
     figmaIconName: string;
     reactIconName: string;
     svgIconName: string;
+    /** androidName и iosName формируем самостоятельно после получения данных из search.json */
+    androidName: string;
+    iosName: string;
 };
 
 export type AnyIcon = Record<string, React.FC<Record<string, unknown>>>;
 
 export type RenderIconParams = {
-    reactIconName: string;
-    iconPrimitiveName: string;
-    packageName: string;
+    packageName: IconPackageName;
     Icon: AnyIcon[keyof AnyIcon];
-};
+} & Pick<IconInfo, 'reactIconName' | 'androidName' | 'iosName' | 'svgIconName'>;
 
 export type RenderAnimationParams = {
     animationName: string;

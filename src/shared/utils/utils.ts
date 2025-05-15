@@ -1,5 +1,7 @@
-import { AnyIcon, Asset, IconInfo, IconPackageName, IconsInfo } from './types';
+import { AnyIcon, Asset, IconInfo, IconPackageName, IconsInfo } from '../../types';
 import decamelize from 'decamelize';
+import { transformFigmaNameToAndroid } from './transform-figma-name-to-android';
+import { transformFigmaNameToIOS } from './transform-figma-name-to-ios';
 
 export const noop = () => {};
 
@@ -28,7 +30,9 @@ export const fillIconInfo = (packages: Record<IconPackageName, AnyIcon>, iconsIn
             let info = iconsInfo[packageName] && iconsInfo[packageName][iconName];
 
             if (!info) {
-                const primitiveName = iconName.replace(/Icon$/, '').replace(/\d+/g, (match) => `-${match}`)
+                const primitiveName = iconName
+                    .replace(/Icon$/, '')
+                    .replace(/\d+/g, (match) => `-${match}`);
                 const arr = decamelize(primitiveName).split('_');
 
                 let lastElem = arr[arr.length - 1];
@@ -57,8 +61,16 @@ export const fillIconInfo = (packages: Record<IconPackageName, AnyIcon>, iconsIn
                     figmaIconName: '',
                     reactIconName: '',
                     figmaDescription: '',
+                    androidName: '',
+                    iosName: '',
                 };
             }
+
+            info = {
+                ...info,
+                androidName: transformFigmaNameToAndroid(info.svgIconName),
+                iosName: transformFigmaNameToIOS(info.svgIconName),
+            };
 
             infoRes[iconName] = info;
 

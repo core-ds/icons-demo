@@ -1,4 +1,4 @@
-import { DeprecatedAssets } from '../types';
+import { DeprecatedAssets } from '../../types';
 
 import deprecatedIcons from '../config/deprecated-icons.json';
 import deprecatedLogos from '../config/deprecated-logos.json';
