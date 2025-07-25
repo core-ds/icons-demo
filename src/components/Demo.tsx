@@ -70,6 +70,7 @@ const initialState = {
     [IconPackageName.LOGOTYPE]: false,
     [IconPackageName.LOGO]: false,
     [IconPackageName.LOGO_AM]: false,
+    [IconPackageName.LOGO_CORP]: false,
 };
 
 const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
@@ -444,6 +445,7 @@ const Demo: FC = () => {
         site: [],
         logo: [],
         'logo-am': [],
+        'logo-corp': [],
         animation: [],
     };
 

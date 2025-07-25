@@ -13,6 +13,7 @@ const IconsInvest: AnyIcon = {};
 const IconsSite: AnyIcon = {};
 const IconsLogo: AnyIcon = {};
 const IconsLogoAm: AnyIcon = {};
+const IconsLogoCorp: AnyIcon = {};
 
 importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
 importAllIcons(require.context('@alfalab/icons/rocky/dist', false, /Icon\.js$/), IconsRocky);
@@ -26,6 +27,7 @@ importAllIcons(require.context('@alfalab/icons/invest/dist', false, /Icon\.js$/)
 importAllIcons(require.context('@alfalab/icons/site/dist', false, /Icon\.js$/), IconsSite);
 importAllIcons(require.context('@alfalab/icons/logo/dist', false, /Icon\.js$/), IconsLogo);
 importAllIcons(require.context('@alfalab/icons/logo-am/dist', false, /Icon\.js$/), IconsLogoAm);
+importAllIcons(require.context('@alfalab/icons/logo-corp/dist', false, /Icon\.js$/), IconsLogoCorp);
 
 export const ICONS = {
     [IconPackageName.GLYPH]: IconsGlyph,
@@ -40,4 +42,5 @@ export const ICONS = {
     [IconPackageName.SITE]: IconsSite,
     [IconPackageName.LOGO]: IconsLogo,
     [IconPackageName.LOGO_AM]: IconsLogoAm,
+    [IconPackageName.LOGO_CORP]: IconsLogoCorp,
 };

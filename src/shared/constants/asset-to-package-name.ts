@@ -13,6 +13,7 @@ export const ASSET_TO_PACKAGE_NAME = {
         { value: 'logo', label: 'Logo' },
         { value: 'logo-am', label: 'Logo-am' },
         { value: 'logotype', label: 'Logotype' },
+        { value: 'logo-corp', label: 'Logo-corp' },
     ],
     flag: [],
     animation: [],

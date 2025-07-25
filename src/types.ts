@@ -19,6 +19,7 @@ export enum IconPackageName {
     LOGO = 'logo',
     LOGOTYPE = 'logotype',
     LOGO_AM = 'logo-am',
+    LOGO_CORP = 'logo-corp',
     CLASSIC = 'classic',
 }
 
