@@ -7,12 +7,12 @@ export const ASSET_TO_PACKAGE_NAME = {
         { value: 'corp', label: 'Corp' },
         { value: 'invest', label: 'Invest' },
         { value: 'site', label: 'Site' },
+        { value: 'classic', label: 'Classic (deprecated)' },
     ],
     logotype: [
         { value: 'logo', label: 'Logo' },
         { value: 'logo-am', label: 'Logo-am' },
         { value: 'logotype', label: 'Logotype' },
-        { value: 'logo-corp', label: 'Logo-corp' },
     ],
     flag: [],
     animation: [],

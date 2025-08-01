@@ -27,11 +27,13 @@ import {
     CopyType,
     DeprecatedType,
     IconPackageName,
+    IconsInfo,
     RenderAnimationParams,
     RenderIconParams,
 } from '../types';
 import { BackToTopButton } from './BackToTopButton';
 import {
+    fillIconInfo,
     formatPackageName,
     getKeyParts,
     getKeys,
@@ -39,6 +41,7 @@ import {
     noop,
 } from '../shared/utils';
 
+import iconsInfo from '@alfalab/icons/search.json';
 import animationJson from 'ui-primitives/animations/test.json';
 
 import './Demo.css';
@@ -46,7 +49,8 @@ import LottieIcon from './LottieIcon';
 import { getDeprecatedAssets } from '../shared/helpers';
 import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
 import { getOptionsList } from './option-list/OptionList';
-import { ICON_META_FILES, ICONS } from '../shared/config';
+import { ICONS } from '../shared/config';
+import { encodeSvgToBase64 } from '../shared/utils';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -62,11 +66,13 @@ const initialState = {
     [IconPackageName.FLAG]: false,
     [IconPackageName.SITE]: false,
     [IconPackageName.INVEST]: false,
+    [IconPackageName.CLASSIC]: false,
     [IconPackageName.LOGOTYPE]: false,
     [IconPackageName.LOGO]: false,
     [IconPackageName.LOGO_AM]: false,
-    [IconPackageName.LOGO_CORP]: false,
 };
+
+const ICONS_INFO = fillIconInfo(ICONS, (iconsInfo as unknown) as IconsInfo);
 
 const isHeader = (idx: number) => idx === 0;
 const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
@@ -106,26 +112,31 @@ const Demo: FC = () => {
     const handleOptionAction = (type: DeprecatedType | CopyType, newName?: string) => {
         if (clickedElem) {
             if (Object.values(CopyType).includes(type as CopyType)) {
-                if (type === CopyType.WEB_NAME && clickedElem.web) {
-                    copy(clickedElem.web);
+                if (type === CopyType.WEB_NAME) {
+                    copy(clickedElem.webName);
                 }
-                if (type === CopyType.WEB_COMPONENT && clickedElem.webComponent) {
-                    copy(clickedElem.webComponent);
+                if (type === CopyType.WEB_COMPONENT) {
+                    copy(
+                        `import { ${clickedElem.webName} } from '@alfalab/icons-${clickedElem.packageName}/${clickedElem.webName}';`,
+                    );
                 }
-                if (type === CopyType.ANDROID_NAME && clickedElem.android) {
-                    copy(clickedElem.android);
+                if (type === CopyType.ANDROID_NAME) {
+                    copy(clickedElem.androidName);
                 }
-                if (type === CopyType.IOS_NAME && clickedElem.ios) {
-                    copy(clickedElem.ios);
+                if (type === CopyType.IOS_NAME) {
+                    copy(clickedElem.iosName);
                 }
                 if (type === CopyType.MIDDLE_NAME) {
-                    copy(clickedElem.middle);
+                    copy(clickedElem.middleName);
                 }
-                if (type === CopyType.CDN_NAME && clickedElem.cdn) {
-                    copy(clickedElem.cdn);
+                if (type === CopyType.CDN_NAME) {
+                    copy(clickedElem.cdnName);
                 }
-                if (type === CopyType.CDN_URL && clickedElem.url) {
-                    copy(clickedElem.url);
+                if (type === CopyType.CDN_URL) {
+                    copy(clickedElem.cdnUrl);
+                }
+                if (type === CopyType.BASE_64_ICON) {
+                    copy(clickedElem.base64Icon);
                 }
 
                 setToastParams({
@@ -216,9 +227,10 @@ const Demo: FC = () => {
 
     const renderDropdown = (clickedElem: ClickedElement | null) => {
         const allDeprecatedIcons = getDeprecatedAssets();
-        const { basename } = clickedElem || ({} as ClickedElement);
-        const newName = allDeprecatedIcons[basename]?.replacement || '';
-        const options = getOptionsList(basename, allDeprecatedIcons, clickedElem) || [];
+        const { svgIconName, packageName } = clickedElem || ({} as ClickedElement);
+        const newName = allDeprecatedIcons[svgIconName]?.replacement || '';
+        const options =
+            (svgIconName && getOptionsList(svgIconName, packageName, allDeprecatedIcons)) || [];
 
         return (
             <OptionsList
@@ -246,15 +258,33 @@ const Demo: FC = () => {
         );
     };
 
-    const renderIcon = (params: RenderIconParams) => {
-        const { Icon, basename, packageName, ...rest } = params;
+    const renderIcon = ({
+        reactIconName,
+        svgIconName,
+        packageName,
+        Icon,
+        androidName,
+        iosName,
+    }: RenderIconParams) => {
         const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
             popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
-            setClickedElem({ basename, packageName, ...rest });
+            setClickedElem({
+                webName: reactIconName,
+                svgIconName,
+                packageName,
+                cdnName: svgIconName,
+                middleName: svgIconName,
+                androidName,
+                iosName,
+                cdnUrl: `https://alfabank.servicecdn.ru/icons/${svgIconName}.svg`,
+                base64Icon: encodeSvgToBase64(packageName, reactIconName),
+            });
         };
 
-        const isWhite = basename.includes('white');
-        const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(basename);
+        const isWhite = svgIconName.includes('white');
+        const isDeprecatedIcon =
+            getDeprecatedAssets().hasOwnProperty(svgIconName) ||
+            packageName === IconPackageName.CLASSIC;
 
         return (
             <div
@@ -262,7 +292,7 @@ const Demo: FC = () => {
                     'icon-wrap_dark': isWhite,
                 })}
                 onClick={handleClick}
-                key={`${packageName}-${basename}`}
+                key={`${packageName}-${svgIconName}`}
             >
                 {isDeprecatedIcon ? (
                     <Typography.Text
@@ -291,7 +321,7 @@ const Demo: FC = () => {
                     color={isWhite ? 'secondary-inverted' : 'secondary'}
                     className='icon-primitive-name'
                 >
-                    {basename}
+                    {svgIconName}
                 </Typography.Text>
             </div>
         );
@@ -410,10 +440,10 @@ const Demo: FC = () => {
         invest: [],
         logotype: [],
         flag: [],
+        classic: [],
         site: [],
         logo: [],
         'logo-am': [],
-        'logo-corp': [],
         animation: [],
     };
 
@@ -427,25 +457,28 @@ const Demo: FC = () => {
 
             getKeys(module).forEach((reactIconName) => {
                 const iconName = reactIconName.toLowerCase();
-                const iconInfo = ICON_META_FILES[packageName][reactIconName];
+                const iconInfo = ICONS_INFO[packageName][reactIconName];
 
-                const { description, basename, ...rest } = iconInfo;
+                const { figmaDescription, svgIconName, androidName, iosName } = iconInfo;
+                const iconDescription = figmaDescription.toLowerCase();
 
                 const isMatch =
                     !query ||
                     iconName.includes(query) ||
-                    basename.includes(query) ||
-                    description.includes(query);
+                    svgIconName.includes(query) ||
+                    iconDescription.includes(query);
 
                 if (isMatch) {
                     const IconComponent = module[reactIconName];
 
                     iconsByPackage[packageName].push(
                         renderIcon({
-                            Icon: IconComponent,
-                            basename,
+                            reactIconName,
+                            svgIconName,
                             packageName,
-                            ...rest,
+                            Icon: IconComponent,
+                            androidName,
+                            iosName,
                         }),
                     );
                 }
