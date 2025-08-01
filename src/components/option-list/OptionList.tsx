@@ -1,21 +1,19 @@
 import React from 'react';
 
-import { ClickedElement, DeprecatedAssets, DeprecatedType } from '../../types';
+import { CopyType, DeprecatedAssets, DeprecatedType, IconPackageName } from '../../types';
 import { OptionContentCopy } from './components/option-content-copy';
 import { OptionContentDeprecated } from './components/option-content-deprecated';
-import { MetaInfo } from '../../shared/config/icon-meta-files';
 
-type Key = Exclude<keyof MetaInfo, 'description' | 'basename'>;
-
-const OPTIONS_MAP: Record<Key, JSX.Element> = {
-    web: <OptionContentCopy text='Веб имя иконки' />,
-    webComponent: <OptionContentCopy text='Веб компонент' />,
-    android: <OptionContentCopy text='Android имя иконки' />,
-    ios: <OptionContentCopy text='iOS имя иконки' />,
-    middle: <OptionContentCopy text='Мидл имя иконки' />,
-    cdn: <OptionContentCopy text='CDN имя иконки' />,
-    url: <OptionContentCopy text='URL иконки' />,
-};
+const COPY_OPTIONS = [
+    { key: CopyType.WEB_NAME, content: <OptionContentCopy text='Веб имя иконки' /> },
+    { key: CopyType.WEB_COMPONENT, content: <OptionContentCopy text='Веб компонент' /> },
+    { key: CopyType.ANDROID_NAME, content: <OptionContentCopy text='Android имя иконки' /> },
+    { key: CopyType.IOS_NAME, content: <OptionContentCopy text='iOS имя иконки' /> },
+    { key: CopyType.MIDDLE_NAME, content: <OptionContentCopy text='Мидл имя иконки' /> },
+    { key: CopyType.CDN_NAME, content: <OptionContentCopy text='CDN имя иконки' /> },
+    { key: CopyType.CDN_URL, content: <OptionContentCopy text='URL иконки' /> },
+    { key: CopyType.BASE_64_ICON, content: <OptionContentCopy text='Base64 иконка' /> },
+];
 
 const DEPRECATED_OPTION_WITH_REPLACE = [
     {
@@ -36,25 +34,17 @@ const DEPRECATED_OPTION_WITHOUT_REPLACE = [
     },
 ];
 
-const generateOptionList = (clickedElem: ClickedElement) => {
-    return Object.keys(clickedElem)
-        .filter((item) => !['packageName', 'basename'].includes(item))
-        .map((item) => {
-            const key = item as Key;
-            return { key, content: OPTIONS_MAP[key] };
-        });
-};
-
 export function getOptionsList(
     iconName: string,
+    packageName: string,
     deprecatedIcons: DeprecatedAssets,
-    clickedElem: ClickedElement | null,
 ) {
+    if (packageName === IconPackageName.CLASSIC) {
+        return DEPRECATED_OPTION_WITHOUT_REPLACE;
+    }
+
     if (!deprecatedIcons.hasOwnProperty(iconName)) {
-        if (clickedElem) {
-            return generateOptionList(clickedElem);
-        }
-        return null;
+        return COPY_OPTIONS;
     } else if (deprecatedIcons[iconName].replacement) {
         return DEPRECATED_OPTION_WITH_REPLACE;
     } else {
