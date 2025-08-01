@@ -8,7 +8,6 @@ const IconsAndroid: AnyIcon = {};
 const IconsCorp: AnyIcon = {};
 const IconsLogotype: AnyIcon = {};
 const IconsFlag: AnyIcon = {};
-const IconsClassic: AnyIcon = {};
 const IconsInvest: AnyIcon = {};
 const IconsSite: AnyIcon = {};
 const IconsLogo: AnyIcon = {};
@@ -22,7 +21,6 @@ importAllIcons(require.context('@alfalab/icons/android/dist', false, /Icon\.js$/
 importAllIcons(require.context('@alfalab/icons/corp/dist', false, /Icon\.js$/), IconsCorp);
 importAllIcons(require.context('@alfalab/icons/logotype/dist', false, /Icon\.js$/), IconsLogotype);
 importAllIcons(require.context('@alfalab/icons/flag/dist', false, /Icon\.js$/), IconsFlag);
-importAllIcons(require.context('@alfalab/icons/classic/dist', false, /Icon\.js$/), IconsClassic);
 importAllIcons(require.context('@alfalab/icons/invest/dist', false, /Icon\.js$/), IconsInvest);
 importAllIcons(require.context('@alfalab/icons/site/dist', false, /Icon\.js$/), IconsSite);
 importAllIcons(require.context('@alfalab/icons/logo/dist', false, /Icon\.js$/), IconsLogo);
@@ -37,7 +35,6 @@ export const ICONS = {
     [IconPackageName.CORP]: IconsCorp,
     [IconPackageName.LOGOTYPE]: IconsLogotype,
     [IconPackageName.FLAG]: IconsFlag,
-    [IconPackageName.CLASSIC]: IconsClassic,
     [IconPackageName.INVEST]: IconsInvest,
     [IconPackageName.SITE]: IconsSite,
     [IconPackageName.LOGO]: IconsLogo,

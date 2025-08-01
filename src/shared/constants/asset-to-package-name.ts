@@ -7,7 +7,6 @@ export const ASSET_TO_PACKAGE_NAME = {
         { value: 'corp', label: 'Corp' },
         { value: 'invest', label: 'Invest' },
         { value: 'site', label: 'Site' },
-        { value: 'classic', label: 'Classic (deprecated)' },
     ],
     logotype: [
         { value: 'logo', label: 'Logo' },
