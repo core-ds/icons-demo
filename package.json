@@ -1,6 +1,6 @@
 {
     "name": "@alfalab/icons-demo",
-    "version": "1.713.0",
+    "version": "1.714.0",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
@@ -50,7 +50,7 @@
     "dependencies": {
         "@alfalab/core-components": "^44.5.1",
         "@alfalab/hooks": "^1.13.0",
-        "@alfalab/icons": "^3.384.0",
+        "@alfalab/icons": "^3.384.1",
         "@tanstack/react-virtual": "^3.0.0-beta.54",
         "camelcase": "^6.2.0",
         "classnames": "^2.3.1",
@@ -59,6 +59,6 @@
         "querystring": "^0.2.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "ui-primitives": "^30.18.0"
+        "ui-primitives": "^30.19.0"
     }
 }
