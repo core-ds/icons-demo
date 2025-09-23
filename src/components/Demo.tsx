@@ -247,14 +247,14 @@ const Demo: FC = () => {
     };
 
     const renderIcon = (params: RenderIconParams) => {
-        const { Icon, basename, packageName, ...rest } = params;
+        const { Icon, packageName, middle, ...rest } = params;
         const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
             popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
-            setClickedElem({ basename, packageName, ...rest });
+            setClickedElem({ middle, packageName, ...rest });
         };
 
-        const isWhite = basename.includes('white');
-        const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(basename);
+        const isWhite = middle.includes('white');
+        const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(middle);
 
         return (
             <div
@@ -262,7 +262,7 @@ const Demo: FC = () => {
                     'icon-wrap_dark': isWhite,
                 })}
                 onClick={handleClick}
-                key={`${packageName}-${basename}`}
+                key={`${packageName}-${middle}`}
             >
                 {isDeprecatedIcon ? (
                     <Typography.Text
@@ -291,7 +291,7 @@ const Demo: FC = () => {
                     color={isWhite ? 'secondary-inverted' : 'secondary'}
                     className='icon-primitive-name'
                 >
-                    {basename}
+                    {middle}
                 </Typography.Text>
             </div>
         );
@@ -429,13 +429,9 @@ const Demo: FC = () => {
                 const iconName = reactIconName.toLowerCase();
                 const iconInfo = ICON_META_FILES[packageName][reactIconName];
 
-                const { description, basename, ...rest } = iconInfo;
+                const { description, ...rest } = iconInfo;
 
-                const isMatch =
-                    !query ||
-                    iconName.includes(query) ||
-                    basename.includes(query) ||
-                    description.includes(query);
+                const isMatch = !query || iconName.includes(query) || description.includes(query);
 
                 if (isMatch) {
                     const IconComponent = module[reactIconName];
@@ -443,7 +439,6 @@ const Demo: FC = () => {
                     iconsByPackage[packageName].push(
                         renderIcon({
                             Icon: IconComponent,
-                            basename,
                             packageName,
                             ...rest,
                         }),
