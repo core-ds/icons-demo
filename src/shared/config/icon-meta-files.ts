@@ -15,7 +15,6 @@ import { IconPackageName } from '../../types';
 
 export type MetaInfo = {
     description: string;
-    basename: string;
     middle: string;
     web?: string;
     webComponent?: string;

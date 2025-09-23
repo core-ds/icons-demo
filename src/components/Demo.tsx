@@ -216,9 +216,9 @@ const Demo: FC = () => {
 
     const renderDropdown = (clickedElem: ClickedElement | null) => {
         const allDeprecatedIcons = getDeprecatedAssets();
-        const { basename } = clickedElem || ({} as ClickedElement);
-        const newName = allDeprecatedIcons[basename]?.replacement || '';
-        const options = getOptionsList(basename, allDeprecatedIcons, clickedElem) || [];
+        const { middle } = clickedElem || ({} as ClickedElement);
+        const newName = allDeprecatedIcons[middle]?.replacement || '';
+        const options = getOptionsList(middle, allDeprecatedIcons, clickedElem) || [];
 
         return (
             <OptionsList
