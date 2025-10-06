@@ -429,9 +429,13 @@ const Demo: FC = () => {
                 const iconName = reactIconName.toLowerCase();
                 const iconInfo = ICON_META_FILES[packageName][reactIconName];
 
-                const { description, ...rest } = iconInfo;
+                const { description, middle, ...rest } = iconInfo;
 
-                const isMatch = !query || iconName.includes(query) || description.includes(query);
+                const isMatch =
+                    !query ||
+                    iconName.includes(query) ||
+                    middle.includes(query) ||
+                    description.includes(query);
 
                 if (isMatch) {
                     const IconComponent = module[reactIconName];
@@ -440,6 +444,7 @@ const Demo: FC = () => {
                         renderIcon({
                             Icon: IconComponent,
                             packageName,
+                            middle,
                             ...rest,
                         }),
                     );
