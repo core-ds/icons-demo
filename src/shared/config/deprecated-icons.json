@@ -1213,5 +1213,9 @@
     "glyph_category-feedback_m" : {
         "replacement": "glyph_star-pointer_m",
         "date": "02.25"
+    },
+    "corp_stack-of-coins_m" : {
+        "replacement": "corp_stack-coins_m",
+        "date": "11.25"
     }
 }
