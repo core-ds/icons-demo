@@ -265,8 +265,8 @@
 .deprecated_dark {
     background-color: var(--color-light-neutral-translucent-100-inverted);
 }
-
-@media (min-width: 600px) {
+/* @see DS-14334 */
+/*@media (min-width: 600px) {*/
     :root {
         --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
         --bundle-padding-bottom: var(--gap-xs);
@@ -285,4 +285,4 @@
         flex-flow: row nowrap;
         gap: var(--gap-xs);
     }
-}
+/*}*/

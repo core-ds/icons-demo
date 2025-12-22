@@ -92,8 +92,12 @@ const Demo: FC = () => {
     const popoverAnchorRef = useRef<HTMLDivElement>();
     const scrollerRef = useRef<HTMLDivElement>(null);
 
-    const [mobile] = useMatchMedia('--mobile');
-    const [tablet] = useMatchMedia('--tablet');
+    let [mobile] = useMatchMedia('--mobile');
+    let [tablet] = useMatchMedia('--tablet');
+
+    /** @see DS-14334 */
+    mobile = false;
+    tablet = false;
 
     const query = value.toLowerCase();
     const Title = mobile ? Typography.TitleMobile : Typography.Title;
