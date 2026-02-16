@@ -1,6 +1,6 @@
 {
     "name": "@alfalab/icons-demo",
-    "version": "1.792.0",
+    "version": "1.793.0",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
@@ -59,6 +59,6 @@
         "querystring": "^0.2.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "ui-primitives": "^35.11.0"
+        "ui-primitives": "^35.12.0"
     }
 }
