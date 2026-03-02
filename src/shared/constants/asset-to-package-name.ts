@@ -1,18 +1,23 @@
-export const ASSET_TO_PACKAGE_NAME = {
+import { Asset, IconPackageName } from '../../types';
+
+type Assets = Record<Asset, { value: IconPackageName; label: string }[]>;
+
+export const ASSET_TO_PACKAGE_NAME: Assets = {
     icons: [
-        { value: 'glyph', label: 'Glyph' },
-        { value: 'rocky', label: 'Rocky' },
-        { value: 'ios', label: 'iOS' },
-        { value: 'android', label: 'Android' },
-        { value: 'corp', label: 'Corp' },
-        { value: 'invest', label: 'Invest' },
-        { value: 'site', label: 'Site' },
+        { value: IconPackageName.GLYPH, label: 'Glyph' },
+        { value: IconPackageName.GLYPH_26, label: 'Glyph-26' },
+        { value: IconPackageName.ROCKY, label: 'Rocky' },
+        { value: IconPackageName.IOS, label: 'iOS' },
+        { value: IconPackageName.ANDROID, label: 'Android' },
+        { value: IconPackageName.CORP, label: 'Corp' },
+        { value: IconPackageName.INVEST, label: 'Invest' },
+        { value: IconPackageName.SITE, label: 'Site' },
     ],
     logotype: [
-        { value: 'logo', label: 'Logo' },
-        { value: 'logo-am', label: 'Logo-am' },
-        { value: 'logotype', label: 'Logotype' },
-        { value: 'logo-corp', label: 'Logo-corp' },
+        { value: IconPackageName.LOGO, label: 'Logo' },
+        { value: IconPackageName.LOGO_AM, label: 'Logo-am' },
+        { value: IconPackageName.LOGOTYPE, label: 'Logotype' },
+        { value: IconPackageName.LOGO_CORP, label: 'Logo-corp' },
     ],
     flag: [],
     animation: [],

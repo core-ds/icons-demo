@@ -53,8 +53,9 @@ const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     content: getPackageNameAsset(Asset[key], true),
 }));
 
-const initialState = {
+const initialState: Record<IconPackageName, boolean> = {
     [IconPackageName.GLYPH]: false,
+    [IconPackageName.GLYPH_26]: false,
     [IconPackageName.ROCKY]: false,
     [IconPackageName.IOS]: false,
     [IconPackageName.ANDROID]: false,
@@ -407,6 +408,7 @@ const Demo: FC = () => {
 
     const iconsByPackage: Record<IconPackageName | Asset.ANIMATION, JSX.Element[]> = {
         glyph: [],
+        'glyph-26': [],
         rocky: [],
         ios: [],
         android: [],
