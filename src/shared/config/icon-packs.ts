@@ -2,6 +2,7 @@ import { AnyIcon, IconPackageName } from '../../types';
 import { importAllIcons } from '../utils';
 
 const IconsGlyph: AnyIcon = {};
+const IconsGlyph26: AnyIcon = {};
 const IconsRocky: AnyIcon = {};
 const IconsIos: AnyIcon = {};
 const IconsAndroid: AnyIcon = {};
@@ -15,6 +16,7 @@ const IconsLogoAm: AnyIcon = {};
 const IconsLogoCorp: AnyIcon = {};
 
 importAllIcons(require.context('@alfalab/icons/glyph/dist', false, /Icon\.js$/), IconsGlyph);
+importAllIcons(require.context('@alfalab/icons/glyph-26/dist', false, /Icon\.js$/), IconsGlyph26);
 importAllIcons(require.context('@alfalab/icons/rocky/dist', false, /Icon\.js$/), IconsRocky);
 importAllIcons(require.context('@alfalab/icons/ios/dist', false, /Icon\.js$/), IconsIos);
 importAllIcons(require.context('@alfalab/icons/android/dist', false, /Icon\.js$/), IconsAndroid);
@@ -29,6 +31,7 @@ importAllIcons(require.context('@alfalab/icons/logo-corp/dist', false, /Icon\.js
 
 export const ICONS = {
     [IconPackageName.GLYPH]: IconsGlyph,
+    [IconPackageName.GLYPH_26]: IconsGlyph26,
     [IconPackageName.ROCKY]: IconsRocky,
     [IconPackageName.IOS]: IconsIos,
     [IconPackageName.ANDROID]: IconsAndroid,

@@ -5,12 +5,9 @@ import copy from 'copy-to-clipboard';
 
 import { Input } from '@alfalab/core-components/input/modern';
 import { Typography } from '@alfalab/core-components/typography/modern';
-import { Select, SelectProps } from '@alfalab/core-components/select/modern';
-import { SelectMobile } from '@alfalab/core-components/select/modern/mobile';
+import { SelectDesktop, SelectDesktopProps } from '@alfalab/core-components/select/desktop';
 import { BaseOption, OptionsList } from '@alfalab/core-components/select/modern/shared';
-import { useMatchMedia } from '@alfalab/core-components/mq/modern';
 import { Toast } from '@alfalab/core-components/toast/modern';
-import { BottomSheet } from '@alfalab/core-components/bottom-sheet/modern';
 import { Popover } from '@alfalab/core-components/popover/modern';
 import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
 import { Tag } from '@alfalab/core-components/tag/modern';
@@ -53,8 +50,9 @@ const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     content: getPackageNameAsset(Asset[key], true),
 }));
 
-const initialState = {
+const initialState: Record<IconPackageName, boolean> = {
     [IconPackageName.GLYPH]: false,
+    [IconPackageName.GLYPH_26]: false,
     [IconPackageName.ROCKY]: false,
     [IconPackageName.IOS]: false,
     [IconPackageName.ANDROID]: false,
@@ -92,16 +90,7 @@ const Demo: FC = () => {
     const popoverAnchorRef = useRef<HTMLDivElement>();
     const scrollerRef = useRef<HTMLDivElement>(null);
 
-    let [mobile] = useMatchMedia('--mobile');
-    let [tablet] = useMatchMedia('--tablet');
-
-    /** @see DS-14334 */
-    mobile = false;
-    tablet = false;
-
     const query = value.toLowerCase();
-    const Title = mobile ? Typography.TitleMobile : Typography.Title;
-    const SelectComponent = mobile ? SelectMobile : Select;
 
     const handleDropdownClose = () => setClickedElem(null);
 
@@ -155,7 +144,7 @@ const Demo: FC = () => {
         setPackages({ ...packages, [payload.name]: payload.checked });
     };
 
-    const handleAssetChange: SelectProps['onChange'] = ({ selected }) => {
+    const handleAssetChange: SelectDesktopProps['onChange'] = ({ selected }) => {
         const packageName = getPackageNameAsset(selected?.key as Asset);
         setPackages({ ...initialState, [packageName]: true });
         setAsset(selected?.key as Asset);
@@ -164,9 +153,9 @@ const Demo: FC = () => {
     const renderHeader = () => {
         return (
             <div key='header'>
-                <Title tag='h1' view='xlarge' font='styrene' className='header-title'>
+                <Typography.Title tag='h1' view='xlarge' font='styrene' className='header-title'>
                     Витрина ассетов
-                </Title>
+                </Typography.Title>
 
                 <div className='search-wrapper'>
                     <Input
@@ -180,7 +169,7 @@ const Demo: FC = () => {
                         onClear={() => setValue('')}
                     />
                     <div className='asset-select-wrapper'>
-                        <SelectComponent
+                        <SelectDesktop
                             options={ASSET_OPTIONS}
                             selected={asset}
                             Option={BaseOption}
@@ -235,7 +224,6 @@ const Demo: FC = () => {
                     Checkmark: null,
                     index,
                     option,
-                    mobile,
                     className: 'option',
                     innerProps: {
                         id: option.key,
@@ -361,7 +349,7 @@ const Demo: FC = () => {
 
     const renderPackageTitle = (packageName: IconPackageName | Asset) => {
         return (
-            <Title
+            <Typography.Title
                 tag='h3'
                 view='small'
                 className='package-title'
@@ -369,7 +357,7 @@ const Demo: FC = () => {
                 key={packageName}
             >
                 {formatPackageName(packageName)}
-            </Title>
+            </Typography.Title>
         );
     };
 
@@ -401,12 +389,13 @@ const Demo: FC = () => {
         </Typography.Text>
     );
 
-    const columnsAmount = mobile ? 1 : tablet ? 3 : 4;
+    const columnsAmount = 4;
 
     const result: JSX.Element[] = [renderHeader()];
 
     const iconsByPackage: Record<IconPackageName | Asset.ANIMATION, JSX.Element[]> = {
         glyph: [],
+        'glyph-26': [],
         rocky: [],
         ios: [],
         android: [],
@@ -554,7 +543,7 @@ const Demo: FC = () => {
         count: grid.length,
         getScrollElement: () => scrollerRef.current,
         overscan: 5,
-        estimateSize: mobile ? estimateMobileSize : estimateDesktopSize,
+        estimateSize: estimateDesktopSize,
     });
 
     const items = virtualizer.getVirtualItems();
@@ -605,28 +594,19 @@ const Demo: FC = () => {
                 onClose={() => setToastParams((prev) => ({ ...prev, open: false }))}
                 style={{ left: '50%', transform: 'translateX(-53%)' }}
             />
-            {mobile ? (
-                <BottomSheet
-                    open={Boolean(clickedElem)}
-                    onClose={handleDropdownClose}
-                    contentClassName='mobile-copy-dropdown'
-                >
-                    {renderDropdown(clickedElem)}
-                </BottomSheet>
-            ) : (
-                <Popover
-                    open={Boolean(clickedElem)}
-                    useAnchorWidth={true}
-                    anchorElement={popoverAnchorRef.current || null}
-                    popperClassName='desktop-copy-dropdown-inner'
-                    position='bottom'
-                    offset={[0, 4]}
-                    preventFlip={false}
-                    ref={popoverRef}
-                >
-                    <div className='popover-options-list'>{renderDropdown(clickedElem)}</div>
-                </Popover>
-            )}
+
+            <Popover
+                open={Boolean(clickedElem)}
+                useAnchorWidth={true}
+                anchorElement={popoverAnchorRef.current || null}
+                popperClassName='desktop-copy-dropdown-inner'
+                position='bottom'
+                offset={[0, 4]}
+                preventFlip={false}
+                ref={popoverRef}
+            >
+                <div className='popover-options-list'>{renderDropdown(clickedElem)}</div>
+            </Popover>
 
             <BackToTopButton
                 visible={items[0].index !== 0}

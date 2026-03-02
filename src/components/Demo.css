@@ -32,17 +32,17 @@
 :root {
     --content-width: 880px;
     --side-gap: 20px;
-    --search-wrapper-padding: var(--gap-l) 0 var(--gap-2xs);
-    --bundle-padding-bottom: var(--gap-2xs);
-    --asset-select-width: '100%';
-    --asset-select-margin: var(--gap-m) 0;
-    --icons-list-padding: var(--gap-3xl) 0 var(--gap-7xl);
-    --row-padding-bottom: var(--gap-m);
+    --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
+    --bundle-padding-bottom: var(--gap-xs);
+    --asset-select-width: 200px;
+    --asset-select-margin: 0;
+    --icons-list-padding: var(--gap-5xl) 0 var(--gap-8xl);
+    --row-padding-bottom: var(--gap-s);
     --icon-wrapper-padding: var(--gap-s);
-    --option-content-padding: var(--gap-m) 0 var(--gap-m) var(--gap-m);
-    --package-name-padding-top: var(--gap-xl);
+    --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
+    --package-name-padding-top: var(--gap-2xl);
     --package-name-padding-bottom: var(--gap-m);
-    --list-padding: 0 0 var(--gap-xl);
+    --list-padding: 0 0 var(--gap-2xl);
 }
 
 .root {
@@ -52,6 +52,9 @@
 }
 
 .search-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: var(--gap-xs);
     padding: var(--search-wrapper-padding);
 }
 
@@ -265,24 +268,3 @@
 .deprecated_dark {
     background-color: var(--color-light-neutral-translucent-100-inverted);
 }
-/* @see DS-14334 */
-/*@media (min-width: 600px) {*/
-    :root {
-        --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
-        --bundle-padding-bottom: var(--gap-xs);
-        --asset-select-width: 200px;
-        --icons-list-padding: var(--gap-5xl) 0 var(--gap-8xl);
-        --asset-select-margin: 0;
-        --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
-        --row-padding-bottom: var(--gap-s);
-        --package-name-padding-top: var(--gap-2xl);
-        --package-name-padding-bottom: var(--gap-m);
-        --list-padding: 0 0 var(--gap-2xl);
-    }
-
-    .search-wrapper {
-        display: flex;
-        flex-flow: row nowrap;
-        gap: var(--gap-xs);
-    }
-/*}*/

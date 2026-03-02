@@ -10,6 +10,7 @@ export enum Asset {
 
 export enum IconPackageName {
     GLYPH = 'glyph',
+    GLYPH_26 = 'glyph-26',
     ROCKY = 'rocky',
     IOS = 'ios',
     ANDROID = 'android',

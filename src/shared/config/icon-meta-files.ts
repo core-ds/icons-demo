@@ -1,4 +1,5 @@
 import glyph from '@alfalab/icons/meta_glyph.json';
+import glyph26 from '@alfalab/icons/meta_glyph-26.json';
 import rocky from '@alfalab/icons/meta_rocky.json';
 import ios from '@alfalab/icons/meta_ios.json';
 import android from '@alfalab/icons/meta_android.json';
@@ -26,6 +27,7 @@ export type MetaInfo = {
 
 export const ICON_META_FILES: Record<IconPackageName, Record<string, MetaInfo>> = {
     [IconPackageName.GLYPH]: glyph,
+    [IconPackageName.GLYPH_26]: glyph26,
     [IconPackageName.ROCKY]: rocky,
     [IconPackageName.IOS]: ios,
     [IconPackageName.ANDROID]: android,
