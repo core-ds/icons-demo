@@ -391,31 +391,14 @@ const Demo: FC = () => {
 
     const columnsAmount = 4;
 
-    const result: JSX.Element[] = [];
-
-    const iconsByPackage: Record<IconPackageName | Asset.ANIMATION, JSX.Element[]> = {
-        glyph: [],
-        'glyph-26': [],
-        rocky: [],
-        ios: [],
-        android: [],
-        corp: [],
-        invest: [],
-        logotype: [],
-        flag: [],
-        site: [],
-        logo: [],
-        'logo-am': [],
-        'logo-corp': [],
-        animation: [],
-    };
+    const result: { render: JSX.Element }[] = [];
 
     getKeys(ICONS).forEach((packageName) => {
         if (packages[packageName]) {
             const module = ICONS[packageName];
 
             if (!query) {
-                iconsByPackage[packageName].push(renderPackageTitle(packageName));
+                result.push({ render: renderPackageTitle(packageName) });
             }
 
             getKeys(module).forEach((reactIconName) => {
@@ -433,20 +416,20 @@ const Demo: FC = () => {
                 if (isMatch) {
                     const IconComponent = module[reactIconName];
 
-                    iconsByPackage[packageName].push(
-                        renderIcon({
+                    result.push({
+                        render: renderIcon({
                             Icon: IconComponent,
                             packageName,
                             middle,
                             ...rest,
                         }),
-                    );
+                    });
                 }
             });
 
-            iconsByPackage[packageName].sort((a, b) => {
-                const keyA = a.key as string;
-                const keyB = b.key as string;
+            result.sort((a, b) => {
+                const keyA = a.render.key as string;
+                const keyB = b.render.key as string;
                 const keyPartsA = getKeyParts(keyA);
                 const keyPartsB = getKeyParts(keyB);
                 const allDeprecatedIcons = getDeprecatedAssets();
@@ -459,15 +442,13 @@ const Demo: FC = () => {
                     return 0;
                 }
             });
-
-            result.push(...iconsByPackage[packageName]);
         }
     });
 
     if (asset === 'animation') {
         if (!query) {
-            iconsByPackage[asset].push(renderPackageTitle(asset));
-            iconsByPackage[asset].push(renderWarning());
+            result.push({ render: renderPackageTitle(asset) });
+            result.push({ render: renderWarning() });
         }
 
         getKeys(animationJson).forEach((animationName) => {
@@ -476,19 +457,19 @@ const Demo: FC = () => {
             const isMatch = !query || animationName.includes(query);
 
             if (isMatch) {
-                iconsByPackage[asset].push(
-                    renderAnimation({
+                result.push({
+                    render: renderAnimation({
                         animationName,
                         packageName: asset,
                         animationData,
                     }),
-                );
+                });
             }
         });
 
-        iconsByPackage[asset].sort((a, b) => {
-            const keyA = a.key as string;
-            const keyB = b.key as string;
+        result.sort((a, b) => {
+            const keyA = a.render.key as string;
+            const keyB = b.render.key as string;
             const keyPartsA = getKeyParts(keyA);
             const keyPartsB = getKeyParts(keyB);
 
@@ -500,8 +481,6 @@ const Demo: FC = () => {
             }
             return 0;
         });
-
-        result.push(...iconsByPackage[asset]);
     }
 
     const { grid } = result.reduce(
@@ -510,7 +489,7 @@ const Demo: FC = () => {
                 acc.grid[acc.rowIndex] = [];
             }
 
-            if (isPackageName(curr) || isWarning(curr)) {
+            if (isPackageName(curr.render) || isWarning(curr.render)) {
                 if (acc.grid[acc.rowIndex].length) {
                     acc.rowIndex += 1;
 
@@ -531,12 +510,12 @@ const Demo: FC = () => {
 
             return acc;
         },
-        { grid: [] as JSX.Element[][], rowIndex: 0 },
+        { grid: [] as { render: JSX.Element }[][], rowIndex: 0 },
     );
 
     //Только заголовок, т.е ничего не найдено
     if (query && grid.length === 0) {
-        grid.push([renderEmptySearchResult()]);
+        grid.push([{ render: renderEmptySearchResult() }]);
     }
 
     const virtualizer = useVirtualizer({
@@ -560,8 +539,8 @@ const Demo: FC = () => {
                     >
                         {items.map((virtualRow) => {
                             const rowItems = grid[virtualRow.index];
-                            const packageName = isPackageName(rowItems[0]);
-                            const warning = isWarning(rowItems[0]);
+                            const packageName = isPackageName(rowItems[0].render);
+                            const warning = isWarning(rowItems[0].render);
                             const listRow = !packageName && !warning;
 
                             return (
@@ -572,12 +551,14 @@ const Demo: FC = () => {
                                         ['list-warning']: warning,
                                         ['list-row']: listRow,
                                         [`list-row-${columnsAmount}`]: listRow,
-                                        ['empty-search-result']: isEmptySearchResult(rowItems[0]),
+                                        ['empty-search-result']: isEmptySearchResult(
+                                            rowItems[0].render,
+                                        ),
                                     })}
                                     data-index={virtualRow.index}
                                     ref={virtualizer.measureElement}
                                 >
-                                    {rowItems.map((item) => item)}
+                                    {rowItems.map((item) => item.render)}
                                 </div>
                             );
                         })}
