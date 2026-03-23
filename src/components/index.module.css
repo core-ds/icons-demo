@@ -1,0 +1,7 @@
+@import '../vars.css';
+
+.header {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 64px 0 0;
+}

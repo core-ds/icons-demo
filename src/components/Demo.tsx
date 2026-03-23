@@ -18,6 +18,8 @@ import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 import { PlayCircleMIcon } from '@alfalab/icons-glyph/PlayCircleMIcon';
 
+import styles from './index.module.css';
+
 import {
     Asset,
     ClickedElement,
@@ -66,13 +68,11 @@ const initialState: Record<IconPackageName, boolean> = {
     [IconPackageName.LOGO_CORP]: false,
 };
 
-const isHeader = (idx: number) => idx === 0;
 const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
 const isWarning = (element: JSX.Element) => Boolean(element.props['data-package-warning']);
 const isEmptySearchResult = (element: JSX.Element) => Boolean(element.props['data-empty-search']);
 
 const estimateDesktopSize = () => 192;
-const estimateMobileSize = () => 196;
 
 const Demo: FC = () => {
     const [value, setValue] = useState('');
@@ -152,7 +152,7 @@ const Demo: FC = () => {
 
     const renderHeader = () => {
         return (
-            <div key='header'>
+            <div className={styles.header}>
                 <Typography.Title tag='h1' view='xlarge' font='styrene' className='header-title'>
                     Витрина ассетов
                 </Typography.Title>
@@ -391,7 +391,7 @@ const Demo: FC = () => {
 
     const columnsAmount = 4;
 
-    const result: JSX.Element[] = [renderHeader()];
+    const result: JSX.Element[] = [];
 
     const iconsByPackage: Record<IconPackageName | Asset.ANIMATION, JSX.Element[]> = {
         glyph: [],
@@ -510,7 +510,7 @@ const Demo: FC = () => {
                 acc.grid[acc.rowIndex] = [];
             }
 
-            if (isHeader(index) || isPackageName(curr) || isWarning(curr)) {
+            if (isPackageName(curr) || isWarning(curr)) {
                 if (acc.grid[acc.rowIndex].length) {
                     acc.rowIndex += 1;
 
@@ -535,7 +535,7 @@ const Demo: FC = () => {
     );
 
     //Только заголовок, т.е ничего не найдено
-    if (query && grid.length === 1) {
+    if (query && grid.length === 0) {
         grid.push([renderEmptySearchResult()]);
     }
 
@@ -551,20 +551,18 @@ const Demo: FC = () => {
     return (
         <div className='root'>
             <div ref={scrollerRef} className='list-scroller'>
+                {renderHeader()}
+
                 <div className='list-scroller-inner' style={{ height: virtualizer.getTotalSize() }}>
                     <div
                         className='icons-list'
-                        style={{ transform: `translateY(${items[0].start}px)` }}
+                        style={{ transform: `translateY(${items[0]?.start ?? 0}px)` }}
                     >
                         {items.map((virtualRow) => {
                             const rowItems = grid[virtualRow.index];
-                            const header = isHeader(virtualRow.index);
                             const packageName = isPackageName(rowItems[0]);
                             const warning = isWarning(rowItems[0]);
-                            const emptySearchResult =
-                                virtualRow.index === 1 && isEmptySearchResult(rowItems[0]);
-                            const listRow =
-                                !emptySearchResult && !header && !packageName && !warning;
+                            const listRow = !packageName && !warning;
 
                             return (
                                 <div
@@ -572,10 +570,9 @@ const Demo: FC = () => {
                                     className={cn({
                                         ['list-package-name']: packageName,
                                         ['list-warning']: warning,
-                                        ['list-header-gap']: query && header,
                                         ['list-row']: listRow,
                                         [`list-row-${columnsAmount}`]: listRow,
-                                        ['empty-search-result']: emptySearchResult,
+                                        ['empty-search-result']: isEmptySearchResult(rowItems[0]),
                                     })}
                                     data-index={virtualRow.index}
                                     ref={virtualizer.measureElement}
@@ -609,7 +606,7 @@ const Demo: FC = () => {
             </Popover>
 
             <BackToTopButton
-                visible={items[0].index !== 0}
+                visible={items.length > 0 && items[0].index !== 0}
                 onClick={() => scrollerRef.current?.scrollTo({ behavior: 'smooth', top: 0 })}
             />
         </div>

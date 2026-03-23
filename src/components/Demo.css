@@ -1,6 +1,8 @@
 @import '@alfalab/core-components/vars/index.css';
 @import '@alfalab/core-components/vars/mixins.css';
 
+@import '../vars.css';
+
 @font-face {
     font-family: 'Styrene UI';
     src: url('https://alfabank.servicecdn.ru/media/fonts/styrene-ui/styrene-ui_regular.woff2')
@@ -30,13 +32,11 @@
 }
 
 :root {
-    --content-width: 880px;
     --side-gap: 20px;
     --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
     --bundle-padding-bottom: var(--gap-xs);
     --asset-select-width: 200px;
     --asset-select-margin: 0;
-    --icons-list-padding: var(--gap-5xl) 0 var(--gap-8xl);
     --row-padding-bottom: var(--gap-s);
     --icon-wrapper-padding: var(--gap-s);
     --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
@@ -78,11 +78,7 @@
     width: 100%;
     max-width: var(--content-width);
     margin: 0 auto;
-    padding: var(--icons-list-padding);
-}
-
-.list-header-gap {
-    padding: var(--list-padding);
+    padding: 0 0 128px;
 }
 
 .list-row {
