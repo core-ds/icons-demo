@@ -1,10 +1,13 @@
 import React from 'react';
 
-import { ClickedElement, DeprecatedAssets, DeprecatedType } from '../../types';
+import { IconCardData, DeprecatedType } from '../../types';
 import { OptionContentCopy } from './components/option-content-copy';
 import { OptionContentDeprecated } from './components/option-content-deprecated';
 import { exhaustiveCheck } from '../../shared/utils';
 import { MetaInfo } from '../../shared/config/types';
+import { getDeprecatedAssets } from '../../shared/helpers';
+
+const ALL_DEPRECATED_ICONS = getDeprecatedAssets();
 
 type OptionKey = Exclude<keyof MetaInfo, 'description' | 'basename'>;
 
@@ -51,31 +54,25 @@ const DEPRECATED_OPTION_WITHOUT_REPLACE = [
     },
 ];
 
-const generateOptionList = (clickedElem: ClickedElement) => {
-    return Object.keys(clickedElem)
+const generateOptionList = (data: IconCardData) => {
+    return Object.keys(data)
         .filter((item) => !['packageName', 'basename'].includes(item))
         .map((item) => {
             const key = item as OptionKey;
             return {
                 key,
                 content: getOption(key),
-                value: clickedElem[key],
+                value: data[key],
             };
         });
 };
 
-export function getOptionsList(
-    iconName: string,
-    deprecatedIcons: DeprecatedAssets,
-    clickedElem: ClickedElement | null,
-) {
-    if (!deprecatedIcons.hasOwnProperty(iconName)) {
-        if (clickedElem) {
-            return generateOptionList(clickedElem);
-        }
-        return null;
-    } else if (deprecatedIcons[iconName].replacement) {
-        return getDeprecatedOptionWithReplace(deprecatedIcons[iconName].replacement);
+export function getOptionsList(data: IconCardData) {
+    const { middle } = data;
+    if (!ALL_DEPRECATED_ICONS.hasOwnProperty(middle)) {
+        return generateOptionList(data);
+    } else if (ALL_DEPRECATED_ICONS[middle].replacement) {
+        return getDeprecatedOptionWithReplace(ALL_DEPRECATED_ICONS[middle].replacement);
     } else {
         return DEPRECATED_OPTION_WITHOUT_REPLACE;
     }

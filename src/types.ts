@@ -24,9 +24,9 @@ export enum IconPackageName {
     LOGO_CORP = 'logo-corp',
 }
 
-export type ClickedElement = {
+export type IconCardData = Omit<MetaInfo, 'description'> & {
     packageName: IconPackageName;
-} & Omit<MetaInfo, 'description'>;
+};
 
 export enum CopyType {
     WEB_NAME = 'web',
@@ -40,9 +40,9 @@ export enum CopyType {
 
 export type AnyIcon = Record<string, React.FC<Record<string, unknown>>>;
 
-export type RenderIconParams = {
+export type RenderIconParams = IconCardData & {
     Icon: AnyIcon[keyof AnyIcon];
-} & ClickedElement;
+};
 
 export type DeprecatedAssets = Record<string, { replacement: string; date: string }>;
 

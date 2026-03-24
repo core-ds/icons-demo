@@ -8,16 +8,20 @@ import { useClickOutside } from '@alfalab/hooks';
 import { COLUMNS_AMOUNT } from '../../const/columns';
 import { IconPackageName, RenderIconParams } from '../../types';
 import { MetaInfo } from '../../shared/config/types';
+import { getDeprecatedAssets } from '../../shared/helpers';
+
+const ALL_DEPRECATED_ICONS = getDeprecatedAssets();
 
 interface Props extends Pick<MetaInfo, 'middle'>, Pick<RenderIconParams, 'Icon'> {
-    isWhite: boolean;
     packageName: IconPackageName;
-    isDeprecatedIcon: boolean;
-    children: (fn: () => void) => ReactNode;
+    children: (callback: () => void) => ReactNode;
 }
 
 export const IconCard: FC<Props> = (props) => {
-    const { isWhite, packageName, isDeprecatedIcon, middle, Icon, children } = props;
+    const { packageName, middle, Icon, children } = props;
+
+    const isWhite = middle.includes('white');
+    const isDeprecatedIcon = ALL_DEPRECATED_ICONS.hasOwnProperty(middle);
 
     const popoverRef = useRef<HTMLDivElement>(null);
     const popoverAnchorRef = useRef<HTMLDivElement>(null);

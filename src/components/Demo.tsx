@@ -6,7 +6,7 @@ import copy from 'copy-to-clipboard';
 import { Input } from '@alfalab/core-components/input/modern';
 import { Typography } from '@alfalab/core-components/typography/modern';
 import { SelectDesktop, SelectDesktopProps } from '@alfalab/core-components/select/desktop';
-import { BaseOption, OptionsList } from '@alfalab/core-components/select/modern/shared';
+import { BaseOption } from '@alfalab/core-components/select/modern/shared';
 import { Toast } from '@alfalab/core-components/toast/modern';
 import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
 import { Tag } from '@alfalab/core-components/tag/modern';
@@ -15,24 +15,18 @@ import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 
 import styles from './index.module.css';
 
-import { Asset, ClickedElement, CopyType, DeprecatedType, IconPackageName } from '../types';
+import { Asset, IconCardData, CopyType, DeprecatedType, IconPackageName } from '../types';
 import { BackToTopButton } from './BackToTopButton';
-import {
-    formatPackageName,
-    getKeyParts,
-    getKeys,
-    getPackageNameAsset,
-    noop,
-} from '../shared/utils';
+import { formatPackageName, getKeyParts, getKeys, getPackageNameAsset } from '../shared/utils';
 
 import './Demo.css';
 import { getDeprecatedAssets } from '../shared/helpers';
 import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
-import { getOptionsList } from './option-list/OptionList';
 import { ICON_META_FILES, ICONS } from '../shared/config';
 import { COLUMNS_AMOUNT } from '../const/columns';
 import { IconCard } from './icon-card';
 import { MetaInfo } from '../shared/config/types';
+import { IconCardOptionsList } from './option-list';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -90,6 +84,11 @@ const Demo: FC = () => {
             open: true,
             text: type === CopyType.WEB_COMPONENT ? 'Код скопирован' : 'Имя скопировано',
         });
+    };
+
+    const handleOptionsListClick = (key: string, value: string, callback: () => void) => {
+        handleOptionItemClick(key, value);
+        callback();
     };
 
     const handlePackageChange = (payload: { checked: boolean; name?: string }) => {
@@ -160,43 +159,6 @@ const Demo: FC = () => {
         );
     };
 
-    const renderDropdown = (clickedElem: ClickedElement, onClose: () => void) => {
-        const allDeprecatedIcons = getDeprecatedAssets();
-
-        const { middle } = clickedElem;
-        const options = getOptionsList(middle, allDeprecatedIcons, clickedElem) || [];
-
-        return (
-            <OptionsList
-                nativeScrollbar={true}
-                options={options}
-                Option={BaseOption}
-                setSelectedItems={noop}
-                toggleMenu={noop}
-                getOptionProps={(option, index) => {
-                    const { key, value } = option;
-
-                    return {
-                        Checkmark: null,
-                        index,
-                        option,
-                        className: 'option',
-                        innerProps: {
-                            id: key,
-                            onClick: () => {
-                                handleOptionItemClick(key, value);
-                                onClose();
-                            },
-                            onMouseDown: noop,
-                            onMouseMove: noop,
-                            role: 'option',
-                        },
-                    };
-                }}
-            />
-        );
-    };
-
     const renderPackageTitle = (packageName: IconPackageName | Asset) => {
         return (
             <Typography.Title
@@ -228,7 +190,7 @@ const Demo: FC = () => {
         middle?: MetaInfo['middle'];
         packageName?: IconPackageName;
         Icon?: React.FC<Record<string, unknown>>;
-        dropDownData?: ClickedElement;
+        dropDownData?: IconCardData;
         key: string;
         isTitle: boolean;
         isEmpty: boolean;
@@ -378,23 +340,25 @@ const Demo: FC = () => {
                                         const { middle, packageName, Icon, dropDownData } = item;
 
                                         if (middle && packageName && Icon && dropDownData) {
-                                            const isWhite = middle.includes('white');
-                                            const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(
-                                                middle,
-                                            );
-
                                             return (
                                                 <IconCard
                                                     key={middle}
-                                                    isWhite={isWhite}
                                                     packageName={packageName}
-                                                    isDeprecatedIcon={isDeprecatedIcon}
                                                     middle={middle}
                                                     Icon={Icon}
                                                 >
-                                                    {(onClose) =>
-                                                        renderDropdown(dropDownData, onClose)
-                                                    }
+                                                    {(onClose) => (
+                                                        <IconCardOptionsList
+                                                            data={dropDownData}
+                                                            onClick={(key, value) =>
+                                                                handleOptionsListClick(
+                                                                    key,
+                                                                    value,
+                                                                    onClose,
+                                                                )
+                                                            }
+                                                        />
+                                                    )}
                                                 </IconCard>
                                             );
                                         }
