@@ -15,10 +15,6 @@ export const formatPackageName = (packageName: IconPackageName | Asset) => {
     const name = packageName.toLowerCase();
     let suffix = '';
 
-    if (name === Asset.ANIMATION) {
-        suffix = ' (test)';
-    }
-
     if (packageName === IconPackageName.IOS) {
         return 'iOS';
     }
@@ -34,8 +30,6 @@ export const getPackageNameAsset = (asset: Asset, ru?: boolean): string => {
             return ru ? 'Логотипы' : 'logo';
         case Asset.FLAG:
             return ru ? 'Флажки' : 'flag';
-        case Asset.ANIMATION:
-            return ru ? 'Анимация' : 'animation';
         default:
             return ru ? 'Иконки' : 'glyph';
     }

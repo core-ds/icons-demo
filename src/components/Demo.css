@@ -100,8 +100,7 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
-.icon-wrap,
-.animation-wrap {
+.icon-wrap {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -116,25 +115,16 @@
     color: var(--color-light-graphic-primary);
 }
 
-.animation-icon {
-    align-self: end;
-    margin-top: -12px;
-    margin-right: -12px;
-}
-
-.icon-wrap:hover,
-.animation-wrap:hover {
+.icon-wrap:hover {
     cursor: pointer;
 }
 
-.icon-wrap_dark,
-.animation-wrap_dark {
+.icon-wrap_dark {
     background-color: var(--color-light-bg-secondary-inverted);
     color: #fff;
 }
 
-.icon,
-.animation {
+.icon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -146,12 +136,7 @@
     max-width: calc(100% - var(--icon-wrapper-padding) * 2);
 }
 
-.animation {
-    width: 48px;
-}
-
-.icon-primitive-name,
-.animation-primitive-name {
+.icon-primitive-name {
     margin-top: auto;
     word-break: break-word;
 }
@@ -175,10 +160,6 @@
 .list-package-name {
     padding-top: var(--package-name-padding-top);
     padding-bottom: var(--package-name-padding-bottom);
-}
-
-.list-warning {
-    padding-bottom: var(--gap-m);
 }
 
 .list-row + .list-package-name {

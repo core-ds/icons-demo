@@ -6,7 +6,6 @@ export enum Asset {
     ICONS = 'icons',
     LOGOTYPE = 'logotype',
     FLAG = 'flag',
-    ANIMATION = 'animation',
 }
 
 export enum IconPackageName {
@@ -44,12 +43,6 @@ export type AnyIcon = Record<string, React.FC<Record<string, unknown>>>;
 export type RenderIconParams = {
     Icon: AnyIcon[keyof AnyIcon];
 } & ClickedElement;
-
-export type RenderAnimationParams = {
-    animationName: string;
-    packageName: string;
-    animationData: any;
-};
 
 export type DeprecatedAssets = Record<string, { replacement: string; date: string }>;
 

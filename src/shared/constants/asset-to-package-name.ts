@@ -20,5 +20,4 @@ export const ASSET_TO_PACKAGE_NAME: Assets = {
         { value: IconPackageName.LOGO_CORP, label: 'Logo-corp' },
     ],
     flag: [],
-    animation: [],
 };

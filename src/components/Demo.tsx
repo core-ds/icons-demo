@@ -11,24 +11,13 @@ import { Toast } from '@alfalab/core-components/toast/modern';
 import { Popover } from '@alfalab/core-components/popover/modern';
 import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
 import { Tag } from '@alfalab/core-components/tag/modern';
-import { Plate } from '@alfalab/core-components/plate/modern';
-import { IconButton } from '@alfalab/core-components/icon-button/modern';
 
 import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
-import { PlayCircleMIcon } from '@alfalab/icons-glyph/PlayCircleMIcon';
 
 import styles from './index.module.css';
 
-import {
-    Asset,
-    ClickedElement,
-    CopyType,
-    DeprecatedType,
-    IconPackageName,
-    RenderAnimationParams,
-    RenderIconParams,
-} from '../types';
+import { Asset, ClickedElement, CopyType, DeprecatedType, IconPackageName } from '../types';
 import { BackToTopButton } from './BackToTopButton';
 import {
     formatPackageName,
@@ -38,10 +27,7 @@ import {
     noop,
 } from '../shared/utils';
 
-import animationJson from 'ui-primitives/animations/test.json';
-
 import './Demo.css';
-import LottieIcon from './LottieIcon';
 import { getDeprecatedAssets } from '../shared/helpers';
 import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
 import { getOptionsList } from './option-list/OptionList';
@@ -71,10 +57,6 @@ const initialState: Record<IconPackageName, boolean> = {
     [IconPackageName.LOGO_CORP]: false,
 };
 
-const isPackageName = (element: JSX.Element) => Boolean(element.props['data-package-title']);
-const isWarning = (element: JSX.Element) => Boolean(element.props['data-package-warning']);
-const isEmptySearchResult = (element: JSX.Element) => Boolean(element.props['data-empty-search']);
-
 const estimateDesktopSize = () => 192;
 
 const Demo: FC = () => {
@@ -84,7 +66,6 @@ const Demo: FC = () => {
         [IconPackageName.GLYPH]: true,
     });
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
-    const [playAnimation, setPlayAnimation] = useState<string | null>(null);
 
     const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
@@ -246,64 +227,6 @@ const Demo: FC = () => {
         setClickedElem({ ...metaInfo });
     };
 
-    const renderAnimation = ({
-        animationName,
-        packageName,
-        animationData,
-    }: RenderAnimationParams) => {
-        const handleClick = () => {
-            copy(JSON.stringify(animationData));
-            setToastParams({
-                open: true,
-                text: 'JSON скопирован',
-            });
-        };
-
-        const changeAnimationName = (name: string | null) => setPlayAnimation(name);
-
-        const handleClickAnimation = (event: MouseEvent<HTMLButtonElement>) => {
-            event.stopPropagation();
-            changeAnimationName(animationName);
-        };
-
-        const isWhite = animationName.includes('white');
-
-        return (
-            <div
-                className={cn('animation-wrap', {
-                    'animation-wrap_dark': isWhite,
-                })}
-                onClick={handleClick}
-                key={`${packageName}-${animationName}`}
-            >
-                <IconButton
-                    onClick={handleClickAnimation}
-                    className='animation-icon'
-                    view='tertiary'
-                    size={48}
-                    icon={PlayCircleMIcon}
-                />
-                {animationData ? (
-                    <LottieIcon
-                        name={animationName}
-                        className='animation'
-                        animationData={animationData}
-                        play={playAnimation === animationName}
-                        changeAnimationName={changeAnimationName}
-                    />
-                ) : null}
-
-                <Typography.Text
-                    view='primary-small'
-                    color={isWhite ? 'secondary-inverted' : 'secondary'}
-                    className='animation-primitive-name'
-                >
-                    {animationName}
-                </Typography.Text>
-            </div>
-        );
-    };
-
     const renderPackageTitle = (packageName: IconPackageName | Asset) => {
         return (
             <Typography.Title
@@ -315,22 +238,6 @@ const Demo: FC = () => {
             >
                 {formatPackageName(packageName)}
             </Typography.Title>
-        );
-    };
-
-    const renderWarning = () => {
-        return (
-            <Plate
-                data-package-warning
-                key='animation'
-                view='attention'
-                title='Не для прода'
-                limitContentWidth={false}
-                border={false}
-            >
-                Примеры анимаций подготовлены для тестирования витрины ассетов, пожалуйста, не
-                тяните их на прод
-            </Plate>
         );
     };
 
@@ -354,7 +261,6 @@ const Demo: FC = () => {
         metaInfo?: ClickedElement;
         key: string;
         isTitle: boolean;
-        isWarning: boolean;
         isEmpty: boolean;
     }[] = [];
 
@@ -366,7 +272,6 @@ const Demo: FC = () => {
                 result.push({
                     render: renderPackageTitle(packageName),
                     isTitle: true,
-                    isWarning: false,
                     isEmpty: false,
                     key: packageName,
                 });
@@ -398,7 +303,6 @@ const Demo: FC = () => {
                         },
                         key: `${packageName}-${middle}`,
                         isTitle: false,
-                        isWarning: false,
                         isEmpty: false,
                     });
                 }
@@ -422,51 +326,13 @@ const Demo: FC = () => {
         }
     });
 
-    // if (asset === 'animation') {
-    //     if (!query) {
-    //         result.push({ render: renderPackageTitle(asset) });
-    //         result.push({ render: renderWarning() });
-    //     }
-    //
-    //     getKeys(animationJson).forEach((animationName) => {
-    //         const animationData = animationJson[animationName].animationData;
-    //
-    //         const isMatch = !query || animationName.includes(query);
-    //
-    //         if (isMatch) {
-    //             result.push({
-    //                 render: renderAnimation({
-    //                     animationName,
-    //                     packageName: asset,
-    //                     animationData,
-    //                 }),
-    //             });
-    //         }
-    //     });
-    //
-    //     result.sort((a, b) => {
-    //         const keyA = a.render.key as string;
-    //         const keyB = b.render.key as string;
-    //         const keyPartsA = getKeyParts(keyA);
-    //         const keyPartsB = getKeyParts(keyB);
-    //
-    //         if (keyPartsA.toLowerCase() < keyPartsB.toLowerCase()) {
-    //             return -1;
-    //         }
-    //         if (keyPartsA.toLowerCase() > keyPartsB.toLowerCase()) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     });
-    // }
-
     const { grid } = result.reduce<{ grid: typeof result[]; rowIndex: number }>(
         (acc, current, index) => {
             if (!acc.grid[acc.rowIndex]) {
                 acc.grid[acc.rowIndex] = [];
             }
 
-            if (current.isTitle || current.isWarning) {
+            if (current.isTitle) {
                 if (acc.grid[acc.rowIndex].length) {
                     acc.rowIndex += 1;
 
@@ -496,7 +362,6 @@ const Demo: FC = () => {
             {
                 render: renderEmptySearchResult(),
                 isTitle: false,
-                isWarning: false,
                 isEmpty: true,
                 key: 'empty-result',
             },
@@ -525,15 +390,13 @@ const Demo: FC = () => {
                         {items.map((virtualRow) => {
                             const rowItems = grid[virtualRow.index];
                             const packageName = rowItems[0].isTitle;
-                            const warning = rowItems[0].isWarning;
-                            const listRow = !packageName && !warning;
+                            const listRow = !packageName;
 
                             return (
                                 <div
                                     key={virtualRow.index}
                                     className={cn({
                                         ['list-package-name']: packageName,
-                                        ['list-warning']: warning,
                                         ['list-row']: listRow,
                                         [`list-row-${COLUMNS_AMOUNT}`]: listRow,
                                         ['empty-search-result']: rowItems[0].isEmpty,
@@ -552,6 +415,7 @@ const Demo: FC = () => {
 
                                             return (
                                                 <IconCard
+                                                    key={middle}
                                                     isWhite={isWhite}
                                                     packageName={packageName}
                                                     isDeprecatedIcon={isDeprecatedIcon}
