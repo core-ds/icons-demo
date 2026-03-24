@@ -47,6 +47,8 @@ import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
 import { getOptionsList } from './option-list/OptionList';
 import { ICON_META_FILES, ICONS } from '../shared/config';
 import { COLUMNS_AMOUNT } from '../const/columns';
+import { IconCard } from './icon-card';
+import { MetaInfo } from '../shared/config/types';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -239,55 +241,9 @@ const Demo: FC = () => {
         );
     };
 
-    const renderIcon = (params: RenderIconParams) => {
-        const { Icon, packageName, middle, ...rest } = params;
-        const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-            popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
-            setClickedElem({ middle, packageName, ...rest });
-        };
-
-        const isWhite = middle.includes('white');
-        const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(middle);
-
-        return (
-            <div
-                className={cn('icon-wrap', `icon-wrap-column-${COLUMNS_AMOUNT}`, {
-                    'icon-wrap_dark': isWhite,
-                })}
-                onClick={handleClick}
-                key={`${packageName}-${middle}`}
-            >
-                {isDeprecatedIcon ? (
-                    <Typography.Text
-                        tag='div'
-                        view='primary-small'
-                        color={isWhite ? 'tertiary-inverted' : 'tertiary'}
-                        className={cn('deprecated', {
-                            deprecated_dark: isWhite,
-                        })}
-                    >
-                        deprecated
-                    </Typography.Text>
-                ) : null}
-                {Icon ? (
-                    <Icon
-                        className='icon'
-                        color={
-                            isDeprecatedIcon
-                                ? 'var(--color-light-graphic-tertiary)'
-                                : 'var(--color-light-graphic-primary)'
-                        }
-                    />
-                ) : null}
-                <Typography.Text
-                    view='primary-small'
-                    color={isWhite ? 'secondary-inverted' : 'secondary'}
-                    className='icon-primitive-name'
-                >
-                    {middle}
-                </Typography.Text>
-            </div>
-        );
+    const handleIconCardClick = (metaInfo: ClickedElement) => (e: MouseEvent) => {
+        popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
+        setClickedElem({ ...metaInfo });
     };
 
     const renderAnimation = ({
@@ -390,14 +346,30 @@ const Demo: FC = () => {
         </Typography.Text>
     );
 
-    const result: { render: JSX.Element }[] = [];
+    const result: {
+        render?: JSX.Element;
+        middle?: MetaInfo['middle'];
+        packageName?: IconPackageName;
+        Icon?: React.FC<Record<string, unknown>>;
+        metaInfo?: ClickedElement;
+        key: string;
+        isTitle: boolean;
+        isWarning: boolean;
+        isEmpty: boolean;
+    }[] = [];
 
     getKeys(ICONS).forEach((packageName) => {
         if (packages[packageName]) {
             const module = ICONS[packageName];
 
             if (!query) {
-                result.push({ render: renderPackageTitle(packageName) });
+                result.push({
+                    render: renderPackageTitle(packageName),
+                    isTitle: true,
+                    isWarning: false,
+                    isEmpty: false,
+                    key: packageName,
+                });
             }
 
             getKeys(module).forEach((reactIconName) => {
@@ -416,19 +388,25 @@ const Demo: FC = () => {
                     const IconComponent = module[reactIconName];
 
                     result.push({
-                        render: renderIcon({
-                            Icon: IconComponent,
+                        middle,
+                        packageName,
+                        Icon: IconComponent,
+                        metaInfo: {
                             packageName,
                             middle,
                             ...rest,
-                        }),
+                        },
+                        key: `${packageName}-${middle}`,
+                        isTitle: false,
+                        isWarning: false,
+                        isEmpty: false,
                     });
                 }
             });
 
             result.sort((a, b) => {
-                const keyA = a.render.key as string;
-                const keyB = b.render.key as string;
+                const keyA = a.key as string;
+                const keyB = b.key as string;
                 const keyPartsA = getKeyParts(keyA);
                 const keyPartsB = getKeyParts(keyB);
                 const allDeprecatedIcons = getDeprecatedAssets();
@@ -444,51 +422,51 @@ const Demo: FC = () => {
         }
     });
 
-    if (asset === 'animation') {
-        if (!query) {
-            result.push({ render: renderPackageTitle(asset) });
-            result.push({ render: renderWarning() });
-        }
+    // if (asset === 'animation') {
+    //     if (!query) {
+    //         result.push({ render: renderPackageTitle(asset) });
+    //         result.push({ render: renderWarning() });
+    //     }
+    //
+    //     getKeys(animationJson).forEach((animationName) => {
+    //         const animationData = animationJson[animationName].animationData;
+    //
+    //         const isMatch = !query || animationName.includes(query);
+    //
+    //         if (isMatch) {
+    //             result.push({
+    //                 render: renderAnimation({
+    //                     animationName,
+    //                     packageName: asset,
+    //                     animationData,
+    //                 }),
+    //             });
+    //         }
+    //     });
+    //
+    //     result.sort((a, b) => {
+    //         const keyA = a.render.key as string;
+    //         const keyB = b.render.key as string;
+    //         const keyPartsA = getKeyParts(keyA);
+    //         const keyPartsB = getKeyParts(keyB);
+    //
+    //         if (keyPartsA.toLowerCase() < keyPartsB.toLowerCase()) {
+    //             return -1;
+    //         }
+    //         if (keyPartsA.toLowerCase() > keyPartsB.toLowerCase()) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     });
+    // }
 
-        getKeys(animationJson).forEach((animationName) => {
-            const animationData = animationJson[animationName].animationData;
-
-            const isMatch = !query || animationName.includes(query);
-
-            if (isMatch) {
-                result.push({
-                    render: renderAnimation({
-                        animationName,
-                        packageName: asset,
-                        animationData,
-                    }),
-                });
-            }
-        });
-
-        result.sort((a, b) => {
-            const keyA = a.render.key as string;
-            const keyB = b.render.key as string;
-            const keyPartsA = getKeyParts(keyA);
-            const keyPartsB = getKeyParts(keyB);
-
-            if (keyPartsA.toLowerCase() < keyPartsB.toLowerCase()) {
-                return -1;
-            }
-            if (keyPartsA.toLowerCase() > keyPartsB.toLowerCase()) {
-                return 1;
-            }
-            return 0;
-        });
-    }
-
-    const { grid } = result.reduce(
-        (acc, curr, index) => {
+    const { grid } = result.reduce<{ grid: typeof result[]; rowIndex: number }>(
+        (acc, current, index) => {
             if (!acc.grid[acc.rowIndex]) {
                 acc.grid[acc.rowIndex] = [];
             }
 
-            if (isPackageName(curr.render) || isWarning(curr.render)) {
+            if (current.isTitle || current.isWarning) {
                 if (acc.grid[acc.rowIndex].length) {
                     acc.rowIndex += 1;
 
@@ -497,10 +475,10 @@ const Demo: FC = () => {
                     }
                 }
 
-                acc.grid[acc.rowIndex].push(curr);
+                acc.grid[acc.rowIndex].push(current);
                 acc.rowIndex += 1;
             } else {
-                acc.grid[acc.rowIndex].push(curr);
+                acc.grid[acc.rowIndex].push(current);
             }
 
             if (acc.grid[acc.rowIndex]?.length === COLUMNS_AMOUNT) {
@@ -509,12 +487,20 @@ const Demo: FC = () => {
 
             return acc;
         },
-        { grid: [] as { render: JSX.Element }[][], rowIndex: 0 },
+        { grid: [], rowIndex: 0 },
     );
 
     //Только заголовок, т.е ничего не найдено
     if (query && grid.length === 0) {
-        grid.push([{ render: renderEmptySearchResult() }]);
+        grid.push([
+            {
+                render: renderEmptySearchResult(),
+                isTitle: false,
+                isWarning: false,
+                isEmpty: true,
+                key: 'empty-result',
+            },
+        ]);
     }
 
     const virtualizer = useVirtualizer({
@@ -538,8 +524,8 @@ const Demo: FC = () => {
                     >
                         {items.map((virtualRow) => {
                             const rowItems = grid[virtualRow.index];
-                            const packageName = isPackageName(rowItems[0].render);
-                            const warning = isWarning(rowItems[0].render);
+                            const packageName = rowItems[0].isTitle;
+                            const warning = rowItems[0].isWarning;
                             const listRow = !packageName && !warning;
 
                             return (
@@ -550,14 +536,40 @@ const Demo: FC = () => {
                                         ['list-warning']: warning,
                                         ['list-row']: listRow,
                                         [`list-row-${COLUMNS_AMOUNT}`]: listRow,
-                                        ['empty-search-result']: isEmptySearchResult(
-                                            rowItems[0].render,
-                                        ),
+                                        ['empty-search-result']: rowItems[0].isEmpty,
                                     })}
                                     data-index={virtualRow.index}
                                     ref={virtualizer.measureElement}
                                 >
-                                    {rowItems.map((item) => item.render)}
+                                    {rowItems.map((item) => {
+                                        const { middle, packageName, Icon, metaInfo } = item;
+
+                                        if (middle && packageName && Icon && metaInfo) {
+                                            const isWhite = middle.includes('white');
+                                            const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(
+                                                middle,
+                                            );
+
+                                            return (
+                                                <IconCard
+                                                    isWhite={isWhite}
+                                                    packageName={packageName}
+                                                    isDeprecatedIcon={isDeprecatedIcon}
+                                                    middle={middle}
+                                                    Icon={Icon}
+                                                    onClick={handleIconCardClick({
+                                                        ...metaInfo,
+                                                    })}
+                                                />
+                                            );
+                                        }
+
+                                        if (item.render) {
+                                            return item.render;
+                                        }
+
+                                        return null;
+                                    })}
                                 </div>
                             );
                         })}
