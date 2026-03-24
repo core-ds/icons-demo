@@ -13,17 +13,7 @@ import logo_am from '@alfalab/icons/meta_logo-am.json';
 import logo_corp from '@alfalab/icons/meta_logo-corp.json';
 
 import { IconPackageName } from '../../types';
-
-export type MetaInfo = {
-    description: string;
-    middle: string;
-    web?: string;
-    webComponent?: string;
-    android?: string;
-    ios?: string;
-    cdn?: string;
-    url?: string;
-};
+import { MetaInfo } from './types';
 
 export const ICON_META_FILES: Record<IconPackageName, Record<string, MetaInfo>> = {
     [IconPackageName.GLYPH]: glyph,

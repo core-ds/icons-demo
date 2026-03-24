@@ -3,7 +3,8 @@ import React from 'react';
 import { ClickedElement, DeprecatedAssets, DeprecatedType } from '../../types';
 import { OptionContentCopy } from './components/option-content-copy';
 import { OptionContentDeprecated } from './components/option-content-deprecated';
-import { MetaInfo } from '../../shared/config/icon-meta-files';
+
+import { MetaInfo } from '../../shared/config/types';
 
 type Key = Exclude<keyof MetaInfo, 'description' | 'basename'>;
 

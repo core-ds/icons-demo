@@ -1,5 +1,6 @@
 import React from 'react';
-import { MetaInfo } from './shared/config/icon-meta-files';
+
+import { MetaInfo } from './shared/config/types';
 
 export enum Asset {
     ICONS = 'icons',
