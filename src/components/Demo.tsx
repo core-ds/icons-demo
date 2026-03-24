@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import cn from 'classnames';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import copy from 'copy-to-clipboard';
@@ -8,11 +8,9 @@ import { Typography } from '@alfalab/core-components/typography/modern';
 import { SelectDesktop, SelectDesktopProps } from '@alfalab/core-components/select/desktop';
 import { BaseOption, OptionsList } from '@alfalab/core-components/select/modern/shared';
 import { Toast } from '@alfalab/core-components/toast/modern';
-import { Popover } from '@alfalab/core-components/popover/modern';
 import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
 import { Tag } from '@alfalab/core-components/tag/modern';
 
-import { useClickOutside } from '@alfalab/hooks';
 import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 
 import styles from './index.module.css';
@@ -67,59 +65,52 @@ const Demo: FC = () => {
     });
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
 
-    const [clickedElem, setClickedElem] = useState<ClickedElement | null>(null);
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
 
-    const popoverRef = useRef<HTMLDivElement>(null);
-    const popoverAnchorRef = useRef<HTMLDivElement>();
     const scrollerRef = useRef<HTMLDivElement>(null);
 
     const query = value.toLowerCase();
 
-    const handleDropdownClose = () => setClickedElem(null);
-
-    useClickOutside(popoverRef, handleDropdownClose);
-
-    const handleOptionAction = (type: DeprecatedType | CopyType, newName?: string) => {
-        if (clickedElem) {
-            if (Object.values(CopyType).includes(type as CopyType)) {
-                if (type === CopyType.WEB_NAME && clickedElem.web) {
-                    copy(clickedElem.web);
-                }
-                if (type === CopyType.WEB_COMPONENT && clickedElem.webComponent) {
-                    copy(clickedElem.webComponent);
-                }
-                if (type === CopyType.ANDROID_NAME && clickedElem.android) {
-                    copy(clickedElem.android);
-                }
-                if (type === CopyType.IOS_NAME && clickedElem.ios) {
-                    copy(clickedElem.ios);
-                }
-                if (type === CopyType.MIDDLE_NAME) {
-                    copy(clickedElem.middle);
-                }
-                if (type === CopyType.CDN_NAME && clickedElem.cdn) {
-                    copy(clickedElem.cdn);
-                }
-                if (type === CopyType.CDN_URL && clickedElem.url) {
-                    copy(clickedElem.url);
-                }
-
-                setToastParams({
-                    open: true,
-                    text: type === CopyType.WEB_COMPONENT ? 'Код скопирован' : 'Имя скопировано',
-                });
+    const handleOptionAction = (
+        type: DeprecatedType | CopyType,
+        clickedElem: ClickedElement,
+        newName?: string,
+    ) => {
+        if (Object.values(CopyType).includes(type as CopyType)) {
+            if (type === CopyType.WEB_NAME && clickedElem.web) {
+                copy(clickedElem.web);
+            }
+            if (type === CopyType.WEB_COMPONENT && clickedElem.webComponent) {
+                copy(clickedElem.webComponent);
+            }
+            if (type === CopyType.ANDROID_NAME && clickedElem.android) {
+                copy(clickedElem.android);
+            }
+            if (type === CopyType.IOS_NAME && clickedElem.ios) {
+                copy(clickedElem.ios);
+            }
+            if (type === CopyType.MIDDLE_NAME) {
+                copy(clickedElem.middle);
+            }
+            if (type === CopyType.CDN_NAME && clickedElem.cdn) {
+                copy(clickedElem.cdn);
+            }
+            if (type === CopyType.CDN_URL && clickedElem.url) {
+                copy(clickedElem.url);
             }
 
-            if (type === DeprecatedType.DEPRECATED && newName) {
-                setValue(newName);
-                const replacePackage = newName.split('_')[0] as IconPackageName;
-                if (!packages[replacePackage]) {
-                    setPackages({ ...packages, [replacePackage]: true });
-                }
-            }
+            setToastParams({
+                open: true,
+                text: type === CopyType.WEB_COMPONENT ? 'Код скопирован' : 'Имя скопировано',
+            });
+        }
 
-            handleDropdownClose();
+        if (type === DeprecatedType.DEPRECATED && newName) {
+            setValue(newName);
+            const replacePackage = newName.split('_')[0] as IconPackageName;
+            if (!packages[replacePackage]) {
+                setPackages({ ...packages, [replacePackage]: true });
+            }
         }
     };
 
@@ -191,9 +182,10 @@ const Demo: FC = () => {
         );
     };
 
-    const renderDropdown = (clickedElem: ClickedElement | null) => {
+    const renderDropdown = (clickedElem: ClickedElement, onClose: () => void) => {
         const allDeprecatedIcons = getDeprecatedAssets();
-        const { middle } = clickedElem || ({} as ClickedElement);
+
+        const { middle } = clickedElem;
         const newName = allDeprecatedIcons[middle]?.replacement || '';
         const options = getOptionsList(middle, allDeprecatedIcons, clickedElem) || [];
 
@@ -211,8 +203,14 @@ const Demo: FC = () => {
                     className: 'option',
                     innerProps: {
                         id: option.key,
-                        onClick: () =>
-                            handleOptionAction(option.key as CopyType | DeprecatedType, newName),
+                        onClick: () => {
+                            handleOptionAction(
+                                option.key as CopyType | DeprecatedType,
+                                clickedElem,
+                                newName,
+                            );
+                            onClose();
+                        },
                         onMouseDown: noop,
                         onMouseMove: noop,
                         role: 'option',
@@ -220,11 +218,6 @@ const Demo: FC = () => {
                 })}
             />
         );
-    };
-
-    const handleIconCardClick = (metaInfo: ClickedElement) => (e: MouseEvent) => {
-        popoverAnchorRef.current = e.currentTarget as HTMLDivElement;
-        setClickedElem({ ...metaInfo });
     };
 
     const renderPackageTitle = (packageName: IconPackageName | Asset) => {
@@ -258,7 +251,7 @@ const Demo: FC = () => {
         middle?: MetaInfo['middle'];
         packageName?: IconPackageName;
         Icon?: React.FC<Record<string, unknown>>;
-        metaInfo?: ClickedElement;
+        dropDownData?: ClickedElement;
         key: string;
         isTitle: boolean;
         isEmpty: boolean;
@@ -296,7 +289,7 @@ const Demo: FC = () => {
                         middle,
                         packageName,
                         Icon: IconComponent,
-                        metaInfo: {
+                        dropDownData: {
                             packageName,
                             middle,
                             ...rest,
@@ -405,9 +398,9 @@ const Demo: FC = () => {
                                     ref={virtualizer.measureElement}
                                 >
                                     {rowItems.map((item) => {
-                                        const { middle, packageName, Icon, metaInfo } = item;
+                                        const { middle, packageName, Icon, dropDownData } = item;
 
-                                        if (middle && packageName && Icon && metaInfo) {
+                                        if (middle && packageName && Icon && dropDownData) {
                                             const isWhite = middle.includes('white');
                                             const isDeprecatedIcon = getDeprecatedAssets().hasOwnProperty(
                                                 middle,
@@ -421,10 +414,11 @@ const Demo: FC = () => {
                                                     isDeprecatedIcon={isDeprecatedIcon}
                                                     middle={middle}
                                                     Icon={Icon}
-                                                    onClick={handleIconCardClick({
-                                                        ...metaInfo,
-                                                    })}
-                                                />
+                                                >
+                                                    {(onClose) =>
+                                                        renderDropdown(dropDownData, onClose)
+                                                    }
+                                                </IconCard>
                                             );
                                         }
 
@@ -447,19 +441,6 @@ const Demo: FC = () => {
                 onClose={() => setToastParams((prev) => ({ ...prev, open: false }))}
                 style={{ left: '50%', transform: 'translateX(-53%)' }}
             />
-
-            <Popover
-                open={Boolean(clickedElem)}
-                useAnchorWidth={true}
-                anchorElement={popoverAnchorRef.current || null}
-                popperClassName='desktop-copy-dropdown-inner'
-                position='bottom'
-                offset={[0, 4]}
-                preventFlip={false}
-                ref={popoverRef}
-            >
-                <div className='popover-options-list'>{renderDropdown(clickedElem)}</div>
-            </Popover>
 
             <BackToTopButton
                 visible={items.length > 0 && items[0].index !== 0}
