@@ -46,6 +46,7 @@ import { getDeprecatedAssets } from '../shared/helpers';
 import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
 import { getOptionsList } from './option-list/OptionList';
 import { ICON_META_FILES, ICONS } from '../shared/config';
+import { COLUMNS_AMOUNT } from '../const/columns';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -250,7 +251,7 @@ const Demo: FC = () => {
 
         return (
             <div
-                className={cn('icon-wrap', `icon-wrap-column-${columnsAmount}`, {
+                className={cn('icon-wrap', `icon-wrap-column-${COLUMNS_AMOUNT}`, {
                     'icon-wrap_dark': isWhite,
                 })}
                 onClick={handleClick}
@@ -389,8 +390,6 @@ const Demo: FC = () => {
         </Typography.Text>
     );
 
-    const columnsAmount = 4;
-
     const result: { render: JSX.Element }[] = [];
 
     getKeys(ICONS).forEach((packageName) => {
@@ -504,7 +503,7 @@ const Demo: FC = () => {
                 acc.grid[acc.rowIndex].push(curr);
             }
 
-            if (acc.grid[acc.rowIndex]?.length === columnsAmount) {
+            if (acc.grid[acc.rowIndex]?.length === COLUMNS_AMOUNT) {
                 acc.rowIndex += 1;
             }
 
@@ -550,7 +549,7 @@ const Demo: FC = () => {
                                         ['list-package-name']: packageName,
                                         ['list-warning']: warning,
                                         ['list-row']: listRow,
-                                        [`list-row-${columnsAmount}`]: listRow,
+                                        [`list-row-${COLUMNS_AMOUNT}`]: listRow,
                                         ['empty-search-result']: isEmptySearchResult(
                                             rowItems[0].render,
                                         ),
