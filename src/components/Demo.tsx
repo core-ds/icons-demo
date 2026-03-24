@@ -71,47 +71,25 @@ const Demo: FC = () => {
 
     const query = value.toLowerCase();
 
-    const handleOptionAction = (
-        type: DeprecatedType | CopyType,
-        clickedElem: ClickedElement,
-        newName?: string,
-    ) => {
-        if (Object.values(CopyType).includes(type as CopyType)) {
-            if (type === CopyType.WEB_NAME && clickedElem.web) {
-                copy(clickedElem.web);
-            }
-            if (type === CopyType.WEB_COMPONENT && clickedElem.webComponent) {
-                copy(clickedElem.webComponent);
-            }
-            if (type === CopyType.ANDROID_NAME && clickedElem.android) {
-                copy(clickedElem.android);
-            }
-            if (type === CopyType.IOS_NAME && clickedElem.ios) {
-                copy(clickedElem.ios);
-            }
-            if (type === CopyType.MIDDLE_NAME) {
-                copy(clickedElem.middle);
-            }
-            if (type === CopyType.CDN_NAME && clickedElem.cdn) {
-                copy(clickedElem.cdn);
-            }
-            if (type === CopyType.CDN_URL && clickedElem.url) {
-                copy(clickedElem.url);
-            }
+    const handleOptionItemClick = (type: string, value: string) => {
+        if (type === DeprecatedType.DEPRECATED && value) {
+            setValue(value);
 
-            setToastParams({
-                open: true,
-                text: type === CopyType.WEB_COMPONENT ? 'Код скопирован' : 'Имя скопировано',
-            });
-        }
+            const replacePackage = value.split('_')[0] as IconPackageName;
 
-        if (type === DeprecatedType.DEPRECATED && newName) {
-            setValue(newName);
-            const replacePackage = newName.split('_')[0] as IconPackageName;
             if (!packages[replacePackage]) {
                 setPackages({ ...packages, [replacePackage]: true });
             }
+
+            return;
         }
+
+        copy(value);
+
+        setToastParams({
+            open: true,
+            text: type === CopyType.WEB_COMPONENT ? 'Код скопирован' : 'Имя скопировано',
+        });
     };
 
     const handlePackageChange = (payload: { checked: boolean; name?: string }) => {
@@ -186,7 +164,6 @@ const Demo: FC = () => {
         const allDeprecatedIcons = getDeprecatedAssets();
 
         const { middle } = clickedElem;
-        const newName = allDeprecatedIcons[middle]?.replacement || '';
         const options = getOptionsList(middle, allDeprecatedIcons, clickedElem) || [];
 
         return (
@@ -196,26 +173,26 @@ const Demo: FC = () => {
                 Option={BaseOption}
                 setSelectedItems={noop}
                 toggleMenu={noop}
-                getOptionProps={(option, index) => ({
-                    Checkmark: null,
-                    index,
-                    option,
-                    className: 'option',
-                    innerProps: {
-                        id: option.key,
-                        onClick: () => {
-                            handleOptionAction(
-                                option.key as CopyType | DeprecatedType,
-                                clickedElem,
-                                newName,
-                            );
-                            onClose();
+                getOptionProps={(option, index) => {
+                    const { key, value } = option;
+
+                    return {
+                        Checkmark: null,
+                        index,
+                        option,
+                        className: 'option',
+                        innerProps: {
+                            id: key,
+                            onClick: () => {
+                                handleOptionItemClick(key, value);
+                                onClose();
+                            },
+                            onMouseDown: noop,
+                            onMouseMove: noop,
+                            role: 'option',
                         },
-                        onMouseDown: noop,
-                        onMouseMove: noop,
-                        role: 'option',
-                    },
-                })}
+                    };
+                }}
             />
         );
     };
