@@ -25,6 +25,7 @@ import { COLUMNS_AMOUNT } from '../const/columns';
 import { IconCard } from './icon-card';
 import { IconCardOptionsList } from './option-list';
 import { buildGrid } from './build-grid';
+import { PackageName } from './package-name';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -157,20 +158,6 @@ const Demo: FC = () => {
         );
     };
 
-    const renderPackageTitle = (packageName: IconPackageName | Asset) => {
-        return (
-            <Typography.Title
-                tag='h3'
-                view='small'
-                className='package-title'
-                data-package-title
-                key={packageName}
-            >
-                {formatPackageName(packageName)}
-            </Typography.Title>
-        );
-    };
-
     const renderEmptySearchResult = () => (
         <Typography.Text
             key='emtpty-result'
@@ -222,7 +209,7 @@ const Demo: FC = () => {
                                     data-index={virtualRow.index}
                                     ref={virtualizer.measureElement}
                                 >
-                                    {isTitleRow && renderPackageTitle(row.packageName)}
+                                    {isTitleRow && <PackageName packageName={row.packageName} />}
                                     {isEmptyRow && renderEmptySearchResult()}
                                     {isIconsRow &&
                                         row.items.map(
