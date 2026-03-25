@@ -47,14 +47,14 @@ const chunkItems = <T>(items: T[], size: number) =>
     }, []);
 
 export const buildGrid = ({
-    packages,
+    selectedPackages,
     query,
 }: {
-    packages: Record<string, boolean>;
+    selectedPackages: IconPackageName[];
     query: string;
 }): GridRow[] => {
     const grid = getKeys(ICONS).flatMap((packageName) => {
-        if (!packages[packageName]) {
+        if (!selectedPackages.includes(packageName)) {
             return [];
         }
 

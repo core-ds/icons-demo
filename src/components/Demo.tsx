@@ -33,30 +33,15 @@ const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     content: getPackageNameAsset(Asset[key], true),
 }));
 
-const initialState: Record<IconPackageName, boolean> = {
-    [IconPackageName.GLYPH]: false,
-    [IconPackageName.GLYPH_26]: false,
-    [IconPackageName.ROCKY]: false,
-    [IconPackageName.IOS]: false,
-    [IconPackageName.ANDROID]: false,
-    [IconPackageName.CORP]: false,
-    [IconPackageName.FLAG]: false,
-    [IconPackageName.SITE]: false,
-    [IconPackageName.INVEST]: false,
-    [IconPackageName.LOGOTYPE]: false,
-    [IconPackageName.LOGO]: false,
-    [IconPackageName.LOGO_AM]: false,
-    [IconPackageName.LOGO_CORP]: false,
-};
-
 const estimateDesktopSize = () => 192;
+const getDefaultPackage = (asset: Asset) => getPackageNameAsset(asset) as IconPackageName;
 
 const Demo: FC = () => {
     const [value, setValue] = useState('');
-    const [packages, setPackages] = useState<Record<string, boolean>>({
-        ...initialState,
-        [IconPackageName.GLYPH]: true,
-    });
+    const [selectedPackages, setSelectedPackages] = useState<IconPackageName[]>([
+        IconPackageName.GLYPH,
+    ]);
+
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
 
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
@@ -71,9 +56,9 @@ const Demo: FC = () => {
 
             const replacePackage = value.split('_')[0] as IconPackageName;
 
-            if (!packages[replacePackage]) {
-                setPackages({ ...packages, [replacePackage]: true });
-            }
+            setSelectedPackages((prev) =>
+                prev.includes(replacePackage) ? prev : [...prev, replacePackage],
+            );
 
             return;
         }
@@ -93,13 +78,23 @@ const Demo: FC = () => {
 
     const handlePackageChange = (payload: { checked: boolean; name?: string }) => {
         if (!payload.name) return;
-        setPackages({ ...packages, [payload.name]: payload.checked });
+
+        const packageName = payload.name as IconPackageName;
+
+        setSelectedPackages((prev) =>
+            payload.checked
+                ? prev.includes(packageName)
+                    ? prev
+                    : [...prev, packageName]
+                : prev.filter((item) => item !== packageName),
+        );
     };
 
     const handleAssetChange: SelectDesktopProps['onChange'] = ({ selected }) => {
-        const packageName = getPackageNameAsset(selected?.key as Asset);
-        setPackages({ ...initialState, [packageName]: true });
-        setAsset(selected?.key as Asset);
+        const nextAsset = selected?.key as Asset;
+
+        setSelectedPackages([getDefaultPackage(nextAsset)]);
+        setAsset(nextAsset);
     };
 
     const renderHeader = () => {
@@ -143,7 +138,7 @@ const Demo: FC = () => {
                         {ASSET_TO_PACKAGE_NAME[asset].map((assetItem) => (
                             <Tag
                                 name={assetItem.value}
-                                checked={packages[assetItem.value]}
+                                checked={selectedPackages.includes(assetItem.value)}
                                 shape='rectangular'
                                 value={assetItem.value}
                                 key={assetItem.value}
@@ -159,7 +154,7 @@ const Demo: FC = () => {
         );
     };
 
-    const grid = buildGrid({ packages, query });
+    const grid = buildGrid({ selectedPackages, query });
 
     const virtualizer = useVirtualizer({
         count: grid.length,
