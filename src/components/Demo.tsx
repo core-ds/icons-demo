@@ -3,47 +3,33 @@ import cn from 'classnames';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import copy from 'copy-to-clipboard';
 
-import { Input } from '@alfalab/core-components/input/modern';
-import { Typography } from '@alfalab/core-components/typography/modern';
-import { SelectDesktop, SelectDesktopProps } from '@alfalab/core-components/select/desktop';
-import { BaseOption } from '@alfalab/core-components/select/modern/shared';
+import { SelectDesktopProps } from '@alfalab/core-components/select/desktop';
 import { Toast } from '@alfalab/core-components/toast/modern';
-import { CheckboxGroup } from '@alfalab/core-components/checkbox-group/modern';
-import { Tag } from '@alfalab/core-components/tag/modern';
-
-import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
-
-import styles from './index.module.css';
 
 import { Asset, CopyType, DeprecatedType, IconPackageName } from '../types';
 import { BackToTopButton } from './BackToTopButton';
-import { getKeys, getPackageNameAsset } from '../shared/utils';
+import { getPackageNameAsset } from '../shared/utils';
 
 import './Demo.css';
-import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
 import { COLUMNS_AMOUNT } from '../const/columns';
 import { IconCard } from './icon-card';
 import { IconCardOptionsList } from './option-list';
 import { buildGrid } from './build-grid';
 import { PackageName } from './package-name';
 import { EmptyResult } from './empty-result';
-
-const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
-    key: Asset[key],
-    content: getPackageNameAsset(Asset[key], true),
-}));
+import { Header } from './header';
 
 const estimateDesktopSize = () => 192;
 const getDefaultPackage = (asset: Asset) => getPackageNameAsset(asset) as IconPackageName;
 
 const Demo: FC = () => {
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState<string>('');
+
     const [selectedPackages, setSelectedPackages] = useState<IconPackageName[]>([
         IconPackageName.GLYPH,
     ]);
 
     const [asset, setAsset] = useState<Asset>(Asset.ICONS);
-
     const [toastParams, setToastParams] = useState({ open: false, text: '' });
 
     const scrollerRef = useRef<HTMLDivElement>(null);
@@ -97,63 +83,6 @@ const Demo: FC = () => {
         setAsset(nextAsset);
     };
 
-    const renderHeader = () => {
-        return (
-            <div className={styles.header}>
-                <Typography.Title tag='h1' view='xlarge' font='styrene' className='header-title'>
-                    Витрина ассетов
-                </Typography.Title>
-
-                <div className='search-wrapper'>
-                    <Input
-                        value={value}
-                        className='search-input'
-                        placeholder='Поиск по названию'
-                        block={true}
-                        leftAddons={<MagnifierMIcon />}
-                        clear={true}
-                        onChange={(e) => setValue(e.target.value)}
-                        onClear={() => setValue('')}
-                    />
-                    <div className='asset-select-wrapper'>
-                        <SelectDesktop
-                            options={ASSET_OPTIONS}
-                            selected={asset}
-                            Option={BaseOption}
-                            block={true}
-                            placeholder='Bundle'
-                            size='s'
-                            onChange={handleAssetChange}
-                        />
-                    </div>
-                </div>
-
-                {['icons', 'logotype'].includes(asset) ? (
-                    <CheckboxGroup
-                        onChange={(_, payload) => handlePackageChange(payload)}
-                        direction='horizontal'
-                        type='tag'
-                        className='bundle-group-wrapper'
-                    >
-                        {ASSET_TO_PACKAGE_NAME[asset].map((assetItem) => (
-                            <Tag
-                                name={assetItem.value}
-                                checked={selectedPackages.includes(assetItem.value)}
-                                shape='rectangular'
-                                value={assetItem.value}
-                                key={assetItem.value}
-                                view='filled'
-                                size='xxs'
-                            >
-                                {assetItem.label}
-                            </Tag>
-                        ))}
-                    </CheckboxGroup>
-                ) : null}
-            </div>
-        );
-    };
-
     const grid = buildGrid({ selectedPackages, query });
 
     const virtualizer = useVirtualizer({
@@ -168,7 +97,14 @@ const Demo: FC = () => {
     return (
         <div className='root'>
             <div ref={scrollerRef} className='list-scroller'>
-                {renderHeader()}
+                <Header
+                    value={value}
+                    asset={asset}
+                    selectedPackages={selectedPackages}
+                    onSetValue={setValue}
+                    onAssetChange={handleAssetChange}
+                    onPackageChange={handlePackageChange}
+                />
 
                 <div className='list-scroller-inner' style={{ height: virtualizer.getTotalSize() }}>
                     <div

@@ -33,10 +33,6 @@
 
 :root {
     --side-gap: 20px;
-    --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
-    --bundle-padding-bottom: var(--gap-xs);
-    --asset-select-width: 200px;
-    --asset-select-margin: 0;
     --row-padding-bottom: var(--gap-s);
     --icon-wrapper-padding: var(--gap-s);
     --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
@@ -49,27 +45,6 @@
     display: flex;
     flex-flow: column nowrap;
     height: 100%;
-}
-
-.search-wrapper {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: var(--gap-xs);
-    padding: var(--search-wrapper-padding);
-}
-
-.asset-select-wrapper {
-    width: var(--asset-select-width);
-    margin: var(--asset-select-margin);
-}
-
-.bundle-group-wrapper {
-    padding-bottom: var(--bundle-padding-bottom)
-}
-
-.search-input {
-    flex: 1;
-    color: var(--color-light-graphic-secondary);
 }
 
 .icons-list {
