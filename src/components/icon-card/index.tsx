@@ -59,16 +59,14 @@ export const IconCard: FC<Props> = (props) => {
                         deprecated
                     </Typography.Text>
                 )}
-                {Icon && (
-                    <Icon
-                        className='icon'
-                        color={
-                            isDeprecatedIcon
-                                ? 'var(--color-light-graphic-tertiary)'
-                                : 'var(--color-light-graphic-primary)'
-                        }
-                    />
-                )}
+                <Icon
+                    className='icon'
+                    color={
+                        isDeprecatedIcon
+                            ? 'var(--color-light-graphic-tertiary)'
+                            : 'var(--color-light-graphic-primary)'
+                    }
+                />
                 <Typography.Text
                     view='primary-small'
                     color={isWhite ? 'secondary-inverted' : 'secondary'}

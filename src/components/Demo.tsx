@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import copy from 'copy-to-clipboard';
@@ -83,7 +83,9 @@ const Demo: FC = () => {
         setAsset(nextAsset);
     };
 
-    const grid = buildGrid({ selectedPackages, query });
+    const grid = useMemo(() => {
+        return buildGrid({ selectedPackages, query });
+    }, [selectedPackages, query]);
 
     const virtualizer = useVirtualizer({
         count: grid.length,
