@@ -1,17 +1,15 @@
 import React from 'react';
 
-import { IconCardData, DeprecatedType } from '../../types';
+import { DeprecatedType, IconCardData } from '../../types';
 import { OptionContentCopy } from './components/option-content-copy';
 import { OptionContentDeprecated } from './components/option-content-deprecated';
 import { exhaustiveCheck } from '../../shared/utils';
-import { MetaInfo } from '../../shared/config/types';
+import { MetaOptions } from '../../shared/config/types';
 import { getDeprecatedAssets } from '../../shared/helpers';
 
 const ALL_DEPRECATED_ICONS = getDeprecatedAssets();
 
-type OptionKey = Exclude<keyof MetaInfo, 'description' | 'basename'>;
-
-const getOption = (key: OptionKey) => {
+const getOption = (key: MetaOptions) => {
     switch (key) {
         case 'web':
             return <OptionContentCopy text='Веб имя иконки' />;
@@ -58,7 +56,7 @@ const generateOptionList = (data: IconCardData) => {
     return Object.keys(data)
         .filter((item) => !['packageName', 'basename'].includes(item))
         .map((item) => {
-            const key = item as OptionKey;
+            const key = item as MetaOptions;
             return {
                 key,
                 content: getOption(key),

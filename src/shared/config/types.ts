@@ -8,3 +8,5 @@ export type MetaInfo = {
     cdn?: string;
     url?: string;
 };
+
+export type MetaOptions = Exclude<keyof MetaInfo, 'description' | 'basename'>;

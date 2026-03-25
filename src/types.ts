@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MetaInfo } from './shared/config/types';
+import { MetaInfo, MetaOptions } from './shared/config/types';
 
 export enum Asset {
     ICONS = 'icons',
@@ -28,26 +28,15 @@ export type IconCardData = Omit<MetaInfo, 'description'> & {
     packageName: IconPackageName;
 };
 
-export enum CopyType {
-    WEB_NAME = 'web',
-    WEB_COMPONENT = 'webComponent',
-    ANDROID_NAME = 'android',
-    IOS_NAME = 'ios',
-    MIDDLE_NAME = 'middle',
-    CDN_NAME = 'cdn',
-    CDN_URL = 'url',
-}
+export const CopyType: Record<string, MetaOptions> = {
+    WEB_COMPONENT: 'webComponent',
+} as const;
 
 export type AnyIcon = Record<string, React.FC<Record<string, unknown>>>;
 
 export type RenderIconParams = IconCardData & {
     Icon: AnyIcon[keyof AnyIcon];
 };
-
-export type DeprecatedAssets = Record<
-    string,
-    { readonly replacement: string; readonly date: string }
->;
 
 export enum DeprecatedType {
     DEPRECATED = 'deprecated',
