@@ -166,10 +166,6 @@
     padding-top: calc(var(--package-name-padding-top) - var(--row-padding-bottom));
 }
 
-.empty-search-result {
-    margin-top: var(--gap-s-neg);
-}
-
 .desktop-copy-dropdown-inner {
     padding-top: var(--select-options-list-offset);
     padding-bottom: var(--select-options-list-offset);

@@ -17,7 +17,7 @@ import styles from './index.module.css';
 
 import { Asset, CopyType, DeprecatedType, IconPackageName } from '../types';
 import { BackToTopButton } from './BackToTopButton';
-import { formatPackageName, getKeys, getPackageNameAsset } from '../shared/utils';
+import { getKeys, getPackageNameAsset } from '../shared/utils';
 
 import './Demo.css';
 import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
@@ -26,6 +26,7 @@ import { IconCard } from './icon-card';
 import { IconCardOptionsList } from './option-list';
 import { buildGrid } from './build-grid';
 import { PackageName } from './package-name';
+import { EmptyResult } from './empty-result';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -158,18 +159,6 @@ const Demo: FC = () => {
         );
     };
 
-    const renderEmptySearchResult = () => (
-        <Typography.Text
-            key='emtpty-result'
-            view='primary-small'
-            color='secondary'
-            className='empty-search-result'
-            data-empty-search
-        >
-            Ничего не нашлось, попробуйте изменить запрос
-        </Typography.Text>
-    );
-
     const grid = buildGrid({ packages, query });
 
     const virtualizer = useVirtualizer({
@@ -204,13 +193,12 @@ const Demo: FC = () => {
                                         ['list-package-name']: isTitleRow,
                                         ['list-row']: isIconsRow,
                                         [`list-row-${COLUMNS_AMOUNT}`]: isIconsRow,
-                                        ['empty-search-result']: isEmptyRow,
                                     })}
                                     data-index={virtualRow.index}
                                     ref={virtualizer.measureElement}
                                 >
                                     {isTitleRow && <PackageName packageName={row.packageName} />}
-                                    {isEmptyRow && renderEmptySearchResult()}
+                                    {isEmptyRow && <EmptyResult />}
                                     {isIconsRow &&
                                         row.items.map(
                                             ({ middle, packageName, Icon, dropDownData }) => (
