@@ -15,18 +15,16 @@ import { MagnifierMIcon } from '@alfalab/icons/glyph/dist/MagnifierMIcon';
 
 import styles from './index.module.css';
 
-import { Asset, IconCardData, CopyType, DeprecatedType, IconPackageName } from '../types';
+import { Asset, CopyType, DeprecatedType, IconPackageName } from '../types';
 import { BackToTopButton } from './BackToTopButton';
-import { formatPackageName, getKeyParts, getKeys, getPackageNameAsset } from '../shared/utils';
+import { formatPackageName, getKeys, getPackageNameAsset } from '../shared/utils';
 
 import './Demo.css';
-import { getDeprecatedAssets } from '../shared/helpers';
 import { ASSET_TO_PACKAGE_NAME } from '../shared/constants';
-import { ICON_META_FILES, ICONS } from '../shared/config';
 import { COLUMNS_AMOUNT } from '../const/columns';
 import { IconCard } from './icon-card';
-import { MetaInfo } from '../shared/config/types';
 import { IconCardOptionsList } from './option-list';
+import { buildGrid } from './build-grid';
 
 const ASSET_OPTIONS = getKeys(Asset).map((key) => ({
     key: Asset[key],
@@ -185,120 +183,7 @@ const Demo: FC = () => {
         </Typography.Text>
     );
 
-    const result: {
-        render?: JSX.Element;
-        middle?: MetaInfo['middle'];
-        packageName?: IconPackageName;
-        Icon?: React.FC<Record<string, unknown>>;
-        dropDownData?: IconCardData;
-        key: string;
-        isTitle: boolean;
-        isEmpty: boolean;
-    }[] = [];
-
-    getKeys(ICONS).forEach((packageName) => {
-        if (packages[packageName]) {
-            const module = ICONS[packageName];
-
-            if (!query) {
-                result.push({
-                    render: renderPackageTitle(packageName),
-                    isTitle: true,
-                    isEmpty: false,
-                    key: packageName,
-                });
-            }
-
-            getKeys(module).forEach((reactIconName) => {
-                const iconName = reactIconName.toLowerCase();
-                const iconInfo = ICON_META_FILES[packageName][reactIconName];
-
-                const { description, middle, ...rest } = iconInfo;
-
-                const isMatch =
-                    !query ||
-                    iconName.includes(query) ||
-                    middle.includes(query) ||
-                    description.includes(query);
-
-                if (isMatch) {
-                    const IconComponent = module[reactIconName];
-
-                    result.push({
-                        middle,
-                        packageName,
-                        Icon: IconComponent,
-                        dropDownData: {
-                            packageName,
-                            middle,
-                            ...rest,
-                        },
-                        key: `${packageName}-${middle}`,
-                        isTitle: false,
-                        isEmpty: false,
-                    });
-                }
-            });
-
-            result.sort((a, b) => {
-                const keyA = a.key as string;
-                const keyB = b.key as string;
-                const keyPartsA = getKeyParts(keyA);
-                const keyPartsB = getKeyParts(keyB);
-                const allDeprecatedIcons = getDeprecatedAssets();
-
-                if (allDeprecatedIcons[keyPartsA]) {
-                    return 1;
-                } else if (allDeprecatedIcons[keyPartsB]) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            });
-        }
-    });
-
-    const { grid } = result.reduce<{ grid: typeof result[]; rowIndex: number }>(
-        (acc, current, index) => {
-            if (!acc.grid[acc.rowIndex]) {
-                acc.grid[acc.rowIndex] = [];
-            }
-
-            if (current.isTitle) {
-                if (acc.grid[acc.rowIndex].length) {
-                    acc.rowIndex += 1;
-
-                    if (!acc.grid[acc.rowIndex]) {
-                        acc.grid[acc.rowIndex] = [];
-                    }
-                }
-
-                acc.grid[acc.rowIndex].push(current);
-                acc.rowIndex += 1;
-            } else {
-                acc.grid[acc.rowIndex].push(current);
-            }
-
-            if (acc.grid[acc.rowIndex]?.length === COLUMNS_AMOUNT) {
-                acc.rowIndex += 1;
-            }
-
-            return acc;
-        },
-        { grid: [], rowIndex: 0 },
-    );
-
-    //Только заголовок, т.е ничего не найдено
-    if (query && grid.length === 0) {
-        grid.push([
-            {
-                render: renderEmptySearchResult(),
-                isTitle: false,
-                isEmpty: true,
-                key: 'empty-result',
-            },
-        ]);
-    }
+    const grid = buildGrid({ packages, query });
 
     const virtualizer = useVirtualizer({
         count: grid.length,
@@ -320,27 +205,28 @@ const Demo: FC = () => {
                         style={{ transform: `translateY(${items[0]?.start ?? 0}px)` }}
                     >
                         {items.map((virtualRow) => {
-                            const rowItems = grid[virtualRow.index];
-                            const packageName = rowItems[0].isTitle;
-                            const listRow = !packageName;
+                            const row = grid[virtualRow.index];
+                            const isTitleRow = row.type === 'title';
+                            const isIconsRow = row.type === 'icons';
+                            const isEmptyRow = row.type === 'empty';
 
                             return (
                                 <div
-                                    key={virtualRow.index}
+                                    key={row.key}
                                     className={cn({
-                                        ['list-package-name']: packageName,
-                                        ['list-row']: listRow,
-                                        [`list-row-${COLUMNS_AMOUNT}`]: listRow,
-                                        ['empty-search-result']: rowItems[0].isEmpty,
+                                        ['list-package-name']: isTitleRow,
+                                        ['list-row']: isIconsRow,
+                                        [`list-row-${COLUMNS_AMOUNT}`]: isIconsRow,
+                                        ['empty-search-result']: isEmptyRow,
                                     })}
                                     data-index={virtualRow.index}
                                     ref={virtualizer.measureElement}
                                 >
-                                    {rowItems.map((item) => {
-                                        const { middle, packageName, Icon, dropDownData } = item;
-
-                                        if (middle && packageName && Icon && dropDownData) {
-                                            return (
+                                    {isTitleRow && renderPackageTitle(row.packageName)}
+                                    {isEmptyRow && renderEmptySearchResult()}
+                                    {isIconsRow &&
+                                        row.items.map(
+                                            ({ middle, packageName, Icon, dropDownData }) => (
                                                 <IconCard
                                                     key={middle}
                                                     packageName={packageName}
@@ -360,15 +246,8 @@ const Demo: FC = () => {
                                                         />
                                                     )}
                                                 </IconCard>
-                                            );
-                                        }
-
-                                        if (item.render) {
-                                            return item.render;
-                                        }
-
-                                        return null;
-                                    })}
+                                            ),
+                                        )}
                                 </div>
                             );
                         })}

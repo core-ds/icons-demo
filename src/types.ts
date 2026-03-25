@@ -44,7 +44,10 @@ export type RenderIconParams = IconCardData & {
     Icon: AnyIcon[keyof AnyIcon];
 };
 
-export type DeprecatedAssets = Record<string, { replacement: string; date: string }>;
+export type DeprecatedAssets = Record<
+    string,
+    { readonly replacement: string; readonly date: string }
+>;
 
 export enum DeprecatedType {
     DEPRECATED = 'deprecated',
