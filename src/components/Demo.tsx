@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import copy from 'copy-to-clipboard';
@@ -13,7 +13,6 @@ import { getPackageNameAsset } from '../shared/utils';
 import './Demo.css';
 import { COLUMNS_AMOUNT } from '../const/columns';
 import { IconCard } from './icon-card';
-import { IconCardOptionsList } from './option-list';
 import { buildGrid } from './build-grid';
 import { PackageName } from './package-name';
 import { EmptyResult } from './empty-result';
@@ -36,7 +35,7 @@ const Demo: FC = () => {
 
     const query = value.toLowerCase();
 
-    const handleOptionItemClick = (type: string, value: string) => {
+    const handleOptionItemClick = useCallback((type: string, value: string) => {
         if (type === DeprecatedType.DEPRECATED && value) {
             setValue(value);
 
@@ -55,12 +54,7 @@ const Demo: FC = () => {
             open: true,
             text: type === CopyType.WEB_COMPONENT ? 'Код скопирован' : 'Имя скопировано',
         });
-    };
-
-    const handleOptionsListClick = (key: string, value: string, callback: () => void) => {
-        handleOptionItemClick(key, value);
-        callback();
-    };
+    }, []);
 
     const handlePackageChange = (payload: { checked: boolean; name?: string }) => {
         if (!payload.name) return;
@@ -140,20 +134,9 @@ const Demo: FC = () => {
                                                     packageName={packageName}
                                                     middle={middle}
                                                     Icon={Icon}
-                                                >
-                                                    {(onClose) => (
-                                                        <IconCardOptionsList
-                                                            data={dropDownData}
-                                                            onClick={(key, value) =>
-                                                                handleOptionsListClick(
-                                                                    key,
-                                                                    value,
-                                                                    onClose,
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                </IconCard>
+                                                    dropDownData={dropDownData}
+                                                    onOptionClick={handleOptionItemClick}
+                                                />
                                             ),
                                         )}
                                 </div>

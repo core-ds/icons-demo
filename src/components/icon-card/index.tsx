@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useRef, useState, ReactNode } from 'react';
+import React, { FC, Fragment, memo, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { Typography } from '@alfalab/core-components/typography';
@@ -6,19 +6,21 @@ import { Popover } from '@alfalab/core-components/popover';
 import { useClickOutside } from '@alfalab/hooks';
 
 import { COLUMNS_AMOUNT } from '../../const/columns';
-import { IconPackageName, RenderIconParams } from '../../types';
+import { IconCardData, IconPackageName, RenderIconParams } from '../../types';
 import { MetaInfo } from '../../shared/config/types';
 import { getDeprecatedAssets } from '../../shared/helpers';
+import { IconCardOptionsList } from '../option-list';
 
 const ALL_DEPRECATED_ICONS = getDeprecatedAssets();
 
 interface Props extends Pick<MetaInfo, 'middle'>, Pick<RenderIconParams, 'Icon'> {
     packageName: IconPackageName;
-    children: (callback: () => void) => ReactNode;
+    dropDownData: IconCardData;
+    onOptionClick: (key: string, value: string) => void;
 }
 
-export const IconCard: FC<Props> = (props) => {
-    const { packageName, middle, Icon, children } = props;
+export const IconCard: FC<Props> = memo((props) => {
+    const { packageName, middle, Icon, dropDownData, onOptionClick } = props;
 
     const isWhite = middle.includes('white');
     const isDeprecatedIcon = ALL_DEPRECATED_ICONS.hasOwnProperty(middle);
@@ -85,8 +87,16 @@ export const IconCard: FC<Props> = (props) => {
                 preventFlip={false}
                 ref={popoverRef}
             >
-                <div className='popover-options-list'>{children(handleSelect)}</div>
+                <div className='popover-options-list'>
+                    <IconCardOptionsList
+                        data={dropDownData}
+                        onClick={(key, value) => {
+                            onOptionClick(key, value);
+                            handleSelect();
+                        }}
+                    />
+                </div>
             </Popover>
         </Fragment>
     );
-};
+});
