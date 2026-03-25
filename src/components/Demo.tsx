@@ -56,7 +56,7 @@ const Demo: FC = () => {
         });
     }, []);
 
-    const handlePackageChange = (payload: { checked: boolean; name?: string }) => {
+    const handlePackageChange = useCallback((payload: { checked: boolean; name?: string }) => {
         if (!payload.name) return;
 
         const packageName = payload.name as IconPackageName;
@@ -68,14 +68,17 @@ const Demo: FC = () => {
                     : [...prev, packageName]
                 : prev.filter((item) => item !== packageName),
         );
-    };
+    }, []);
 
-    const handleAssetChange: SelectDesktopProps['onChange'] = ({ selected }) => {
-        const nextAsset = selected?.key as Asset;
+    const handleAssetChange = useCallback<NonNullable<SelectDesktopProps['onChange']>>(
+        (payload) => {
+            const nextAsset = payload.selected?.key as Asset;
 
-        setSelectedPackages([getDefaultPackage(nextAsset)]);
-        setAsset(nextAsset);
-    };
+            setSelectedPackages([getDefaultPackage(nextAsset)]);
+            setAsset(nextAsset);
+        },
+        [],
+    );
 
     const grid = useMemo(() => {
         return buildGrid({ selectedPackages, query });

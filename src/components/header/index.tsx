@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 
 import { Typography } from '@alfalab/core-components/typography';
 import { Input } from '@alfalab/core-components/input';
@@ -28,7 +28,7 @@ type Props = {
     onPackageChange: (args: Parameters<NonNullable<CheckboxGroupProps['onChange']>>[1]) => void;
 };
 
-export const Header: FC<Props> = (props) => {
+export const Header: FC<Props> = memo((props) => {
     const { value, asset, selectedPackages, onSetValue, onAssetChange, onPackageChange } = props;
 
     return (
@@ -85,4 +85,4 @@ export const Header: FC<Props> = (props) => {
             ) : null}
         </div>
     );
-};
+});
