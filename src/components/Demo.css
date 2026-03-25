@@ -39,6 +39,7 @@
     --package-name-padding-top: var(--gap-2xl);
     --package-name-padding-bottom: var(--gap-m);
     --list-padding: 0 0 var(--gap-2xl);
+    --header-height: 248px;
 }
 
 .root {
@@ -129,7 +130,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--header-height));
 }
 
 .list-package-name {
