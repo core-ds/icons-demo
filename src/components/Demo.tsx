@@ -7,7 +7,7 @@ import { SelectDesktopProps } from '@alfalab/core-components/select/desktop';
 import { Toast } from '@alfalab/core-components/toast/modern';
 
 import { Asset, CopyType, DeprecatedType, IconPackageName } from '../types';
-import { BackToTopButton } from './BackToTopButton';
+import { BackToTopButton } from './scroll-top-button/BackToTopButton';
 import { getPackageNameAsset } from '../shared/utils';
 
 import './Demo.css';

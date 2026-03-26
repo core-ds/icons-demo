@@ -3,6 +3,8 @@ import cn from 'classnames';
 import { IconButton } from '@alfalab/core-components/icon-button/modern';
 import { ArrowUpMIcon } from '@alfalab/icons/glyph/dist/ArrowUpMIcon';
 
+import style from './index.module.css';
+
 type BackToTopProps = {
     onClick: () => void;
     visible: boolean;
@@ -10,19 +12,16 @@ type BackToTopProps = {
 
 export const BackToTopButton: React.FC<BackToTopProps> = ({ onClick, visible }) => {
     const [show, setShow] = useState(visible);
-    const [transitionClass, setTransitionClass] = useState('');
+    const [transitionClass, setTransitionClass] = useState<boolean>(false);
     const timeoutRef = useRef<number>();
 
     useEffect(() => {
         if (visible) {
             setShow(true);
-            timeoutRef.current = window.setTimeout(
-                () => setTransitionClass('back-to-top-appear'),
-                50,
-            );
+            timeoutRef.current = window.setTimeout(() => setTransitionClass(true), 50);
         } else {
             timeoutRef.current = window.setTimeout(() => setShow(false), 300);
-            setTransitionClass('');
+            setTransitionClass(false);
         }
 
         return () => clearTimeout(timeoutRef.current);
@@ -31,7 +30,9 @@ export const BackToTopButton: React.FC<BackToTopProps> = ({ onClick, visible }) 
     return show ? (
         <IconButton
             icon={ArrowUpMIcon}
-            className={cn('back-to-top', transitionClass)}
+            className={cn(style.button, {
+                [style.appear]: transitionClass,
+            })}
             colors='inverted'
             onClick={onClick}
         />

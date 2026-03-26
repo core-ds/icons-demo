@@ -1,6 +1,4 @@
-@import '@alfalab/core-components/vars/index.css';
 @import '@alfalab/core-components/vars/mixins.css';
-
 @import '../vars.css';
 
 @font-face {
@@ -191,20 +189,6 @@
     text-align: center;
     padding-top: 14px;
     padding-bottom: 14px;
-}
-
-.back-to-top {
-    position: fixed;
-    right: var(--side-gap);
-    bottom: var(--gap-3xl);
-    background-color: var(--color-light-bg-primary-inverted);
-    border-radius: var(--border-radius-circle);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.back-to-top-appear {
-    opacity: 1;
 }
 
 .deprecated {
