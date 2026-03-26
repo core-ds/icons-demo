@@ -1,28 +1,44 @@
 import React from 'react';
 
-import { ClickedElement, DeprecatedAssets, DeprecatedType } from '../../types';
+import { DeprecatedType, IconCardData } from '../../types';
 import { OptionContentCopy } from './components/option-content-copy';
 import { OptionContentDeprecated } from './components/option-content-deprecated';
-import { MetaInfo } from '../../shared/config/icon-meta-files';
+import { exhaustiveCheck } from '../../shared/utils';
+import { MetaOptions } from '../../shared/config/types';
+import { getDeprecatedAssets } from '../../shared/helpers';
 
-type Key = Exclude<keyof MetaInfo, 'description' | 'basename'>;
+const ALL_DEPRECATED_ICONS = getDeprecatedAssets();
 
-const OPTIONS_MAP: Record<Key, JSX.Element> = {
-    web: <OptionContentCopy text='Веб имя иконки' />,
-    webComponent: <OptionContentCopy text='Веб компонент' />,
-    android: <OptionContentCopy text='Android имя иконки' />,
-    ios: <OptionContentCopy text='iOS имя иконки' />,
-    middle: <OptionContentCopy text='Мидл имя иконки' />,
-    cdn: <OptionContentCopy text='CDN имя иконки' />,
-    url: <OptionContentCopy text='URL иконки' />,
+const getOption = (key: MetaOptions) => {
+    switch (key) {
+        case 'web':
+            return <OptionContentCopy text='Веб имя иконки' />;
+        case 'webComponent':
+            return <OptionContentCopy text='Веб компонент' />;
+        case 'android':
+            return <OptionContentCopy text='Android имя иконки' />;
+        case 'ios':
+            return <OptionContentCopy text='iOS имя иконки' />;
+        case 'middle':
+            return <OptionContentCopy text='Мидл имя иконки' />;
+        case 'cdn':
+            return <OptionContentCopy text='CDN имя иконки' />;
+        case 'url':
+            return <OptionContentCopy text='URL иконки' />;
+        default:
+            return exhaustiveCheck(key);
+    }
 };
 
-const DEPRECATED_OPTION_WITH_REPLACE = [
-    {
-        key: DeprecatedType.DEPRECATED,
-        content: <OptionContentDeprecated text='Перейти к замене' replace={true} />,
-    },
-];
+const getDeprecatedOptionWithReplace = (replaceValue: string) => {
+    return [
+        {
+            key: DeprecatedType.DEPRECATED,
+            content: <OptionContentDeprecated text='Перейти к замене' replace={true} />,
+            value: replaceValue,
+        },
+    ];
+};
 
 const DEPRECATED_OPTION_WITHOUT_REPLACE = [
     {
@@ -36,27 +52,25 @@ const DEPRECATED_OPTION_WITHOUT_REPLACE = [
     },
 ];
 
-const generateOptionList = (clickedElem: ClickedElement) => {
-    return Object.keys(clickedElem)
+const generateOptionList = (data: IconCardData) => {
+    return Object.keys(data)
         .filter((item) => !['packageName', 'basename'].includes(item))
         .map((item) => {
-            const key = item as Key;
-            return { key, content: OPTIONS_MAP[key] };
+            const key = item as MetaOptions;
+            return {
+                key,
+                content: getOption(key),
+                value: data[key],
+            };
         });
 };
 
-export function getOptionsList(
-    iconName: string,
-    deprecatedIcons: DeprecatedAssets,
-    clickedElem: ClickedElement | null,
-) {
-    if (!deprecatedIcons.hasOwnProperty(iconName)) {
-        if (clickedElem) {
-            return generateOptionList(clickedElem);
-        }
-        return null;
-    } else if (deprecatedIcons[iconName].replacement) {
-        return DEPRECATED_OPTION_WITH_REPLACE;
+export function getOptionsList(data: IconCardData) {
+    const { middle } = data;
+    if (!ALL_DEPRECATED_ICONS.hasOwnProperty(middle)) {
+        return generateOptionList(data);
+    } else if (ALL_DEPRECATED_ICONS[middle].replacement) {
+        return getDeprecatedOptionWithReplace(ALL_DEPRECATED_ICONS[middle].replacement);
     } else {
         return DEPRECATED_OPTION_WITHOUT_REPLACE;
     }

@@ -1,6 +1,8 @@
 @import '@alfalab/core-components/vars/index.css';
 @import '@alfalab/core-components/vars/mixins.css';
 
+@import '../vars.css';
+
 @font-face {
     font-family: 'Styrene UI';
     src: url('https://alfabank.servicecdn.ru/media/fonts/styrene-ui/styrene-ui_regular.woff2')
@@ -30,19 +32,14 @@
 }
 
 :root {
-    --content-width: 880px;
     --side-gap: 20px;
-    --search-wrapper-padding: var(--gap-m) 0 var(--gap-m);
-    --bundle-padding-bottom: var(--gap-xs);
-    --asset-select-width: 200px;
-    --asset-select-margin: 0;
-    --icons-list-padding: var(--gap-5xl) 0 var(--gap-8xl);
     --row-padding-bottom: var(--gap-s);
     --icon-wrapper-padding: var(--gap-s);
     --option-content-padding: var(--gap-s) 0 var(--gap-s) var(--gap-s);
     --package-name-padding-top: var(--gap-2xl);
     --package-name-padding-bottom: var(--gap-m);
     --list-padding: 0 0 var(--gap-2xl);
+    --header-height: 248px;
 }
 
 .root {
@@ -51,38 +48,13 @@
     height: 100%;
 }
 
-.search-wrapper {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: var(--gap-xs);
-    padding: var(--search-wrapper-padding);
-}
-
-.asset-select-wrapper {
-    width: var(--asset-select-width);
-    margin: var(--asset-select-margin);
-}
-
-.bundle-group-wrapper {
-    padding-bottom: var(--bundle-padding-bottom)
-}
-
-.search-input {
-    flex: 1;
-    color: var(--color-light-graphic-secondary);
-}
-
 .icons-list {
     position: absolute;
     top: 0;
     width: 100%;
     max-width: var(--content-width);
     margin: 0 auto;
-    padding: var(--icons-list-padding);
-}
-
-.list-header-gap {
-    padding: var(--list-padding);
+    padding: 0 0 128px;
 }
 
 .list-row {
@@ -104,8 +76,7 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
-.icon-wrap,
-.animation-wrap {
+.icon-wrap {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -120,25 +91,16 @@
     color: var(--color-light-graphic-primary);
 }
 
-.animation-icon {
-    align-self: end;
-    margin-top: -12px;
-    margin-right: -12px;
-}
-
-.icon-wrap:hover,
-.animation-wrap:hover {
+.icon-wrap:hover {
     cursor: pointer;
 }
 
-.icon-wrap_dark,
-.animation-wrap_dark {
+.icon-wrap_dark {
     background-color: var(--color-light-bg-secondary-inverted);
     color: #fff;
 }
 
-.icon,
-.animation {
+.icon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -150,12 +112,7 @@
     max-width: calc(100% - var(--icon-wrapper-padding) * 2);
 }
 
-.animation {
-    width: 48px;
-}
-
-.icon-primitive-name,
-.animation-primitive-name {
+.icon-primitive-name {
     margin-top: auto;
     word-break: break-word;
 }
@@ -173,7 +130,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--header-height));
 }
 
 .list-package-name {
@@ -181,16 +138,8 @@
     padding-bottom: var(--package-name-padding-bottom);
 }
 
-.list-warning {
-    padding-bottom: var(--gap-m);
-}
-
 .list-row + .list-package-name {
     padding-top: calc(var(--package-name-padding-top) - var(--row-padding-bottom));
-}
-
-.empty-search-result {
-    margin-top: var(--gap-s-neg);
 }
 
 .desktop-copy-dropdown-inner {
