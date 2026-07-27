@@ -6,5 +6,9 @@
     "logo_alfa-bank-sing-square_m_white": {
         "replacement": "logo_alfa-bank-sign-square_m_white",
         "date": "04.25"
+    },
+    "logo_telegram-sign-box_s": {
+        "replacement": "logo_telegram-sign-circle_s",
+        "date": "07.26"
     }
 }
