@@ -11,6 +11,8 @@ import { MetaInfo } from '../../shared/config/types';
 import { getDeprecatedAssets } from '../../shared/helpers';
 import { IconCardOptionsList } from '../option-list';
 
+import styles from './index.module.css';
+
 const ALL_DEPRECATED_ICONS = getDeprecatedAssets();
 
 interface Props extends Pick<MetaInfo, 'middle'>, Pick<RenderIconParams, 'Icon'> {
@@ -81,21 +83,19 @@ export const IconCard: FC<Props> = memo((props) => {
                 open={popoverOpen}
                 useAnchorWidth={true}
                 anchorElement={popoverAnchorRef.current || null}
-                popperClassName='desktop-copy-dropdown-inner'
+                popperClassName={styles.popperClassName}
                 position='bottom'
                 offset={[0, 4]}
                 preventFlip={false}
                 ref={popoverRef}
             >
-                <div className='popover-options-list'>
-                    <IconCardOptionsList
-                        data={dropDownData}
-                        onClick={(key, value) => {
-                            onOptionClick(key, value);
-                            handleSelect();
-                        }}
-                    />
-                </div>
+                <IconCardOptionsList
+                    data={dropDownData}
+                    onClick={(key, value) => {
+                        onOptionClick(key, value);
+                        handleSelect();
+                    }}
+                />
             </Popover>
         </Fragment>
     );
