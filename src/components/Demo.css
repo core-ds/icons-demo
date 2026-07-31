@@ -140,26 +140,6 @@
     padding-top: calc(var(--package-name-padding-top) - var(--row-padding-bottom));
 }
 
-.desktop-copy-dropdown-inner {
-    padding-top: var(--select-options-list-offset);
-    padding-bottom: var(--select-options-list-offset);
-    box-shadow: none;
-    border: none;
-    background: transparent;
-    border-radius: 0;
-    position: relative;
-}
-
-.popover-options-list {
-    position: relative;
-    padding-top: var(--select-options-list-top-padding);
-    padding-bottom: var(--select-options-list-bottom-padding);
-    box-shadow: var(--select-options-list-box-shadow);
-    border-radius: var(--select-options-list-border-radius);
-    background: var(--select-option-background);
-    overflow: hidden;
-}
-
 .mobile-copy-dropdown {
     padding-right: 0;
     padding-left: 0;
