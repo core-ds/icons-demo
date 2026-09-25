@@ -1199,11 +1199,7 @@
         "date": "09.26"
     },
     "rocky_perekrestok_m": {
-        "replacement": "logotype_swift_m",
-        "date": "01.24"
-    },
-    "logotype_perekrestok_m": {
-        "replacement": "logotype_swift_m",
+        "replacement": "logotype_perekrestok_m",
         "date": "01.24"
     },
     "glyph__card_im" : {
