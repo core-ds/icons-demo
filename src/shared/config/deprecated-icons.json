@@ -799,7 +799,7 @@
         "date": "01.24"
     },
     "glyph_pfm-transfer_m": {
-        "replacement": "glyph_pfm-transfer_m",
+        "replacement": "glyph_transfer_m",
         "date": "01.24"
     },
     "glyph_pfm-transport_m": {
@@ -1193,6 +1193,10 @@
     "rocky_banknote-out_m": {
         "replacement": "rocky_banknote-arrow-down-line-up_m",
         "date": "01.24"
+    },
+    "rocky_lightning_m": {
+        "replacement": "rocky_flash_m",
+        "date": "09.26"
     },
     "rocky_perekrestok_m": {
         "replacement": "logotype_perekrestok_m",
