@@ -177,7 +177,7 @@
         "date": "01.24"
     },
     "glyph_burger_m": {
-        "replacement": "glyph_list_m",
+        "replacement": "glyph_list-dec_m",
         "date": "01.24"
     },
     "glyph_call_m": {
@@ -371,7 +371,7 @@
         "date": "01.24"
     },
     "glyph_dollar-rounded_m": {
-        "replacement": "glyph_usd-square_m",
+        "replacement": "glyph_usd-square-medium_m",
         "date": "01.24"
     },
     "glyph_dot_m": {
@@ -439,7 +439,7 @@
         "date": "01.24"
     },
     "glyph_hand-round-percent_m": {
-        "replacement": "glyph_hand-round-percent_m",
+        "replacement": "",
         "date": "01.24"
     },
     "glyph_headset_m": {
@@ -799,7 +799,7 @@
         "date": "01.24"
     },
     "glyph_pfm-transfer_m": {
-        "replacement": "glyph_pfm-transfer_m",
+        "replacement": "glyph_arrow-left-shift-up-arrow-right-shift-down_m",
         "date": "01.24"
     },
     "glyph_pfm-transport_m": {
@@ -807,7 +807,7 @@
         "date": "01.24"
     },
     "glyph_pfm-tshirt_m": {
-        "replacement": "glyph_pfm-tshirt_m",
+        "replacement": "",
         "date": "01.24"
     },
     "glyph_pfm-tv_m": {
@@ -823,7 +823,7 @@
         "date": "01.24"
     },
     "glyph_phone-card_m": {
-        "replacement": "glyph_phone-card_m",
+        "replacement": "",
         "date": "01.24"
     },
     "glyph_phone-number-scanner_m": {
@@ -843,7 +843,7 @@
         "date": "01.24"
     },
     "glyph_play-big_m": {
-        "replacement": "glyph_play_m",
+        "replacement": "glyph_play-compact_m",
         "date": "01.24"
     },
     "glyph_pointer-down_m": {
@@ -887,7 +887,7 @@
         "date": "01.24"
     },
     "glyph_repeat_m": {
-        "replacement": "glyph_clock-repeat-line_m",
+        "replacement": "glyph_clock-repeat-cw-line_m",
         "date": "01.24"
     },
     "glyph_repeat-circle_m": {
@@ -1194,17 +1194,13 @@
         "replacement": "rocky_banknote-arrow-down-line-up_m",
         "date": "01.24"
     },
+    "rocky_lightning_m": {
+        "replacement": "rocky_flash_m",
+        "date": "09.26"
+    },
     "rocky_perekrestok_m": {
         "replacement": "logotype_perekrestok_m",
         "date": "01.24"
-    },
-    "logotype_perekrestok_m": {
-        "replacement": "logotype_swift_m",
-        "date": "01.24"
-    },
-    "glyph__card_im" : {
-        "replacement": "glyph_card-info_m",
-        "date": "05.24"
     },
     "glyph_tram_m" : {
         "replacement": "glyph_trolleybus_m",
@@ -1215,7 +1211,7 @@
         "date": "02.25"
     },
     "corp_stack-of-coins_m" : {
-        "replacement": "corp_stack-coins_m",
+        "replacement": "corp_coins-stack_m",
         "date": "11.25"
     }
 }
