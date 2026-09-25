@@ -1202,10 +1202,6 @@
         "replacement": "logotype_perekrestok_m",
         "date": "01.24"
     },
-    "glyph__card_im" : {
-        "replacement": "glyph_card-info_m",
-        "date": "05.24"
-    },
     "glyph_tram_m" : {
         "replacement": "glyph_trolleybus_m",
         "date": "10.24"
@@ -1215,7 +1211,7 @@
         "date": "02.25"
     },
     "corp_stack-of-coins_m" : {
-        "replacement": "corp_stack-coins_m",
+        "replacement": "corp_coins-stack_m",
         "date": "11.25"
     }
 }
