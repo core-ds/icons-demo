@@ -80,10 +80,10 @@
   resolved "https://registry.yarnpkg.com/@alfalab/icons-logotype/-/icons-logotype-2.29.0.tgz#6d212528b6a3d060dfeeea7a11425c7b19a14fc9"
   integrity sha512-XTzXfHsIeLcb4RjSRIPfA6m7COlgxGaTIN8p5LUjDMs7WWuAmzEnZlbIeD7DvqOszGH8b2uImJWYwts7AXrKKg==
 
-"@alfalab/icons@^3.507.0":
-  version "3.507.0"
-  resolved "https://registry.yarnpkg.com/@alfalab/icons/-/icons-3.507.0.tgz#ec4a2b0a439bf0549cebd609961dcaac0ebd0a46"
-  integrity sha512-Kp6aSKVrBV220dJCU7Be+T7EMDp0xuJo4UVxy2nK6qd3d8h5GdkGzrkMPoKwUMiA4OSmiEPeEpNG0rmmdgJpaw==
+"@alfalab/icons@^3.508.0":
+  version "3.508.0"
+  resolved "https://registry.yarnpkg.com/@alfalab/icons/-/icons-3.508.0.tgz#c063d2998c9d48a687bf907d0d630cd3464d571b"
+  integrity sha512-CL+WD6V0ygreH5JMrgrzU83OcP2GGe/5qzY/RpM3sKTLgr0ZiOO8RL+VboOhxCgJmF+t/qM0hMR2zS5EdDORgg==
 
 "@alfalab/utils@^1.13.2":
   version "1.14.2"
@@ -6510,10 +6510,10 @@ ui-primitives@^13.19.0:
   resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-13.28.0.tgz#1fa71d5888e491dbeb633accc4e03b59bebe2edf"
   integrity sha512-OCsu8yrubZJJ0MAd8+5qewcvjvIjiG8kam/bW07HN5QNvkQ/4TQOWOxY8V8nRXDOYlBkTxj+wjiVxA36V5U3+w==
 
-ui-primitives@^36.5.0:
-  version "36.5.0"
-  resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-36.5.0.tgz#17769f42790eb800d7af37274b07b3c35c334f8d"
-  integrity sha512-SXH+/pnnuUqjDqhxe/34d52B1ESU2LM7Ycyc8r1PMP4xkHU9W+x+HmnvmVbj6oIfawI/DJa4cT6N0W8TD1793g==
+ui-primitives@^36.6.0:
+  version "36.6.0"
+  resolved "https://registry.yarnpkg.com/ui-primitives/-/ui-primitives-36.6.0.tgz#7a0979fb41ea9e774fa22e14033ba992c112f87c"
+  integrity sha512-4ku7cseqBFloDqTpAQd5qk8tcLDgw6/YiKmPi1QDmkowNS8htQS8+Uw/wLCemr6i2rq+Y/FoN3fkT+YCXs86tw==
 
 unified@^9.0.0:
   version "9.2.2"
